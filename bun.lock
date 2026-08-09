@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "felya-labs-landing",
+      "name": "felya-website-public",
       "devDependencies": {
         "@tailwindcss/vite": "4.3.2",
         "astro": "7.0.3",

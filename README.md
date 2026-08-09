@@ -1,4 +1,4 @@
-# FELYA LABS Landing
+# FELYA Website — Public
 
 [![FELYA LABS PATON — Your hands. Anywhere on Earth.](docs/assets/readme-header-anywhere-on-earth.png)](https://www.felyalabs.com)
 
@@ -7,7 +7,7 @@
 Production source for the multilingual FELYA LABS PATON landing page. The site is built with Astro and Tailwind CSS and is published as static files—no production application server is required.
 
 - Website: [www.felyalabs.com](https://www.felyalabs.com)
-- Stage repository: [`felyalabs/felya-labs-landing_stage`](https://github.com/felyalabs/felya-labs-landing_stage)
+- Stage repository: [`felya-labs/felya-website-stage`](https://github.com/felya-labs/felya-website-stage)
 - Stage website: [preview.felyalabs.com](https://preview.felyalabs.com)
 
 ## What is in this repository?
