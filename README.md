@@ -1,69 +1,25 @@
-# FELYA LABS Landing
+# FELYA Website — Production
 
-[![FELYA LABS PATON — Your hands. Anywhere on Earth.](docs/assets/readme-header-anywhere-on-earth.png)](https://www.felyalabs.com)
+[![FELYA PATON — Anywhere on Earth](docs/assets/readme-header-anywhere-on-earth.png)](https://felya.com)
 
-[![Open the FELYA LABS website](https://img.shields.io/badge/open-www.felyalabs.com-315efb)](https://www.felyalabs.com)
+Published production snapshot of the multilingual FELYA website at [felya.com](https://felya.com).
 
-Production source for the multilingual FELYA LABS PATON landing page. The site is built with Astro and Tailwind CSS and is published as static files—no production application server is required.
+## Repository role
 
-- Website: [www.felyalabs.com](https://www.felyalabs.com)
-- Stage repository: [`felyalabs/felya-labs-landing_stage`](https://github.com/felyalabs/felya-labs-landing_stage)
-- Stage website: [preview.felyalabs.com](https://preview.felyalabs.com)
+This public repository is an automated deployment mirror. The canonical source is the private [`felya-labs/felya-website-stage`](https://github.com/felya-labs/felya-website-stage) repository.
 
-## What is in this repository?
+Every push to `felya-website-stage/main` is verified and synchronized here by GitHub Actions. A successful snapshot commit triggers this repository's Pages workflow and deploys the static Astro build to the production domain.
 
-| Area | Location |
-| --- | --- |
-| Pages and route generation | `src/pages/` |
-| Shared layouts | `src/layouts/` |
-| Reusable page sections | `src/components/` |
-| Site data | `src/data/` |
-| Interface translations | `src/i18n/translations.ts` |
-| Locale configuration | `src/i18n/config.ts` |
-| Legal source text | `src/content/legal/` |
-| Browser behavior | `src/scripts/site.js` |
-| Deployed static assets | `public/assets/` |
-| Local fonts | `public/fonts/` |
-| Source/archive assets (not deployed) | `assets-source/` |
-| Localization review sheets | `docs/localization-review/` |
-| Dependency inventory | `dependencies.md` |
-| Verification inventory | `tests.md` |
+Do not make editorial or application changes directly in this repository. Changes belong in the Stage repository and reach production through the verified snapshot pipeline.
 
-## Local development
+## Deployment contract
 
-The repository uses Bun exclusively. The supported version is pinned in `package.json`, and `bun.lock` is the authoritative lockfile.
+- Source branch: `felya-website-stage/main`
+- Snapshot branch: `felya-website-public/main`
+- Production URL: [felya.com](https://felya.com)
+- Build origin: `SITE_URL=https://felya.com`
+- Hosting: GitHub Pages
 
-```sh
-bun --version
-bun install --frozen-lockfile
-bun run dev --host 127.0.0.1 --port 4321
-```
+The production CNAME, Pages workflow, and this README are maintained in this repository and preserved when source snapshots are synchronized.
 
-Then open `http://127.0.0.1:4321/en/`. Useful checks:
-
-```sh
-bun run build
-bun run verify
-bun run preview --host 127.0.0.1 --port 4321
-```
-
-`bun run verify` checks repository references and localization completeness, builds the static site, and validates the generated localized routes and metadata.
-
-## Localization
-
-The homepage is generated at `/en/`, `/de/`, `/ru/`, `/pt/`, `/fr/`, `/es/`, `/it/`, `/ky/`, `/id/`, `/ko/`, `/ja/`, `/zh-cn/`, and `/zh-tw/`. The root route redirects to the stored or browser language when supported and falls back to English.
-
-English is the canonical source for translation keys. Every locale dictionary is complete and independent; translations never inherit from another language. When copy changes:
-
-1. Update `src/i18n/translations.ts` deliberately for every affected locale.
-2. Run `bun run verify:i18n`.
-3. Regenerate reviewer-facing sheets with `bun run review:i18n` when needed.
-4. Run `bun run verify` before publishing.
-
-Review sheets compare English with one target language and are not deployed.
-
-## Delivery and privacy
-
-Pushing `main` runs `.github/workflows/deploy.yml`, builds `dist/` with `SITE_URL=https://www.felyalabs.com`, and publishes it to GitHub Pages. The custom domain is declared in `public/CNAME`. Together, these settings control canonical URLs, Open Graph metadata, `hreflang`, `robots.txt`, and `sitemap.xml` for production.
-
-The initial page load uses first-party CSS, JavaScript, images, media, and fonts. There are no analytics, remote fonts, or remote embeds. Formspark is contacted only after the development-updates form is submitted, and prototype video media is requested only after its play cover is selected. Keep `dependencies.md`, `tests.md`, and the legal text aligned whenever this behavior changes.
+The generated site contains localized routes, canonical and social metadata, `hreflang`, legal pages, `robots.txt`, and `sitemap.xml`. The initial page load uses first-party assets and does not load analytics, remote fonts, or remote embeds.
