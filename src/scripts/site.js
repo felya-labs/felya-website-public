@@ -305,6 +305,7 @@ export function initHeroHeadlineLanguages({
   let idleRunId = 0;
   let automaticChangeCount = 0;
   let lastAutomaticLanguageCode = '';
+  let lastPointerPreviewLanguageCode = '';
   let interactionState = 'intro';
   let isDestroyed = false;
   const timers = new Map();
@@ -395,16 +396,6 @@ export function initHeroHeadlineLanguages({
     return secondaryQueue.shift();
   };
 
-  const peekNextLanguage = () => {
-    if (shouldShowEnglishFirst) return englishLanguage;
-    if (priorityQueue.length) return priorityQueue[0];
-    if (!secondaryQueue.length) {
-      const defaultText = translate(headline.dataset.i18n);
-      secondaryQueue = shuffle(secondary).filter((entry) => entry.text !== defaultText);
-    }
-    return secondaryQueue[0];
-  };
-
   const showNextLanguage = () => {
     let languageEntry = nextLanguage();
     const defaultText = translate(headline.dataset.i18n);
@@ -423,6 +414,17 @@ export function initHeroHeadlineLanguages({
     for (let attempt = 0; attempt < maximumAttempts; attempt += 1) {
       const entry = nextLanguage();
       if (!entry || entry.code === lastAutomaticLanguageCode) continue;
+      return entry;
+    }
+    return null;
+  };
+
+  const nextPointerPreviewLanguage = () => {
+    const defaultText = translate(headline.dataset.i18n);
+    const maximumAttempts = priority.length + secondary.length + 2;
+    for (let attempt = 0; attempt < maximumAttempts; attempt += 1) {
+      const entry = nextLanguage();
+      if (!entry || entry.text === defaultText || entry.code === lastPointerPreviewLanguageCode) continue;
       return entry;
     }
     return null;
@@ -574,8 +576,16 @@ export function initHeroHeadlineLanguages({
     cancelPreview();
     const runId = previewRunId;
     isPointerPreviewRunning = true;
+    const languageEntry = nextPointerPreviewLanguage();
+    if (!languageEntry) {
+      isPointerPreviewRunning = false;
+      return;
+    }
 
-    const didShowLanguage = await transitionHeadline(() => showLanguageEntry(peekNextLanguage()));
+    const didShowLanguage = await transitionHeadline(() => {
+      showLanguageEntry(languageEntry);
+      lastPointerPreviewLanguageCode = languageEntry.code;
+    });
     if (!didShowLanguage || runId !== previewRunId) {
       if (runId === previewRunId) isPointerPreviewRunning = false;
       return;

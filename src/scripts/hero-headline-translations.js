@@ -17,6 +17,5 @@ export const secondaryHeroLanguages = Object.freeze([
   { code: 'ja', name: 'Japanese', text: '地球上のどこでも。' },
   { code: 'ko', name: 'Korean', text: '지구 어디에서나.' },
   { code: 'it', name: 'Italian', text: 'Ovunque sulla Terra.' },
-  { code: 'uz', name: 'Uzbek', text: 'Yer yuzining istalgan joyida.' },
   { code: 'mfe', name: 'Mauritian Creole (Morisien)', text: 'Partou lor Later.' }
 ]);
