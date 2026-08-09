@@ -4,12 +4,12 @@
 
 | Key | English source | Localized copy | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `meta.title` | FELYA LABS \| Interfaces that extend human capability. | FELYA LABS \| 인간의 역량을 확장하는 인터페이스. | Native review pending | |
-| `meta.description` | FELYA LABS develops wearable interfaces that transfer human movement, touch and skill into robotic systems. | FELYA LABS는 사람의 움직임과 촉감, 숙련도를 로봇 시스템에 전달하는 웨어러블 인터페이스를 개발합니다. | Native review pending | |
-| `meta.ogTitle` | FELYA LABS | FELYA LABS | Native review pending | |
+| `meta.title` | FELYA | FELYA | Native review pending | |
+| `meta.description` | FELYA develops wearable interfaces that transfer human movement, touch and skill into robotic systems. | FELYA는 사람의 움직임과 촉감, 숙련도를 로봇 시스템에 전달하는 웨어러블 인터페이스를 개발합니다. | Native review pending | |
+| `meta.ogTitle` | FELYA | FELYA | Native review pending | |
 | `meta.ogDescription` | Interfaces that extend human capability. | 인간의 역량을 확장하는 인터페이스. | Native review pending | |
-| `meta.imageAlt` | PATON haptic glove by FELYA LABS with the claim Your hands. Anywhere on Earth. | “당신의 두 손. 세계 어디에서나.”라는 문구와 함께 보이는 FELYA LABS의 PATON 햅틱 글러브. | Native review pending | |
-| `brand.home` | FELYA LABS home | FELYA LABS 홈 | Native review pending | |
+| `meta.imageAlt` | PATON haptic glove by FELYA with the claim Your hands. Anywhere on Earth. | “당신의 두 손. 세계 어디에서나.”라는 문구와 함께 보이는 FELYA의 PATON 햅틱 글러브. | Native review pending | |
+| `brand.home` | FELYA home | FELYA 홈 | Native review pending | |
 | `nav.skip` | Skip to content | 본문으로 건너뛰기 | Native review pending | |
 | `nav.primary` | Primary navigation | 주요 탐색 | Native review pending | |
 | `nav.open` | Open navigation | 메뉴 열기 | Native review pending | |
@@ -31,7 +31,7 @@
 | `hero.headlineAnywhere` | Anywhere on Earth. | 세계 어디에서나. | Native review pending | |
 | `hero.lead` | Natural movement. Physical feedback. | 자연스러운 움직임. 생생한 피드백. | Native review pending | |
 | `hero.languageInteraction` | Show the next language | 다음 언어 보기 | Native review pending | |
-| `hero.imageAlt` | Close-up of the FELYA LABS haptic glove with blue finger mechanisms over a fabric glove. | 패브릭 글러브 위에 파란색 손가락 메커니즘이 장착된 FELYA LABS 햅틱 글러브의 클로즈업. | Native review pending | |
+| `hero.imageAlt` | Close-up of the FELYA haptic glove with blue finger mechanisms over a fabric glove. | 패브릭 글러브 위에 파란색 손가락 메커니즘이 장착된 FELYA 햅틱 글러브의 클로즈업. | Native review pending | |
 | `system.eyebrow` | The system | 시스템 | Native review pending | |
 | `system.heading` | <span class="heading-line">PATON closes</span><span class="heading-line">the loop.</span> | <span class="heading-line">PATON이 루프를</span><span class="heading-line">완성합니다.</span> | Native review pending | |
 | `system.leadSequence` | You move. The robot follows. | 사람이 움직이면, 로봇이 따릅니다. | Native review pending | |
@@ -40,7 +40,7 @@
 | `system.forward` | Movement and control | 움직임과 제어 | Native review pending | |
 | `system.return` | Contact, force and resistance | 접촉, 힘, 저항 | Native review pending | |
 | `system.returnShort` | Touch + force | 접촉 + 힘 | Native review pending | |
-| `system.patonLayer` | Gloves + Suit | 글러브 + 수트 | Native review pending | |
+| `system.patonLayer` | HAPTIC EXOSKELETON | HAPTIC EXOSKELETON | Native review pending | |
 | `system.stage.movement.label` | Human movement | 사람의 움직임 | Native review pending | |
 | `system.stage.movement.aria` | Human movement: trace movement and control to the robot | 사람의 움직임: 로봇으로 전달되는 움직임과 제어 흐름 보기 | Native review pending | |
 | `system.stage.paton.label` | PATON | PATON | Native review pending | |
@@ -61,7 +61,7 @@
 | `developmentUpdates.pendingStatus` | Submitting... | 등록 중... | Native review pending | |
 | `developmentUpdates.fallbackButton` | Receive updates | 업데이트 받기 | Native review pending | |
 | `developmentUpdates.success` | Connection made. You are on the list. | 연결되었습니다. 소식을 전해드릴게요. | Native review pending | |
-| `developmentUpdates.error` | Something went wrong. Email us at info@felyalabs.com and we will add you manually. | 오류가 발생했습니다. info@felyalabs.com으로 메일을 보내주시면 직접 등록해 드립니다. | Native review pending | |
+| `developmentUpdates.error` | Something went wrong. Email us at info@felya.com and we will add you manually. | 오류가 발생했습니다. info@felya.com으로 메일을 보내주시면 직접 등록해 드립니다. | Native review pending | |
 | `developmentUpdates.consent` | By signing up, you agree to Formspark processing your email and technical data to send development updates. You can withdraw consent at any time. See our <a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">Privacy Policy</a>. | 신청하면 개발 소식을 보내기 위해 Formspark가 이메일과 기술 정보를 처리하는 데 동의하게 됩니다. 동의는 언제든 철회할 수 있습니다. <a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">개인정보 처리방침</a>을 확인하세요. | Native review pending | |
 | `prototypes.eyebrow` | Real prototypes | 생각에 그치지 않고, 직접 만들었습니다. | Native review pending | |
 | `prototypes.heading` | <span class="heading-line">Built through</span><span class="heading-line">iteration.</span> | <span class="heading-line">버전을 거듭하며</span><span class="heading-line">더 나아집니다.</span> | Native review pending | |
@@ -96,7 +96,7 @@
 | `pointOfView.disciplinesEyebrow` | Across disciplines. | 여러 분야. 하나의 시스템. | Native review pending | |
 | `pointOfView.disciplines` | Mechanical systems, wearable robotics, embedded electronics and software become one embodied interface. | 기계 시스템과 웨어러블 로보틱스, 임베디드 전자장치, 소프트웨어가 하나의 신체형 인터페이스로 결합됩니다. | Native review pending | |
 | `pointOfView.origin` | Started at TH Köln. Shaped with industry. | TH Köln에서 시작해 산업계와 함께 발전시켰습니다. | Native review pending | |
-| `pointOfView.imageAlt` | Four FELYA LABS team members holding and wearing haptic glove prototypes. | FELYA LABS 팀원 네 명이 햅틱 글러브 프로토타입을 들거나 착용하고 있습니다. | Native review pending | |
+| `pointOfView.imageAlt` | Four FELYA team members holding and wearing haptic glove prototypes. | FELYA 팀원 네 명이 햅틱 글러브 프로토타입을 들거나 착용하고 있습니다. | Native review pending | |
 | `workWithUs.eyebrow` | Work with us | 함께하기 | Native review pending | |
 | `workWithUs.heading` | <span class="heading-line">Help extend</span><span class="heading-line">human capability.</span> | <span class="heading-line">사람과 기계 사이의 인터페이스를</span><span class="heading-line">함께 만듭니다.</span> | Native review pending | |
 | `workWithUs.description` | We collaborate with researchers, engineers, robotics teams and industry partners to turn ambitious ideas into working systems. | 연구자와 엔지니어, 로봇 팀, 산업 파트너와 협력해 대담한 아이디어를 실제로 작동하는 시스템으로 구현합니다. | Native review pending | |
@@ -105,12 +105,12 @@
 | `workWithUs.joinTitle` | Join the team | 팀에 합류하기 | Native review pending | |
 | `workWithUs.joinDescription` | Engineering, robotics, embedded systems, software and design | 엔지니어링, 로보틱스, 임베디드 시스템, 소프트웨어, 디자인 | Native review pending | |
 | `workWithUs.openInvitation` | See another way to work together? Let's talk. | 새로운 협업 방식이 떠오르나요? 이야기해 주세요. | Native review pending | |
-| `footer.copyright` | © FELYA LABS 2026. | © FELYA LABS 2026. | Native review pending | |
+| `footer.copyright` | © FELYA 2026. | © FELYA 2026. | Native review pending | |
 | `footer.legalAria` | Legal information | 법적 정보 | Native review pending | |
-| `footer.linkedin` | FELYA LABS on LinkedIn | LinkedIn의 FELYA LABS | Native review pending | |
-| `footer.instagram` | FELYA LABS on Instagram | Instagram의 FELYA LABS | Native review pending | |
-| `footer.github` | FELYA LABS on GitHub | GitHub의 FELYA LABS | Native review pending | |
-| `footer.youtube` | FELYA LABS prototype video on YouTube | YouTube의 FELYA LABS 프로토타입 영상 | Native review pending | |
+| `footer.linkedin` | FELYA on LinkedIn | LinkedIn의 FELYA | Native review pending | |
+| `footer.instagram` | FELYA on Instagram | Instagram의 FELYA | Native review pending | |
+| `footer.github` | FELYA on GitHub | GitHub의 FELYA | Native review pending | |
+| `footer.youtube` | FELYA prototype video on YouTube | YouTube의 FELYA 프로토타입 영상 | Native review pending | |
 | `legal.terms` | Terms & Conditions | 이용약관 | Native review pending | |
 | `legal.privacy` | Privacy Policy | 개인정보 처리방침 | Native review pending | |
 | `legal.impressum` | Impressum | 법적 고지 | Native review pending | |

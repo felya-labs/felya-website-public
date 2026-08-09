@@ -4,12 +4,12 @@
 
 | Key | English source | Localized copy | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `meta.title` | FELYA LABS \| Interfaces that extend human capability. | FELYA LABS \| 延伸人類能力的介面。 | Native review pending | |
-| `meta.description` | FELYA LABS develops wearable interfaces that transfer human movement, touch and skill into robotic systems. | FELYA LABS 開發穿戴式介面，將人的動作、觸覺與技能帶入機器人系統。 | Native review pending | |
-| `meta.ogTitle` | FELYA LABS | FELYA LABS | Native review pending | |
+| `meta.title` | FELYA | FELYA | Native review pending | |
+| `meta.description` | FELYA develops wearable interfaces that transfer human movement, touch and skill into robotic systems. | FELYA 開發穿戴式介面，將人的動作、觸覺與技能帶入機器人系統。 | Native review pending | |
+| `meta.ogTitle` | FELYA | FELYA | Native review pending | |
 | `meta.ogDescription` | Interfaces that extend human capability. | 延伸人類能力的介面。 | Native review pending | |
-| `meta.imageAlt` | PATON haptic glove by FELYA LABS with the claim Your hands. Anywhere on Earth. | FELYA LABS 的 PATON 觸覺手套，以及「你的雙手。世界任何角落。」標語。 | Native review pending | |
-| `brand.home` | FELYA LABS home | FELYA LABS 首頁 | Native review pending | |
+| `meta.imageAlt` | PATON haptic glove by FELYA with the claim Your hands. Anywhere on Earth. | FELYA 的 PATON 觸覺手套，以及「你的雙手。世界任何角落。」標語。 | Native review pending | |
+| `brand.home` | FELYA home | FELYA 首頁 | Native review pending | |
 | `nav.skip` | Skip to content | 跳至主要內容 | Native review pending | |
 | `nav.primary` | Primary navigation | 主要導覽 | Native review pending | |
 | `nav.open` | Open navigation | 開啟導覽選單 | Native review pending | |
@@ -31,7 +31,7 @@
 | `hero.headlineAnywhere` | Anywhere on Earth. | 世界任何角落。 | Native review pending | |
 | `hero.lead` | Natural movement. Physical feedback. | 自然動作。真實回饋。 | Native review pending | |
 | `hero.languageInteraction` | Show the next language | 顯示下一種語言 | Native review pending | |
-| `hero.imageAlt` | Close-up of the FELYA LABS haptic glove with blue finger mechanisms over a fabric glove. | FELYA LABS 觸覺手套特寫：織物手套上裝有藍色手指機構。 | Native review pending | |
+| `hero.imageAlt` | Close-up of the FELYA haptic glove with blue finger mechanisms over a fabric glove. | FELYA 觸覺手套特寫：織物手套上裝有藍色手指機構。 | Native review pending | |
 | `system.eyebrow` | The system | 系統 | Native review pending | |
 | `system.heading` | <span class="heading-line">PATON closes</span><span class="heading-line">the loop.</span> | <span class="heading-line">PATON 讓控制</span><span class="heading-line">形成完整閉環。</span> | Native review pending | |
 | `system.leadSequence` | You move. The robot follows. | 你一動，機器人就跟著動。 | Native review pending | |
@@ -40,7 +40,7 @@
 | `system.forward` | Movement and control | 動作與控制 | Native review pending | |
 | `system.return` | Contact, force and resistance | 觸覺、力量與阻力 | Native review pending | |
 | `system.returnShort` | Touch + force | 觸覺 + 力量 | Native review pending | |
-| `system.patonLayer` | Gloves + Suit | 手套 + 穿戴系統 | Native review pending | |
+| `system.patonLayer` | HAPTIC EXOSKELETON | HAPTIC EXOSKELETON | Native review pending | |
 | `system.stage.movement.label` | Human movement | 人的動作 | Native review pending | |
 | `system.stage.movement.aria` | Human movement: trace movement and control to the robot | 人的動作：查看動作與控制如何傳向機器人 | Native review pending | |
 | `system.stage.paton.label` | PATON | PATON | Native review pending | |
@@ -61,7 +61,7 @@
 | `developmentUpdates.pendingStatus` | Submitting... | 正在送出… | Native review pending | |
 | `developmentUpdates.fallbackButton` | Receive updates | 追蹤開發進度 | Native review pending | |
 | `developmentUpdates.success` | Connection made. You are on the list. | 訂閱成功。接下來的開發動態會寄到你的信箱。 | Native review pending | |
-| `developmentUpdates.error` | Something went wrong. Email us at info@felyalabs.com and we will add you manually. | 目前無法送出。請寄信至 info@felyalabs.com，我們會協助你完成訂閱。 | Native review pending | |
+| `developmentUpdates.error` | Something went wrong. Email us at info@felya.com and we will add you manually. | 目前無法送出。請寄信至 info@felya.com，我們會協助你完成訂閱。 | Native review pending | |
 | `developmentUpdates.consent` | By signing up, you agree to Formspark processing your email and technical data to send development updates. You can withdraw consent at any time. See our <a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">Privacy Policy</a>. | 送出即表示你同意由 Formspark 處理你的電子郵件與技術資料，以寄送開發動態。你可以隨時撤回同意。詳情請見我們的<a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">隱私權政策</a>。 | Native review pending | |
 | `prototypes.eyebrow` | Real prototypes | 實作，不只停在想像 | Native review pending | |
 | `prototypes.heading` | <span class="heading-line">Built through</span><span class="heading-line">iteration.</span> | <span class="heading-line">一步一步，</span><span class="heading-line">持續改進。</span> | Native review pending | |
@@ -96,7 +96,7 @@
 | `pointOfView.disciplinesEyebrow` | Across disciplines. | 多種專業，一個系統。 | Native review pending | |
 | `pointOfView.disciplines` | Mechanical systems, wearable robotics, embedded electronics and software become one embodied interface. | 機械、穿戴式機器人、嵌入式電子與軟體，整合成一套貼近身體的介面。 | Native review pending | |
 | `pointOfView.origin` | Started at TH Köln. Shaped with industry. | 誕生於 TH Köln，與產業夥伴共同發展。 | Native review pending | |
-| `pointOfView.imageAlt` | Four FELYA LABS team members holding and wearing haptic glove prototypes. | 四位 FELYA LABS 團隊成員手持或穿戴觸覺手套原型。 | Native review pending | |
+| `pointOfView.imageAlt` | Four FELYA team members holding and wearing haptic glove prototypes. | 四位 FELYA 團隊成員手持或穿戴觸覺手套原型。 | Native review pending | |
 | `workWithUs.eyebrow` | Work with us | 與我們同行 | Native review pending | |
 | `workWithUs.heading` | <span class="heading-line">Help extend</span><span class="heading-line">human capability.</span> | <span class="heading-line">一起打造人與機器之間的</span><span class="heading-line">新型介面。</span> | Native review pending | |
 | `workWithUs.description` | We collaborate with researchers, engineers, robotics teams and industry partners to turn ambitious ideas into working systems. | 我們與研究人員、工程師、機器人團隊和產業夥伴合作，將大膽構想化為真正運作的系統。 | Native review pending | |
@@ -105,12 +105,12 @@
 | `workWithUs.joinTitle` | Join the team | 加入團隊 | Native review pending | |
 | `workWithUs.joinDescription` | Engineering, robotics, embedded systems, software and design | 工程、機器人、嵌入式系統、軟體與設計 | Native review pending | |
 | `workWithUs.openInvitation` | See another way to work together? Let's talk. | 看見另一種合作方式？歡迎與我們聊聊。 | Native review pending | |
-| `footer.copyright` | © FELYA LABS 2026. | © FELYA LABS 2026. | Native review pending | |
+| `footer.copyright` | © FELYA 2026. | © FELYA 2026. | Native review pending | |
 | `footer.legalAria` | Legal information | 法律資訊 | Native review pending | |
-| `footer.linkedin` | FELYA LABS on LinkedIn | FELYA LABS 的 LinkedIn | Native review pending | |
-| `footer.instagram` | FELYA LABS on Instagram | FELYA LABS 的 Instagram | Native review pending | |
-| `footer.github` | FELYA LABS on GitHub | FELYA LABS 的 GitHub | Native review pending | |
-| `footer.youtube` | FELYA LABS prototype video on YouTube | FELYA LABS 在 YouTube 上的原型影片 | Native review pending | |
+| `footer.linkedin` | FELYA on LinkedIn | FELYA 的 LinkedIn | Native review pending | |
+| `footer.instagram` | FELYA on Instagram | FELYA 的 Instagram | Native review pending | |
+| `footer.github` | FELYA on GitHub | FELYA 的 GitHub | Native review pending | |
+| `footer.youtube` | FELYA prototype video on YouTube | FELYA 在 YouTube 上的原型影片 | Native review pending | |
 | `legal.terms` | Terms & Conditions | 使用條款 | Native review pending | |
 | `legal.privacy` | Privacy Policy | 隱私權政策 | Native review pending | |
 | `legal.impressum` | Impressum | 法律聲明 | Native review pending | |

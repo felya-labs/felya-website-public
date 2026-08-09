@@ -4,12 +4,12 @@
 
 | Key | English source | Localized copy | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `meta.title` | FELYA LABS \| Interfaces that extend human capability. | FELYA LABS \| Интерфейсы, расширяющие возможности человека. | Native review pending | |
-| `meta.description` | FELYA LABS develops wearable interfaces that transfer human movement, touch and skill into robotic systems. | FELYA LABS разрабатывает носимые интерфейсы, которые передают движения, прикосновения и навыки человека роботизированным системам. | Native review pending | |
-| `meta.ogTitle` | FELYA LABS | FELYA LABS | Native review pending | |
+| `meta.title` | FELYA | FELYA | Native review pending | |
+| `meta.description` | FELYA develops wearable interfaces that transfer human movement, touch and skill into robotic systems. | FELYA разрабатывает носимые интерфейсы, которые передают движения, прикосновения и навыки человека роботизированным системам. | Native review pending | |
+| `meta.ogTitle` | FELYA | FELYA | Native review pending | |
 | `meta.ogDescription` | Interfaces that extend human capability. | Интерфейсы, расширяющие возможности человека. | Native review pending | |
-| `meta.imageAlt` | PATON haptic glove by FELYA LABS with the claim Your hands. Anywhere on Earth. | Тактильная перчатка PATON от FELYA LABS и слоган «Ваши руки. В любой точке мира». | Native review pending | |
-| `brand.home` | FELYA LABS home | Главная страница FELYA LABS | Native review pending | |
+| `meta.imageAlt` | PATON haptic glove by FELYA with the claim Your hands. Anywhere on Earth. | Тактильная перчатка PATON от FELYA и слоган «Ваши руки. В любой точке мира». | Native review pending | |
+| `brand.home` | FELYA home | Главная страница FELYA | Native review pending | |
 | `nav.skip` | Skip to content | Перейти к содержанию | Native review pending | |
 | `nav.primary` | Primary navigation | Основная навигация | Native review pending | |
 | `nav.open` | Open navigation | Открыть навигацию | Native review pending | |
@@ -31,7 +31,7 @@
 | `hero.headlineAnywhere` | Anywhere on Earth. | В любой точке мира. | Native review pending | |
 | `hero.lead` | Natural movement. Physical feedback. | Естественное движение. Осязаемая обратная связь. | Native review pending | |
 | `hero.languageInteraction` | Show the next language | Показать следующий язык | Native review pending | |
-| `hero.imageAlt` | Close-up of the FELYA LABS haptic glove with blue finger mechanisms over a fabric glove. | Крупный план тактильной перчатки FELYA LABS с синими механизмами пальцев поверх тканевой основы. | Native review pending | |
+| `hero.imageAlt` | Close-up of the FELYA haptic glove with blue finger mechanisms over a fabric glove. | Крупный план тактильной перчатки FELYA с синими механизмами пальцев поверх тканевой основы. | Native review pending | |
 | `system.eyebrow` | The system | Система | Native review pending | |
 | `system.heading` | <span class="heading-line">PATON closes</span><span class="heading-line">the loop.</span> | <span class="heading-line">PATON замыкает</span><span class="heading-line">контур.</span> | Native review pending | |
 | `system.leadSequence` | You move. The robot follows. | Вы двигаетесь. Робот повторяет. | Native review pending | |
@@ -40,7 +40,7 @@
 | `system.forward` | Movement and control | Движение и управление | Native review pending | |
 | `system.return` | Contact, force and resistance | Прикосновение, усилие и сопротивление | Native review pending | |
 | `system.returnShort` | Touch + force | Прикосновение + усилие | Native review pending | |
-| `system.patonLayer` | Gloves + Suit | ПЕРЧАТКИ + КОСТЮМ | Native review pending | |
+| `system.patonLayer` | HAPTIC EXOSKELETON | HAPTIC EXOSKELETON | Native review pending | |
 | `system.stage.movement.label` | Human movement | Движение человека | Native review pending | |
 | `system.stage.movement.aria` | Human movement: trace movement and control to the robot | Движение человека: проследить передачу движения и управления к роботу | Native review pending | |
 | `system.stage.paton.label` | PATON | PATON | Native review pending | |
@@ -61,7 +61,7 @@
 | `developmentUpdates.pendingStatus` | Submitting... | Подписка оформляется... | Native review pending | |
 | `developmentUpdates.fallbackButton` | Receive updates | Получать новости | Native review pending | |
 | `developmentUpdates.success` | Connection made. You are on the list. | Связь установлена. Вы в списке. | Native review pending | |
-| `developmentUpdates.error` | Something went wrong. Email us at info@felyalabs.com and we will add you manually. | Что-то пошло не так. Напишите нам на info@felyalabs.com, и мы добавим вас вручную. | Native review pending | |
+| `developmentUpdates.error` | Something went wrong. Email us at info@felya.com and we will add you manually. | Что-то пошло не так. Напишите нам на info@felya.com, и мы добавим вас вручную. | Native review pending | |
 | `developmentUpdates.consent` | By signing up, you agree to Formspark processing your email and technical data to send development updates. You can withdraw consent at any time. See our <a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">Privacy Policy</a>. | Подписываясь, вы соглашаетесь на обработку Formspark вашего адреса электронной почты и технических данных для рассылки новостей о разработке. Согласие можно отозвать в любое время. Подробнее — в нашей <a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">Политике конфиденциальности</a>. | Native review pending | |
 | `prototypes.eyebrow` | Real prototypes | Создано, а не просто задумано. | Native review pending | |
 | `prototypes.heading` | <span class="heading-line">Built through</span><span class="heading-line">iteration.</span> | <span class="heading-line">Каждая итерация</span><span class="heading-line">ведёт дальше.</span> | Native review pending | |
@@ -96,7 +96,7 @@
 | `pointOfView.disciplinesEyebrow` | Across disciplines. | Много дисциплин. Одна система. | Native review pending | |
 | `pointOfView.disciplines` | Mechanical systems, wearable robotics, embedded electronics and software become one embodied interface. | Механика, носимая робототехника, встроенная электроника и программное обеспечение объединяются в единый телесный интерфейс. | Native review pending | |
 | `pointOfView.origin` | Started at TH Köln. Shaped with industry. | Создано в TH Köln. Развивается вместе с индустрией. | Native review pending | |
-| `pointOfView.imageAlt` | Four FELYA LABS team members holding and wearing haptic glove prototypes. | Четыре участника FELYA LABS держат и надевают прототипы тактильных перчаток. | Native review pending | |
+| `pointOfView.imageAlt` | Four FELYA team members holding and wearing haptic glove prototypes. | Четыре участника FELYA держат и надевают прототипы тактильных перчаток. | Native review pending | |
 | `workWithUs.eyebrow` | Work with us | Работайте с нами | Native review pending | |
 | `workWithUs.heading` | <span class="heading-line">Help extend</span><span class="heading-line">human capability.</span> | <span class="heading-line">Создадим вместе интерфейс</span><span class="heading-line">между человеком и машиной.</span> | Native review pending | |
 | `workWithUs.description` | We collaborate with researchers, engineers, robotics teams and industry partners to turn ambitious ideas into working systems. | Вместе с исследователями, инженерами, командами робототехники и индустриальными партнёрами мы превращаем смелые идеи в работающие системы. | Native review pending | |
@@ -105,12 +105,12 @@
 | `workWithUs.joinTitle` | Join the team | Присоединиться к команде | Native review pending | |
 | `workWithUs.joinDescription` | Engineering, robotics, embedded systems, software and design | Инженерия, робототехника, встраиваемые системы, программное обеспечение и дизайн | Native review pending | |
 | `workWithUs.openInvitation` | See another way to work together? Let's talk. | Видите другой формат сотрудничества? Давайте обсудим. | Native review pending | |
-| `footer.copyright` | © FELYA LABS 2026. | © FELYA LABS 2026. | Native review pending | |
+| `footer.copyright` | © FELYA 2026. | © FELYA 2026. | Native review pending | |
 | `footer.legalAria` | Legal information | Правовая информация | Native review pending | |
-| `footer.linkedin` | FELYA LABS on LinkedIn | FELYA LABS в LinkedIn | Native review pending | |
-| `footer.instagram` | FELYA LABS on Instagram | FELYA LABS в Instagram | Native review pending | |
-| `footer.github` | FELYA LABS on GitHub | FELYA LABS на GitHub | Native review pending | |
-| `footer.youtube` | FELYA LABS prototype video on YouTube | Видео прототипа FELYA LABS на YouTube | Native review pending | |
+| `footer.linkedin` | FELYA on LinkedIn | FELYA в LinkedIn | Native review pending | |
+| `footer.instagram` | FELYA on Instagram | FELYA в Instagram | Native review pending | |
+| `footer.github` | FELYA on GitHub | FELYA на GitHub | Native review pending | |
+| `footer.youtube` | FELYA prototype video on YouTube | Видео прототипа FELYA на YouTube | Native review pending | |
 | `legal.terms` | Terms & Conditions | Условия использования | Native review pending | |
 | `legal.privacy` | Privacy Policy | Политика конфиденциальности | Native review pending | |
 | `legal.impressum` | Impressum | Выходные данные | Native review pending | |

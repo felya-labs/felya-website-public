@@ -31,7 +31,7 @@ const resolvedOpenGraphDescription = openGraphDescription ?? t(locale, 'meta.ogD
 const resolvedTwitterTitle = twitterTitle ?? resolvedOpenGraphTitle;
 const resolvedTwitterDescription = twitterDescription ?? resolvedOpenGraphDescription;
 
-const siteOrigin = Astro.site?.origin ?? 'https://preview.felyalabs.com';
+const siteOrigin = Astro.site?.origin ?? 'https://preview.felya.com';
 const canonicalPath = Astro.url.pathname === '/index.html' ? '/' : Astro.url.pathname;
 const canonicalUrl = new URL(canonicalPath, siteOrigin).toString();
 const socialImageUrl = new URL('/assets/brand/felya-labs-paton-social-preview-1200x630.jpg', siteOrigin).toString();
@@ -39,14 +39,14 @@ const organizationLogoUrl = new URL('/assets/brand/felya-labs-logo-square-512.pn
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'FELYA LABS',
+  name: 'FELYA',
   url: siteOrigin,
   logo: organizationLogoUrl,
-  email: 'info@felyalabs.com',
+  email: 'info@felya.com',
   sameAs: [
     'https://linkedin.com/company/felya-labs',
     'https://instagram.com/felya_labs/',
-    'https://github.com/felyalabs/'
+    'https://github.com/felya-labs/'
   ]
 };
 const productSchema = {
@@ -56,7 +56,7 @@ const productSchema = {
   description: t(locale, 'system.leadControl'),
   brand: {
     '@type': 'Brand',
-    name: 'FELYA LABS'
+    name: 'FELYA'
   },
   url: canonicalUrl
 };

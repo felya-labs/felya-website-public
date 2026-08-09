@@ -4,7 +4,7 @@ const imageSrcset = (directory, fileStem, widths = responsiveImageWidths) =>
   widths.map((width) => [imageSrc(directory, `${fileStem}-${width}`), width]);
 
 export const brand = {
-  name: 'FELYA LABS',
+  name: 'FELYA',
   logo: {
     src: '/assets/images/brand/felya-labs-logo/felya-labs-wordmark-white.webp',
     width: 2935,
@@ -13,7 +13,7 @@ export const brand = {
 };
 
 export const siteMetadata = {
-  siteName: 'FELYA LABS'
+  siteName: 'FELYA'
 };
 
 export const navLinks = [
@@ -34,22 +34,22 @@ export const socialLinks = [
   {
     id: 'linkedin',
     href: 'https://linkedin.com/company/felya-labs',
-    label: 'FELYA LABS on LinkedIn'
+    label: 'FELYA on LinkedIn'
   },
   {
     id: 'instagram',
     href: 'https://instagram.com/felya_labs/',
-    label: 'FELYA LABS on Instagram'
+    label: 'FELYA on Instagram'
   },
   {
     id: 'github',
-    href: 'https://github.com/felyalabs/',
-    label: 'FELYA LABS on GitHub'
+    href: 'https://github.com/felya-labs/',
+    label: 'FELYA on GitHub'
   },
   {
     id: 'youtube',
     href: 'https://youtube.com/watch?v=230vny1l3fE',
-    label: 'FELYA LABS prototype video on YouTube'
+    label: 'FELYA prototype video on YouTube'
   }
 ];
 
@@ -61,7 +61,7 @@ export const gloveDarkImage = {
   sizes: '(min-width: 1536px) 760px, (min-width: 1024px) 680px, (min-width: 768px) 620px, 300px',
   width: 1200,
   height: 1343,
-  alt: 'Close-up of the FELYA LABS haptic glove with blue finger mechanisms over a fabric glove.'
+  alt: 'Close-up of the FELYA haptic glove with blue finger mechanisms over a fabric glove.'
 };
 
 export const gloveLightImage = {
@@ -88,7 +88,7 @@ export const teamPortrait = {
   sizes: '(min-width: 1344px) 568px, (min-width: 768px) calc((100vw - 12rem) / 2), calc(100vw - 4rem)',
   width: 3568,
   height: 2585,
-  alt: 'Four FELYA LABS team members holding and wearing haptic glove prototypes.'
+  alt: 'Four FELYA team members holding and wearing haptic glove prototypes.'
 };
 
 export const partners = [

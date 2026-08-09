@@ -13,7 +13,7 @@ const { locale } = Astro.props as { locale: Locale };
         <div class="footer-bar">
             <div class="footer-identity">
                 <a href={`${localePath(locale)}#paton`} class="footer-brand" aria-label={t(locale, 'brand.home')}>
-                    <img src={brand.logo.src} width={brand.logo.width} height={brand.logo.height} alt="FELYA LABS" loading="lazy" decoding="async" fetchpriority="low">
+                    <img src={brand.logo.src} width={brand.logo.width} height={brand.logo.height} alt="FELYA" loading="lazy" decoding="async" fetchpriority="low">
                 </a>
                 <p class="footer-copyright" data-i18n="footer.copyright">{t(locale, 'footer.copyright')}</p>
             </div>
@@ -28,7 +28,7 @@ const { locale } = Astro.props as { locale: Locale };
                 {legalLinks.map((link) => (
                     <a href={link.href} data-i18n={`legal.${link.key}`}>{t(locale, `legal.${link.key}` as TranslationKey)}</a>
                 ))}
-                <a href="https://brand.felyalabs.com" target="_blank" rel="noopener noreferrer">Brand Guide</a>
+                <a href="https://brand.felya.com" target="_blank" rel="noopener noreferrer">Brand Guide</a>
             </nav>
         </div>
     </div>

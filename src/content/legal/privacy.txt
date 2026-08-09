@@ -4,9 +4,9 @@ Last updated: July 2026
 
 1. General Information and Controller
 
-1.1. Protecting your personal data is of utmost importance to us. This Privacy Policy clarifies the nature, scope, and purpose of the processing of personal data (hereinafter referred to as "Data") within our website felyalabs.com (hereinafter referred to as "Website").
+1.1. Protecting your personal data is of utmost importance to us. This Privacy Policy clarifies the nature, scope, and purpose of the processing of personal data (hereinafter referred to as "Data") within our website felya.com (hereinafter referred to as "Website").
 
-1.2. The data controller responsible for the data processing on this Website pursuant to the General Data Protection Regulation (GDPR) is the founding team of the FELYA LABS project, acting as a partnership under civil law (Gesellschaft bürgerlichen Rechts — GbR) under German law, emerged from the "Code & Context" program at the Cologne University of Applied Sciences (TH Köln). You can contact us directly and informally via email at: info@felyalabs.com.
+1.2. The data controller responsible for the data processing on this Website pursuant to the General Data Protection Regulation (GDPR) is the founding team of the FELYA project, acting as a partnership under civil law (Gesellschaft bürgerlichen Rechts — GbR) under German law, emerged from the "Code & Context" program at the Cologne University of Applied Sciences (TH Köln). You can contact us directly and informally via email at: info@felya.com.
 
 
 2. Hosting and Server Log Files
@@ -24,7 +24,7 @@ Last updated: July 2026
 
 3.2. For the technical provision, validation, and processing of form submissions, we utilize the external form backend Formspark, a service provided by Trampoline Software SRL, Rue de Marsannay-la-Côte Mazy 16, 5032 Gembloux, Belgium. A technical connection to Formspark's servers is exclusively established at the moment you actively click the submission button. According to the provider, the data is stored on servers within the European Union. Data transmitted during this action includes your email address and the required HTTP header data (including your IP address).
 
-3.3. The legal basis for this processing is your explicit consent pursuant to Art. 6 (1) (a) GDPR. You maintain the absolute and unconditional right to revoke this consent at any time with effect for the future. A revocation can be submitted informally by sending an email notification to info@felyalabs.com. Following your revocation, your data will be permanently deleted from our list without undue delay.
+3.3. The legal basis for this processing is your explicit consent pursuant to Art. 6 (1) (a) GDPR. You maintain the absolute and unconditional right to revoke this consent at any time with effect for the future. A revocation can be submitted informally by sending an email notification to info@felya.com. Following your revocation, your data will be permanently deleted from our list without undue delay.
 
 
 4. Contact via Email
@@ -50,7 +50,7 @@ Last updated: July 2026
 
 7. Your Statutory Rights under the GDPR
 
-7.1. As a data subject under European law, you possess comprehensive statutory rights regarding your personal data, which you can assert at any time by contacting us informally via email at info@felyalabs.com:
+7.1. As a data subject under European law, you possess comprehensive statutory rights regarding your personal data, which you can assert at any time by contacting us informally via email at info@felya.com:
 
 (1) Right of Access (Art. 15 GDPR): The right to obtain information about your data processed by us.
 (2) Right to Rectification (Art. 16 GDPR): The right to demand the immediate correction of inaccurate or incomplete data.

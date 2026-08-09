@@ -21,7 +21,7 @@ for (const locale of reviewLocales) {
     lines.push(`| \`${key}\` | ${escape(translations.en[key])} | ${escape(translations[locale][key])} | Native review pending | |`);
   }
   lines.push('');
-  fs.writeFileSync(path.join(outputDirectory, `${locale}.md`), `${lines.join('\n')}\n`);
+  fs.writeFileSync(path.join(outputDirectory, `${locale}.md`), lines.join('\n'));
 }
 
 console.log(`Generated ${reviewLocales.length} native-review documents in ${outputDirectory}.`);

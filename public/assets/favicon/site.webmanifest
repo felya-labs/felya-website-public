@@ -1,7 +1,7 @@
 {
-  "name": "FELYA LABS",
-  "short_name": "FELYA LABS",
-  "description": "FELYA LABS develops wearable interfaces that transfer human movement, touch and skill into robotic systems.",
+  "name": "FELYA",
+  "short_name": "FELYA",
+  "description": "FELYA develops wearable interfaces that transfer human movement, touch and skill into robotic systems.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

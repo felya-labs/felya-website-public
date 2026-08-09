@@ -4,7 +4,7 @@ import { localeDetails, localePath, locales } from '../src/i18n/config.ts';
 import { translations } from '../src/i18n/translations.ts';
 
 const dist = new URL('../dist/', import.meta.url);
-const siteOrigin = process.env.SITE_URL?.trim() || 'https://preview.felyalabs.com';
+const siteOrigin = process.env.SITE_URL?.trim() || 'https://preview.felya.com';
 const errors = [];
 
 const expect = (html, needle, context) => {

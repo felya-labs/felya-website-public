@@ -4,12 +4,12 @@
 
 | Key | English source | Localized copy | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `meta.title` | FELYA LABS \| Interfaces that extend human capability. | FELYA LABS \| 人の能力を拡張するインターフェース。 | Native review pending | |
-| `meta.description` | FELYA LABS develops wearable interfaces that transfer human movement, touch and skill into robotic systems. | FELYA LABSは、人の動き、触覚、技能をロボットシステムへ伝えるウェアラブルインターフェースを開発しています。 | Native review pending | |
-| `meta.ogTitle` | FELYA LABS | FELYA LABS | Native review pending | |
+| `meta.title` | FELYA | FELYA | Native review pending | |
+| `meta.description` | FELYA develops wearable interfaces that transfer human movement, touch and skill into robotic systems. | FELYAは、人の動き、触覚、技能をロボットシステムへ伝えるウェアラブルインターフェースを開発しています。 | Native review pending | |
+| `meta.ogTitle` | FELYA | FELYA | Native review pending | |
 | `meta.ogDescription` | Interfaces that extend human capability. | 人の能力を拡張するインターフェース。 | Native review pending | |
-| `meta.imageAlt` | PATON haptic glove by FELYA LABS with the claim Your hands. Anywhere on Earth. | 「あなたの手を、世界のどこへでも。」というメッセージとFELYA LABSのPATONハプティックグローブ。 | Native review pending | |
-| `brand.home` | FELYA LABS home | FELYA LABS ホーム | Native review pending | |
+| `meta.imageAlt` | PATON haptic glove by FELYA with the claim Your hands. Anywhere on Earth. | 「あなたの手を、世界のどこへでも。」というメッセージとFELYAのPATONハプティックグローブ。 | Native review pending | |
+| `brand.home` | FELYA home | FELYA ホーム | Native review pending | |
 | `nav.skip` | Skip to content | 本文へ移動 | Native review pending | |
 | `nav.primary` | Primary navigation | メインナビゲーション | Native review pending | |
 | `nav.open` | Open navigation | ナビゲーションを開く | Native review pending | |
@@ -31,7 +31,7 @@
 | `hero.headlineAnywhere` | Anywhere on Earth. | 世界のどこへでも。 | Native review pending | |
 | `hero.lead` | Natural movement. Physical feedback. | 自然な動き。確かな感覚。 | Native review pending | |
 | `hero.languageInteraction` | Show the next language | 次の言語を表示 | Native review pending | |
-| `hero.imageAlt` | Close-up of the FELYA LABS haptic glove with blue finger mechanisms over a fabric glove. | 布製グローブの上に青い指機構を備えたFELYA LABSハプティックグローブのクローズアップ。 | Native review pending | |
+| `hero.imageAlt` | Close-up of the FELYA haptic glove with blue finger mechanisms over a fabric glove. | 布製グローブの上に青い指機構を備えたFELYAハプティックグローブのクローズアップ。 | Native review pending | |
 | `system.eyebrow` | The system | システム | Native review pending | |
 | `system.heading` | <span class="heading-line">PATON closes</span><span class="heading-line">the loop.</span> | <span class="heading-line">PATONがループを</span><span class="heading-line">完成させる。</span> | Native review pending | |
 | `system.leadSequence` | You move. The robot follows. | 人が動く。ロボットが従う。 | Native review pending | |
@@ -40,7 +40,7 @@
 | `system.forward` | Movement and control | 動きと制御 | Native review pending | |
 | `system.return` | Contact, force and resistance | 接触、力、抵抗 | Native review pending | |
 | `system.returnShort` | Touch + force | 接触 + 力 | Native review pending | |
-| `system.patonLayer` | Gloves + Suit | グローブ + スーツ | Native review pending | |
+| `system.patonLayer` | HAPTIC EXOSKELETON | HAPTIC EXOSKELETON | Native review pending | |
 | `system.stage.movement.label` | Human movement | 人の動き | Native review pending | |
 | `system.stage.movement.aria` | Human movement: trace movement and control to the robot | 人の動き：ロボットへ向かう動きと制御の流れを表示 | Native review pending | |
 | `system.stage.paton.label` | PATON | PATON | Native review pending | |
@@ -61,7 +61,7 @@
 | `developmentUpdates.pendingStatus` | Submitting... | 登録中... | Native review pending | |
 | `developmentUpdates.fallbackButton` | Receive updates | 更新を受け取る | Native review pending | |
 | `developmentUpdates.success` | Connection made. You are on the list. | 登録が完了しました。今後の情報をお届けします。 | Native review pending | |
-| `developmentUpdates.error` | Something went wrong. Email us at info@felyalabs.com and we will add you manually. | 送信できませんでした。info@felyalabs.comへご連絡いただければ、こちらで登録します。 | Native review pending | |
+| `developmentUpdates.error` | Something went wrong. Email us at info@felya.com and we will add you manually. | 送信できませんでした。info@felya.comへご連絡いただければ、こちらで登録します。 | Native review pending | |
 | `developmentUpdates.consent` | By signing up, you agree to Formspark processing your email and technical data to send development updates. You can withdraw consent at any time. See our <a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">Privacy Policy</a>. | 登録すると、開発情報を送るためにFormsparkがメールアドレスと技術情報を処理することに同意したものとみなされます。同意はいつでも撤回できます。詳しくは<a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">プライバシーポリシー</a>をご覧ください。 | Native review pending | |
 | `prototypes.eyebrow` | Real prototypes | 考えるだけでなく、つくる。 | Native review pending | |
 | `prototypes.heading` | <span class="heading-line">Built through</span><span class="heading-line">iteration.</span> | <span class="heading-line">試作を重ね、</span><span class="heading-line">前へ進む。</span> | Native review pending | |
@@ -96,7 +96,7 @@
 | `pointOfView.disciplinesEyebrow` | Across disciplines. | 多くの専門性。一つのシステム。 | Native review pending | |
 | `pointOfView.disciplines` | Mechanical systems, wearable robotics, embedded electronics and software become one embodied interface. | 機械、ウェアラブルロボティクス、組み込み電子回路、ソフトウェアが、一つの身体的なインターフェースになります。 | Native review pending | |
 | `pointOfView.origin` | Started at TH Köln. Shaped with industry. | TH Kölnから始まり、産業界とともに育てています。 | Native review pending | |
-| `pointOfView.imageAlt` | Four FELYA LABS team members holding and wearing haptic glove prototypes. | FELYA LABSの4人のメンバーが、ハプティックグローブのプロトタイプを手に持ち、または装着しています。 | Native review pending | |
+| `pointOfView.imageAlt` | Four FELYA team members holding and wearing haptic glove prototypes. | FELYAの4人のメンバーが、ハプティックグローブのプロトタイプを手に持ち、または装着しています。 | Native review pending | |
 | `workWithUs.eyebrow` | Work with us | 共につくる | Native review pending | |
 | `workWithUs.heading` | <span class="heading-line">Help extend</span><span class="heading-line">human capability.</span> | <span class="heading-line">人と機械をつなぐインターフェースを</span><span class="heading-line">共につくる。</span> | Native review pending | |
 | `workWithUs.description` | We collaborate with researchers, engineers, robotics teams and industry partners to turn ambitious ideas into working systems. | 研究者、エンジニア、ロボティクスチーム、産業パートナーと協力し、大胆なアイデアを実際に動くシステムへ変えています。 | Native review pending | |
@@ -105,12 +105,12 @@
 | `workWithUs.joinTitle` | Join the team | チームに加わる | Native review pending | |
 | `workWithUs.joinDescription` | Engineering, robotics, embedded systems, software and design | エンジニアリング、ロボティクス、組み込みシステム、ソフトウェア、デザイン | Native review pending | |
 | `workWithUs.openInvitation` | See another way to work together? Let's talk. | ほかの協業の形が見えますか。ぜひ話しましょう。 | Native review pending | |
-| `footer.copyright` | © FELYA LABS 2026. | © FELYA LABS 2026. | Native review pending | |
+| `footer.copyright` | © FELYA 2026. | © FELYA 2026. | Native review pending | |
 | `footer.legalAria` | Legal information | 法的情報 | Native review pending | |
-| `footer.linkedin` | FELYA LABS on LinkedIn | LinkedInのFELYA LABS | Native review pending | |
-| `footer.instagram` | FELYA LABS on Instagram | InstagramのFELYA LABS | Native review pending | |
-| `footer.github` | FELYA LABS on GitHub | GitHubのFELYA LABS | Native review pending | |
-| `footer.youtube` | FELYA LABS prototype video on YouTube | YouTubeのFELYA LABSプロトタイプ映像 | Native review pending | |
+| `footer.linkedin` | FELYA on LinkedIn | LinkedInのFELYA | Native review pending | |
+| `footer.instagram` | FELYA on Instagram | InstagramのFELYA | Native review pending | |
+| `footer.github` | FELYA on GitHub | GitHubのFELYA | Native review pending | |
+| `footer.youtube` | FELYA prototype video on YouTube | YouTubeのFELYAプロトタイプ映像 | Native review pending | |
 | `legal.terms` | Terms & Conditions | 利用規約 | Native review pending | |
 | `legal.privacy` | Privacy Policy | プライバシーポリシー | Native review pending | |
 | `legal.impressum` | Impressum | 法的表記 | Native review pending | |

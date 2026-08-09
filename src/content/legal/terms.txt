@@ -4,9 +4,9 @@ Last updated: July 2026
 
 1. Scope of Application
 
-1.1. These Terms & Conditions (hereinafter: "Terms") govern the access to and use of the website felyalabs.com (hereinafter: "Website") and all services, functions, and content provided herein.
+1.1. These Terms & Conditions (hereinafter: "Terms") govern the access to and use of the website felya.com (hereinafter: "Website") and all services, functions, and content provided herein.
 
-1.2. The Website is operated by the founders of FELYA LABS, an independent pre-seed student venture emerged from the "Code & Context" program at the Cologne University of Applied Sciences (TH Köln), acting as a partnership under civil law (Gesellschaft bürgerlichen Rechts — GbR) under the laws of the Federal Republic of Germany (hereinafter: "FELYA LABS", "we", "our", or "us").
+1.2. The Website is operated by the founders of FELYA, an independent pre-seed student venture emerged from the "Code & Context" program at the Cologne University of Applied Sciences (TH Köln), acting as a partnership under civil law (Gesellschaft bürgerlichen Rechts — GbR) under the laws of the Federal Republic of Germany (hereinafter: "FELYA", "we", "our", or "us").
 
 1.3. By accessing, browsing, interacting with the Website, or actively submitting your email address via the "Sign up" interface, you (hereinafter: "User" or "you") explicitly declare your agreement to be legally bound by these Terms.
 
@@ -15,43 +15,43 @@ Last updated: July 2026
 
 2.1. All content published on this Website is provided for general informational and demonstration purposes only, showcasing our ongoing academic research and technical development in the field of real-time robotic teleoperation technology.
 
-2.2. The User acknowledges that FELYA LABS is operated as an early-stage pre-seed venture. Consequently, all projects, visual representations, animations, video materials, technical specifications, architectural sketches, layouts, and product descriptions displayed on the Website represent non-binding internal prototypes and conceptual designs (Entwürfe).
+2.2. The User acknowledges that FELYA is operated as an early-stage pre-seed venture. Consequently, all projects, visual representations, animations, video materials, technical specifications, architectural sketches, layouts, and product descriptions displayed on the Website represent non-binding internal prototypes and conceptual designs (Entwürfe).
 
-2.3. FELYA LABS gives no warranty, guarantee, or representation, whether express or implied, regarding the final technical functionality, market maturity, or commercial availability of any future products or services. All designs and concepts are subject to modification, suspension, or discontinuation at any time without prior notice.
+2.3. FELYA gives no warranty, guarantee, or representation, whether express or implied, regarding the final technical functionality, market maturity, or commercial availability of any future products or services. All designs and concepts are subject to modification, suspension, or discontinuation at any time without prior notice.
 
 
 3. Sign-Up Functionality and Electronic Communications
 
-3.1. By actively entering your email address into the provided form and selecting the "Sign up" action, you grant FELYA LABS your explicit consent pursuant to Art. 6 (1) (a) GDPR (DSGVO) to process your contact details and technical metadata for the purpose of registering your interest and sending you periodic electronic updates regarding our project milestones, research progress, and future launch.
+3.1. By actively entering your email address into the provided form and selecting the "Sign up" action, you grant FELYA your explicit consent pursuant to Art. 6 (1) (a) GDPR (DSGVO) to process your contact details and technical metadata for the purpose of registering your interest and sending you periodic electronic updates regarding our project milestones, research progress, and future launch.
 
 3.2. To process form submissions technically, we utilize the external data processing infrastructure provided by Formspark (Codev LLC). A technical connection to the external form server is exclusively initiated upon your active interaction with the submission button.
 
-3.3. You maintain the absolute and unconditional right to revoke your consent and opt out of future communications at any time with effect for the future. Revocation requests must be submitted by contacting us directly via email at info@felyalabs.com.
+3.3. You maintain the absolute and unconditional right to revoke your consent and opt out of future communications at any time with effect for the future. Revocation requests must be submitted by contacting us directly via email at info@felya.com.
 
 
 4. Technical Infrastructure and External Hyperlinks
 
 4.1. In strict compliance with privacy-by-design and privacy-by-default principles, this Website serves its core visual assets, integrated media content, and typography locally. The Website does not deploy native commercial user-tracking or persistent behavioral analytics tools.
 
-4.2. The Website may contain hyperlinks to external third-party professional networks, institutional websites, or corporate profiles. FELYA LABS exercises no control over, and assumes no liability or warranty for, the legal compliance, content, operational availability, or data processing practices of external platforms. Accessing third-party domains occurs solely at the User's own risk.
+4.2. The Website may contain hyperlinks to external third-party professional networks, institutional websites, or corporate profiles. FELYA exercises no control over, and assumes no liability or warranty for, the legal compliance, content, operational availability, or data processing practices of external platforms. Accessing third-party domains occurs solely at the User's own risk.
 
 
 5. Intellectual Property and Proprietary Rights
 
-5.1. All original software architecture, conceptual frameworks, website copy, proprietary graphics, user interface (UI/UX) designs, layout structures, and multimedia assets generated by the FELYA LABS team or its founders remain the exclusive intellectual property of the respective creators, protected under the German Copyright Act (Urheberrechtsgesetz — UrhG) and applicable international intellectual property treaties. The User is granted a non-exclusive, non-transferable, revocable right to access the Website for personal, non-commercial viewing purposes only.
+5.1. All original software architecture, conceptual frameworks, website copy, proprietary graphics, user interface (UI/UX) designs, layout structures, and multimedia assets generated by the FELYA team or its founders remain the exclusive intellectual property of the respective creators, protected under the German Copyright Act (Urheberrechtsgesetz — UrhG) and applicable international intellectual property treaties. The User is granted a non-exclusive, non-transferable, revocable right to access the Website for personal, non-commercial viewing purposes only.
 
-5.2. Any unauthorized duplication, modification, adaptation, commercial distribution, scraping, extraction, or reproduction of the assets or source code found on this Website is strictly prohibited without explicit, prior written consent from FELYA LABS.
+5.2. Any unauthorized duplication, modification, adaptation, commercial distribution, scraping, extraction, or reproduction of the assets or source code found on this Website is strictly prohibited without explicit, prior written consent from FELYA.
 
 5.3. Third-party trade names, logos, institutional trademarks (including those belonging to TH Köln), and embedded platform references displayable on the Website remain the sole property of their respective registered rights holders. Their display does not imply an endorsement or affiliation, unless explicitly stated.
 
 
 6. Limitation of Liability
 
-6.1. FELYA LABS shall be liable for damages without limitation in cases of intent (Vorsatz) or gross negligence (grobe Fahrlässigkeit), as well as for damages resulting from injury to life, body, or health (Verletzung von Leben, Körper oder Gesundheit) in accordance with statutory German provisions.
+6.1. FELYA shall be liable for damages without limitation in cases of intent (Vorsatz) or gross negligence (grobe Fahrlässigkeit), as well as for damages resulting from injury to life, body, or health (Verletzung von Leben, Körper oder Gesundheit) in accordance with statutory German provisions.
 
-6.2. In cases of slight negligence (leichte Fahrlässigkeit), FELYA LABS shall only be liable for the breach of a material contractual obligation (Kardinalpflicht). A material contractual obligation is an obligation whose fulfillment is essential for the proper execution of the contract in the first place and on whose compliance the User may regularly rely. In such cases, liability is strictly limited to typical, foreseeable contractual damages.
+6.2. In cases of slight negligence (leichte Fahrlässigkeit), FELYA shall only be liable for the breach of a material contractual obligation (Kardinalpflicht). A material contractual obligation is an obligation whose fulfillment is essential for the proper execution of the contract in the first place and on whose compliance the User may regularly rely. In such cases, liability is strictly limited to typical, foreseeable contractual damages.
 
-6.3. Any further liability of FELYA LABS, including but not limited to liability for minor technical glitches, temporary website downtime, loss of data during transmission, or typographical errors, is expressly excluded to the maximum extent permitted under German law.
+6.3. Any further liability of FELYA, including but not limited to liability for minor technical glitches, temporary website downtime, loss of data during transmission, or typographical errors, is expressly excluded to the maximum extent permitted under German law.
 
 
 7. Governing Law, Severability, and Jurisdiction

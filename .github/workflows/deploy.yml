@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: bun run build
         env:
-          SITE_URL: https://www.felyalabs.com
+          SITE_URL: https://felya.com
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
