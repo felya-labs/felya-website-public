@@ -1673,6 +1673,9 @@ html[data-theme="light"] .mobile-nav-toggle {
     overflow: hidden;
     background: #000000;
     padding: clamp(7rem, 12vh, 8.5rem) 1.5rem clamp(2.75rem, 5vh, 4rem);
+    /* Declared here (not on .hero-earth) so .hero-product-stage can also read it below --
+       the product image needs to know how tall the earth strip is to reserve clearance above it. */
+    --earth-h: clamp(9rem, 15vw, 16rem);
 }
 
 .hero-section::after {
@@ -1693,12 +1696,160 @@ html[data-theme="light"] .hero-section::after {
     opacity: 1;
 }
 
+/* Hero earth — a faint horizon-line backdrop behind the hero copy, not a focal element. Real
+   coastline geometry (Natural Earth land-110m vector data), drawn as glowing outlines only — no
+   filled landmass — using a true orthographic projection with the sub-viewer point on the
+   equator, so the North Pole sits at the true top of the sphere and the visible strip is a real
+   polar cap, not a flat map crop or an arbitrary crop further north. Static for now (a future
+   rotation would recompute this projection continuously in JS, not crossfade pre-baked frames).
+   The horizon glow and the coastline's own clip mask (an SVG clipPath, not a hand-tuned CSS
+   ellipse) are both the true circular limb of the sphere in this same projection space, so the
+   "edge of the planet" is physically consistent with the coastline data at every breakpoint.
+   Purely supportive of the "Anywhere on Earth" headline; must never compete with it or the
+   product image for attention. */
+.hero-earth {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.hero-earth__horizon {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: var(--earth-h);
+    overflow: visible;
+}
+
+/* Glow via stacked, wider, more transparent strokes instead of blur()/drop-shadow(): a CSS
+   filter here measured as a major source of the rotation's frame stutter even though this path
+   never changes -- in software rendering it still forces a full repaint of the filtered region
+   whenever the sibling animated coastline mutates. Stacked strokes are just more vector geometry,
+   which the renderer can composite without ever re-rasterizing a blur. */
+.hero-earth__horizon path {
+    fill: none;
+    stroke: var(--accent-strong);
+    stroke-width: 1.5px;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.65;
+}
+
+/* Four stacked, progressively wider and more transparent strokes (painted widest-first, see
+   HeroSection.astro) instead of one or two -- a single glow layer read as a thin outline with a
+   faint halo, not an atmosphere. More layers approximate the soft gaussian falloff of a real
+   atmospheric limb glow while staying stroke-based (still no blur()/drop-shadow(): see the
+   perf note above on .hero-earth__horizon-glow -- that's still what keeps the rotation smooth). */
+.hero-earth__horizon path.hero-earth__horizon-glow {
+    stroke-width: 5px;
+    opacity: 0.3;
+}
+
+.hero-earth__horizon path.hero-earth__horizon-glow--soft {
+    stroke-width: 11px;
+    opacity: 0.16;
+}
+
+.hero-earth__horizon path.hero-earth__horizon-glow--wide {
+    stroke-width: 20px;
+    opacity: 0.08;
+}
+
+.hero-earth__horizon path.hero-earth__horizon-glow--diffuse {
+    stroke-width: 34px;
+    opacity: 0.04;
+}
+
+html[data-theme="light"] .hero-earth__horizon path {
+    opacity: 0.42;
+}
+
+html[data-theme="light"] .hero-earth__horizon path.hero-earth__horizon-glow {
+    opacity: 0.2;
+}
+
+html[data-theme="light"] .hero-earth__horizon path.hero-earth__horizon-glow--soft {
+    opacity: 0.11;
+}
+
+html[data-theme="light"] .hero-earth__horizon path.hero-earth__horizon-glow--wide {
+    opacity: 0.055;
+}
+
+html[data-theme="light"] .hero-earth__horizon path.hero-earth__horizon-glow--diffuse {
+    opacity: 0.028;
+}
+
+/* A static gradient stand-in for the ambient glow that used to be a drop-shadow on
+   .hero-earth__orb. That filter re-rasterized a blur across the whole (animated, ~3000-point)
+   coastline on every rotation frame -- measured at 100+ ms of extra paint per update, which is
+   exactly the stutter this was reported as. A gradient never needs to repaint when the
+   coastline's `d` changes, so the rotation stays smooth; only the crisp coastline stroke still
+   tracks the sphere's edge precisely, via .hero-earth__horizon above. */
+.hero-earth__glow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--earth-h);
+    /* Wider and slightly brighter than before, to read as an atmospheric bloom sitting behind
+       the stroke-based horizon glow above, rather than a narrow smudge under just the crisp
+       line. */
+    background: radial-gradient(ellipse 70% 92% at 50% 100%, var(--accent-soft), transparent 72%);
+    opacity: 0.82;
+    transition: opacity 560ms cubic-bezier(.4, 0, .2, 1);
+}
+
+html[data-theme="light"] .hero-earth__glow {
+    opacity: 0.62;
+}
+
+.hero-earth__orb {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--earth-h);
+    opacity: 0.7;
+    transition: opacity 560ms cubic-bezier(.4, 0, .2, 1);
+}
+
+html[data-theme="light"] .hero-earth__orb {
+    opacity: 0.55;
+}
+
+.hero-earth__coastline {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-earth__coastline path {
+    fill: none;
+    stroke: var(--accent-strong);
+    stroke-width: 1.1px;
+    vector-effect: non-scaling-stroke;
+}
+
+@media (min-width: 1024px) {
+    .hero-section { --earth-h: clamp(11rem, 13vw, 17rem); }
+}
+
 .hero-composition {
     position: relative;
     z-index: 2;
     display: grid;
     width: 100%;
-    max-width: 104rem;
+    /* Was 104rem, then 116rem: 104rem was the actual bottleneck behind the language-cycling
+       headline's horizontal squeeze (scaleX, see .hero-headline-language-text) at ordinary
+       desktop sizes too, not just the large-viewport tier below. 116rem fixed the squeeze but
+       overshot -- wider than the text ever needs (capped at .hero-copy's own 64rem), so the
+       excess just became dead space that pushed the product image toward the far edge instead
+       of toward the headline. 106rem keeps the text column just wide enough to stay unsquashed
+       while pulling the whole composition back into a centered, cohesive group. */
+    max-width: 106rem;
     min-height: auto;
     margin-inline: auto;
     align-items: center;
@@ -1849,6 +2000,10 @@ html[data-theme="light"] .hero-headline-language-hitbox {
     width: 100%;
     height: clamp(18rem, 78vw, 24rem);
     margin-top: 1.75rem;
+    /* Reserve clearance for the earth strip below so the glove's cuff never sits on top of the
+       coastline art (it did, at every breakpoint -- measured, not a guess: the two heights were
+       previously computed independently of each other, with nothing keeping them apart). */
+    margin-bottom: calc(var(--earth-h) + 1rem);
     align-items: center;
     justify-content: center;
     animation: hero-product-in 900ms 120ms cubic-bezier(.22,.75,.25,1) both;
@@ -3557,39 +3712,139 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
     }
     .hero-section {
         display: flex;
+        /* Must always fill the viewport on load, on every screen size -- non-negotiable, this is
+           what makes it a hero. (A previous pass here dropped this to fix excess top whitespace,
+           which instead broke the next section into view on large screens -- wrong trade.) */
         min-height: 100vh;
         min-height: 100svh;
-        padding: clamp(7.5rem, 12vh, 9rem) 4rem clamp(2.75rem, 5vh, 4rem);
+        padding: clamp(5.5rem, 8vh, 7rem) 4rem clamp(2.75rem, 5vh, 4rem);
     }
     .hero-composition {
         flex: 1;
-        grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.92fr);
-        gap: clamp(2rem, 4vw, 4.5rem);
-        min-height: clamp(34rem, calc(100svh - 12rem), 46rem);
+        /* Was fr-based (minmax(0, 1.08fr) minmax(22rem, 0.92fr)): fr tracks split whatever width
+           the container has, but neither column's actual content scales with that width -- the
+           text is capped at a fixed 64/72rem and the glove's rendered width follows its own
+           height clamp, not the column. So on any screen wider than those two together need, fr
+           handed the leftover to both columns as internal slack, which showed up as extra empty
+           space between the headline and the image (worst on 3440px+, ~280px of dead air).
+           max-content-based columns instead size each track to exactly what its content needs;
+           justify-content below then centers that tight two-column cluster as a group, so any
+           leftover container width becomes a balanced outer margin instead of an internal gap. */
+        grid-template-columns: minmax(0, max-content) minmax(22rem, max-content);
+        justify-content: center;
+        /* Tighter than the original clamp(2rem, 4vw, 4.5rem): that gap plus the wide max-width
+           above spread text and product image toward opposite edges instead of reading as one
+           composed group. */
+        gap: clamp(1.5rem, 3vw, 3.5rem);
     }
     .hero-copy {
         padding-top: 0;
-        transform: translateY(-0.75rem);
+        /* Wider than the 48rem mobile/tablet cap: that width was fine for the German/English
+           headline it was tuned against, but the language-cycling second line (.hero-headline-
+           language-text) can be dramatically longer in other languages, and gets squeezed
+           horizontally (scaleX, see .hero-headline-language-text below) to fit inside whatever
+           width it's given. Measured this directly: at 48rem, even the English reference text
+           was already being compressed to ~0.80 scale at the larger sizing tier, and real
+           translations as low as ~0.35-0.54 -- visibly squashed. .hero-lead keeps its own
+           narrower 38rem cap below for readability, so widening this doesn't lengthen its lines. */
+        max-width: 64rem;
+        /* Bottom-anchored with the same reserved clearance as .hero-product-stage below (rather
+           than the container's default centering) so their relationship stays fixed regardless
+           of how tall the viewport is. Plain centering would only match their visible centers
+           when the row's height happens to equal the glove's own box height -- true when the row
+           sized itself to content, but never true once the section is forced to fill the full
+           viewport, where the leftover height grows with the screen and drags the headline's
+           centered position away from the glove's by an amount that scales with viewport height. */
+        align-self: end;
+        margin-bottom: calc(var(--earth-h) + 1rem);
     }
-    .hero-title { font-size: clamp(3.55rem, 5.2vw, 5.1rem); }
+    /* JS-driven fine positioning (initHeroCopyAlignment in scripts/site.js): keeps the headline's
+       second line level with the gap between the glove's thumb and index finger, measured against
+       the actual rendered glove image so it holds at any viewport size -- not something a static
+       CSS offset could do, since the glove's height (and therefore where that gap lands) itself
+       scales with viewport height. On a separate wrapper, not .hero-copy itself, because
+       .hero-copy already owns `transform` for its entrance animation. */
+    .hero-copy-align { transform: translateY(var(--hero-copy-align-shift, 0px)); }
+    .hero-title {
+        max-width: 64rem; /* matches .hero-copy's widened cap above -- see comment there */
+        /* 5.2vw ran too large at the low end of this tier (e.g. 1366px wide) -- 4.2vw keeps the
+           headline readable without crowding the product image at smaller desktop widths, while
+           still reaching the same 5.1rem ceiling by ~1930px wide where it was already capping. */
+        font-size: clamp(3.55rem, 4.2vw, 5.1rem);
+    }
     .hero-title span { white-space: nowrap; }
     .hero-product-stage {
-        height: clamp(28rem, 60vh, 42rem);
+        /* Bigger than the original clamp(22rem, 46vh, 32rem): the glove was reading small
+           relative to the headline at every desktop size once measured side by side. */
+        height: clamp(25rem, 52vh, 34rem);
         margin-top: 0;
-        padding-right: clamp(0.5rem, 1.5vw, 1.5rem);
-        justify-content: flex-end;
+        /* flex-start, not flex-end: this column's own minmax(22rem, 0.92fr) track is
+           consistently wider than the glove image actually renders (measured up to ~150px of
+           slack at some sizes), and flex-end was pushing the image across that entire slack to
+           the column's far-right edge -- putting empty space between the headline and the image
+           instead of at the outer edge where it's harmless. Anchoring to the column's start puts
+           the image right after the grid gap, next to the text, and pushes the leftover slack out
+           to the section's right margin instead. */
+        justify-content: flex-start;
+        /* Bottom-anchor within the grid row instead of the container's default vertical
+           centering: centering would only give half of any added margin-bottom back as real
+           clearance (the rest goes to the top, which doesn't need it). Anchoring to the bottom
+           makes the reserved earth clearance above exact, not approximate. */
+        align-self: end;
     }
     .hero-product-image { max-width: none; }
 }
 
 @media (min-width: 1280px) {
     .hero-product-stage {
-        height: clamp(31rem, 66vh, 46rem);
+        height: clamp(27rem, 56vh, 38rem);
         transform: translateX(clamp(0.5rem, 1vw, 1rem));
     }
     .section-title { font-size: 5rem; }
     .point-of-view-title,
     .contact-title { font-size: 5rem; }
+}
+
+/* Large/tall viewports (big monitors, 1440p+) and ultrawide screens (21:9, however tall): the
+   vw/vh clamps above were already hitting their ceiling here, so headline, glove and earth all
+   rendered at their SMALLEST relative size right where there's the MOST room -- exactly
+   backwards. Give the ceilings more room to grow instead of manufacturing empty space (on tall
+   screens) or leaving everything undersized against the canvas (on wide ones). Two triggers:
+   min-height for tall 16:9/16:10 screens, min-aspect-ratio for ultrawide -- a short ultrawide
+   like 2560x1080 doesn't clear the height bar but reads just as undersized as a tall one does,
+   so it needs the bump too, on its own condition rather than height. */
+@media (min-width: 1024px) and (min-height: 1100px),
+       (min-width: 1024px) and (min-aspect-ratio: 2/1) {
+    /* Was 130rem: like the base tier above, that gave the headline room to stay unsqueezed but
+       overshot what the text (capped at .hero-copy's 64rem) ever uses, so the leftover became
+       dead space pushing the glove toward the far edge instead of toward the headline. 120rem
+       keeps that same unsqueezed room while pulling text and glove back into a tighter group. */
+    .hero-composition { max-width: 120rem; }
+    /* min(..., 9vh) alongside the vw term: a short-but-wide screen (e.g. 2560x1080) and a
+       tall one at the same width (e.g. 2560x1440) previously got identical vw-driven sizing even
+       though the short one visibly has less vertical room to grow into. Capping by viewport
+       height too makes shallower ultrawide screens size down relative to taller ones at the same
+       width, instead of both maxing out identically. */
+    .hero-title { font-size: clamp(3.55rem, min(5.2vw, 9vh), 6.4rem); }
+    .hero-lead { font-size: clamp(1.2rem, 1vw, 1.4rem); }
+    .hero-product-stage { height: clamp(27rem, 56vh, 48rem); }
+    .hero-section { --earth-h: clamp(11rem, min(13vw, 22vh), 22rem); }
+}
+
+/* Very wide monitors (3440px+ ultrawide): even the tier above still reads undersized against
+   this much width, since its own ceilings were tuned for 2560-wide screens. Scoped by min-width
+   (not min-aspect-ratio) so it doesn't also inflate the 2560-wide tiers above, which weren't
+   asking to grow further. */
+@media (min-width: 3200px) {
+    .hero-composition { max-width: 140rem; }
+    /* .hero-copy/.hero-title's 64rem cap (set at the 1024px tier above) was tuned for the
+       6.4rem ceiling there -- the bigger 7.4rem ceiling here needs a wider cap too, or the
+       English reference text gets squeezed (scaleX) against that now-too-narrow cap. Measured:
+       72rem keeps it at scale 1.0. */
+    .hero-copy, .hero-title { max-width: 72rem; }
+    .hero-title { font-size: clamp(3.55rem, min(5.2vw, 9vh), 7.4rem); }
+    .hero-product-stage { height: clamp(27rem, 56vh, 54rem); }
+    .hero-section { --earth-h: clamp(11rem, min(13vw, 26vh), 24rem); }
 }
 
 @media (min-width: 1536px) {

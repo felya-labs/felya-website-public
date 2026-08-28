@@ -9,6 +9,10 @@ import {
   priorityHeroLanguages,
   secondaryHeroLanguages
 } from './hero-headline-translations.js';
+import {
+  heroEarthSegments,
+  heroEarthRotationParams
+} from '../data/hero-earth-coastline.js';
 
 export {
   colorTheme,
@@ -1053,6 +1057,152 @@ export function initHeroMobileGloveScroll({ root = document } = {}) {
   reduceMotion.addEventListener?.('change', requestUpdate);
 }
 
+export function initHeroCopyAlignment({ root = document } = {}) {
+  const wrap = root.querySelector('.hero-copy-align');
+  const glove = root.querySelector('.hero-product-composite');
+  const line = root.querySelector('.hero-headline-language-hitbox');
+  if (!wrap || !glove || !line) return;
+
+  // Measured on the source photo: the web between the thumb and index finger sits at ~50% of
+  // the image's own height. Only meaningful in the desktop two-column layout (glove and headline
+  // are stacked, not side by side, below 1024px, so there's no "level with the glove" to keep).
+  const GLOVE_THUMB_INDEX_GAP_FRACTION = 0.5;
+  const desktopQuery = window.matchMedia('(min-width: 1024px)');
+
+  let frame = null;
+
+  function align() {
+    frame = null;
+    if (!desktopQuery.matches) {
+      wrap.style.removeProperty('--hero-copy-align-shift');
+      return;
+    }
+    // Reset first and force a fresh layout read -- otherwise a previously-applied shift would be
+    // baked into the rects below, and the delta would compound on every resize instead of being
+    // measured against the true unshifted position each time.
+    wrap.style.setProperty('--hero-copy-align-shift', '0px');
+    const gloveRect = glove.getBoundingClientRect();
+    const lineRect = line.getBoundingClientRect();
+    if (!gloveRect.height || !lineRect.height) return; // image not laid out/decoded yet
+    const targetY = gloveRect.top + gloveRect.height * GLOVE_THUMB_INDEX_GAP_FRACTION;
+    const lineCenterY = lineRect.top + lineRect.height / 2;
+    wrap.style.setProperty('--hero-copy-align-shift', `${(targetY - lineCenterY).toFixed(1)}px`);
+  }
+
+  const requestAlign = () => {
+    if (frame !== null) return;
+    frame = window.requestAnimationFrame(align);
+  };
+
+  align();
+  // Glove images load async (eager, but not guaranteed ready before first layout); re-align once
+  // they actually have dimensions, and again on anything that can move the text or the image.
+  root.querySelectorAll('.hero-product-image').forEach((img) => {
+    if (img.complete) return;
+    img.addEventListener('load', requestAlign, { once: true });
+  });
+  document.fonts?.ready?.then(requestAlign);
+  window.addEventListener('resize', requestAlign);
+  desktopQuery.addEventListener?.('change', requestAlign);
+}
+
+export function initHeroEarthRotation({ root = document } = {}) {
+  const container = root.querySelector('.hero-earth');
+  const path = root.querySelector('.hero-earth__coastline path');
+  if (!container || !path) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (reduceMotion.matches) return; // leave the server-rendered static frame in place
+
+  const { R, maxDlon, coscMin } = heroEarthRotationParams;
+  const D2R = Math.PI / 180;
+
+  // West-to-east planetary rotation reads, for a fixed external viewer, as features drifting
+  // left-to-right on screen -- so the sub-viewer longitude drifts west (decreases) over time.
+  // Same true-orthographic math as the build script that generated the static frame (sub-viewer
+  // on the equator), just re-evaluated every frame instead of baked once.
+  const PERIOD_MS = 150000; // one full 360deg turn every 2.5 minutes -- was 2 minutes, slowed down further for a calmer drift
+  // Sub-viewer longitude the rotation starts from. 0 (Greenwich) read as starting over Europe;
+  // 100 (over Asia) then read as starting too far east. 50 sits between the two (roughly the
+  // Urals), then drifts west into Europe ~17s into the loop (matches the static heroEarthPath
+  // default below, which is baked at this same longitude).
+  const LON_START = 50;
+  // 12fps (throttled) was the actual remaining cause of the reported stutter: consistent timing
+  // isn't the same as smooth motion, and 12fps reads as discrete steps rather than a continuous
+  // turn no matter how evenly spaced. Now that a frame costs ~2ms (post filter-removal), there's
+  // no reason to throttle below the display's own refresh rate; this just caps redundant work on
+  // very high-refresh-rate displays without any perceptible smoothness cost.
+  const UPDATE_INTERVAL_MS = 16;
+
+  function project(lon, lat, lon0) {
+    const dlon = ((lon - lon0 + 540) % 360) - 180;
+    if (Math.abs(dlon) > maxDlon) return null;
+    const latR = lat * D2R, dlonR = dlon * D2R;
+    const cosc = Math.cos(latR) * Math.cos(dlonR);
+    if (cosc < coscMin) return null;
+    const x = R * Math.cos(latR) * Math.sin(dlonR);
+    const y = R * Math.sin(latR);
+    // Math.round beats toFixed here (called ~7000x/frame) -- sub-pixel precision either way,
+    // path data doesn't need a fixed decimal count.
+    return `${Math.round(x * 100) / 100},${Math.round(-y * 100) / 100}`;
+  }
+
+  function buildPath(lon0) {
+    const parts = [];
+    for (const run of heroEarthSegments) {
+      let segment = [];
+      for (const [lon, lat] of run) {
+        const p = project(lon, lat, lon0);
+        if (p) {
+          segment.push(p);
+        } else {
+          if (segment.length > 1) parts.push(`M ${segment.join(' L ')}`);
+          segment = [];
+        }
+      }
+      if (segment.length > 1) parts.push(`M ${segment.join(' L ')}`);
+    }
+    return parts.join(' ');
+  }
+
+  let frame = null;
+  let lastUpdate = 0;
+  let visible = true;
+
+  function tick(now) {
+    frame = window.requestAnimationFrame(tick);
+    if (!visible || now - lastUpdate < UPDATE_INTERVAL_MS) return;
+    lastUpdate = now;
+    const lon0 = LON_START - ((now / PERIOD_MS) % 1) * 360;
+    path.setAttribute('d', buildPath(lon0));
+  }
+
+  const start = () => {
+    if (frame === null) frame = window.requestAnimationFrame(tick);
+  };
+  const stop = () => {
+    if (frame !== null) window.cancelAnimationFrame(frame);
+    frame = null;
+    path.setAttribute('d', buildPath(LON_START));
+  };
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === container) visible = entry.isIntersecting;
+      });
+    }, { threshold: 0.01 });
+    observer.observe(container);
+  }
+
+  reduceMotion.addEventListener?.('change', () => {
+    if (reduceMotion.matches) stop();
+    else start();
+  });
+
+  start();
+}
+
 export function initPatonSystemDemonstration({ root = document } = {}) {
   const demonstrations = Array.from(root.querySelectorAll('[data-system-demonstration]'));
   if (!demonstrations.length) return;
@@ -2088,6 +2238,8 @@ export function initSite(root = document) {
   initPrototypeVideoCover({ root });
   initPrototypeFilmViewport({ root });
   initHeroMobileGloveScroll({ root });
+  initHeroCopyAlignment({ root });
+  initHeroEarthRotation({ root });
   initPatonSystemDemonstration({ root });
   initSectionReveals({ root });
   initSectionNavigation({ root });

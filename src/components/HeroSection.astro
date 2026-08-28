@@ -1,5 +1,6 @@
 ---
 import { gloveLightImage, gloveDarkImage } from '../data/site.js';
+import { heroEarthPath, heroEarthLimbPath, heroEarthClipPath, heroEarthViewBox } from '../data/hero-earth-coastline.js';
 import type { Locale } from '../i18n/config';
 import { t } from '../i18n/translations';
 
@@ -10,22 +11,43 @@ const gloveCutoutSrcset = gloveLightImage.srcset.map(([src, width]) => `${src} $
 ---
 
 <section id="paton" class="hero-reveal hero-section">
+    <div class="hero-earth" aria-hidden="true">
+        <div class="hero-earth__glow"></div>
+        <svg class="hero-earth__horizon" viewBox={heroEarthViewBox} preserveAspectRatio="xMidYMin slice">
+            <defs>
+                <clipPath id="hero-earth-clip" clipPathUnits="userSpaceOnUse">
+                    <path d={heroEarthClipPath} />
+                </clipPath>
+            </defs>
+            <path class="hero-earth__horizon-glow hero-earth__horizon-glow--diffuse" d={heroEarthLimbPath} clip-path="url(#hero-earth-clip)" />
+            <path class="hero-earth__horizon-glow hero-earth__horizon-glow--wide" d={heroEarthLimbPath} clip-path="url(#hero-earth-clip)" />
+            <path class="hero-earth__horizon-glow hero-earth__horizon-glow--soft" d={heroEarthLimbPath} clip-path="url(#hero-earth-clip)" />
+            <path class="hero-earth__horizon-glow" d={heroEarthLimbPath} clip-path="url(#hero-earth-clip)" />
+            <path d={heroEarthLimbPath} clip-path="url(#hero-earth-clip)" />
+        </svg>
+        <div class="hero-earth__orb">
+            <svg class="hero-earth__coastline" viewBox={heroEarthViewBox} preserveAspectRatio="xMidYMin slice">
+                <path d={heroEarthPath} clip-path="url(#hero-earth-clip)" />
+            </svg>
+        </div>
+    </div>
     <div class="hero-composition">
         <div class="hero-copy">
-            <p class="hero-product-name" data-i18n="hero.product">{t(locale, 'hero.product')}</p>
-            <h1 class="hero-title">
-                <span class="block text-white" data-i18n="hero.headlineHands">{t(locale, 'hero.headlineHands')}</span>
-                <span class="hero-headline-language-hitbox text-[#777777]" data-hero-headline-languages data-hero-intro-pending
-                      role="button" tabindex="0" aria-label={t(locale, 'hero.languageInteraction')}>
-                    <span class="hero-headline-language-reference" data-i18n="hero.headlineAnywhere"
-                          aria-hidden="true">{t(locale, 'hero.headlineAnywhere')}</span>
-                    <span class="hero-headline-language-text" data-i18n="hero.headlineAnywhere">{t(locale, 'hero.headlineAnywhere')}</span>
-                </span>
-            </h1>
-            <p class="hero-lead" data-i18n="hero.lead">
-                {t(locale, 'hero.lead')}
-            </p>
-
+            <div class="hero-copy-align">
+                <p class="hero-product-name" data-i18n="hero.product">{t(locale, 'hero.product')}</p>
+                <h1 class="hero-title">
+                    <span class="block text-white" data-i18n="hero.headlineHands">{t(locale, 'hero.headlineHands')}</span>
+                    <span class="hero-headline-language-hitbox text-[#777777]" data-hero-headline-languages data-hero-intro-pending
+                          role="button" tabindex="0" aria-label={t(locale, 'hero.languageInteraction')}>
+                        <span class="hero-headline-language-reference" data-i18n="hero.headlineAnywhere"
+                              aria-hidden="true">{t(locale, 'hero.headlineAnywhere')}</span>
+                        <span class="hero-headline-language-text" data-i18n="hero.headlineAnywhere">{t(locale, 'hero.headlineAnywhere')}</span>
+                    </span>
+                </h1>
+                <p class="hero-lead" data-i18n="hero.lead">
+                    {t(locale, 'hero.lead')}
+                </p>
+            </div>
         </div>
 
         <div class="hero-product-stage hero-mobile-glove-stage">
