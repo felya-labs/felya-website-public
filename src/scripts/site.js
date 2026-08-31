@@ -785,9 +785,12 @@ export function initHeroHeadlineLanguages({
     isFocused = false;
     if (!isEasterEggActive) scheduleNormalIdle();
   };
-  const handleResize = () => {
-    if (headline.dataset.heroLanguage) fitHeadline();
-  };
+  // Always refit, not just while an intro/cycling language is showing: the resting default
+  // headline needs this too whenever the hitbox's available width changes for any reason (a
+  // window resize, a devtools viewport-dimension switch, an orientation change) -- gating this
+  // on dataset.heroLanguage left the resting text's scale stuck at whatever it was computed as
+  // on the very first fit, however that number came about.
+  const handleResize = () => fitHeadline();
   const handleLanguageChange = () => {
     if (!isEasterEggActive) {
       cancelPreview();
@@ -852,12 +855,22 @@ export function initHeroHeadlineLanguages({
   listen(document, 'visibilitychange', handleVisibilityChange);
   reduceMotion.addEventListener?.('change', handleReducedMotionChange);
 
+  // Belt-and-suspenders alongside the resize listener above: a window resize is only one way
+  // the hitbox's available width can change. A ResizeObserver also catches a font swap reflowing
+  // the line, a sibling layout shift, or a breakpoint's width cap kicking in at a size no
+  // window-level resize event fires for (e.g. a devtools device-toolbar switch that changes the
+  // viewport without the page navigating). Doesn't loop: fitHeadline only ever writes a
+  // transform on .hero-headline-language-text, which doesn't feed back into hitbox's own size.
+  const hitboxResizeObserver = 'ResizeObserver' in window ? new ResizeObserver(() => fitHeadline()) : null;
+  hitboxResizeObserver?.observe(hitbox);
+
   const cleanup = () => {
     isDestroyed = true;
     cancelPreview();
     cancelTimers();
     listeners.splice(0).forEach((removeListener) => removeListener());
     reduceMotion.removeEventListener?.('change', handleReducedMotionChange);
+    hitboxResizeObserver?.disconnect();
     cancelHeadlineTransition();
     hitbox.classList.remove('hero-headline-language-hitbox--animating', 'hero-headline-language-hitbox--idle-transition');
     hitbox.removeAttribute('data-hero-language-state');
@@ -867,6 +880,11 @@ export function initHeroHeadlineLanguages({
   listen(window, 'pagehide', cleanup, { once: true });
 
   fitHeadline();
+  // Independent of whichever branch scheduleIntro() below takes (e.g. it skips its own
+  // fonts.ready wait entirely under prefers-reduced-motion): refit once webfonts are actually
+  // loaded, since the very first fitHeadline() call above may have measured against fallback
+  // font metrics.
+  document.fonts?.ready.then(() => { if (!isDestroyed) fitHeadline(); });
   setState('intro');
   scheduleIntro();
 }

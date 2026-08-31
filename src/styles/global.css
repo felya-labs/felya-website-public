@@ -88,6 +88,15 @@ html[data-theme="light"] .theme-brand-logo {
 }
 
 .hero-product-stage {
+    /* Containing block for ::before/::after below (both position:absolute): without this,
+       neither has any positioned ancestor of their own, so their right/bottom percentages
+       resolve against the next one up the tree instead -- .hero-composition, a much bigger box
+       spanning the whole headline+image area. The ::after contact shadow in particular was
+       floating wherever "5% from .hero-composition's bottom" happened to land rather than
+       actually sitting under the glove -- most visible now that .hero-composition can be taller
+       than its content (see its margin-block:auto), which moves that point further from the
+       image than before. */
+    position: relative;
     isolation: isolate;
 }
 
@@ -1672,10 +1681,38 @@ html[data-theme="light"] .mobile-nav-toggle {
     isolation: isolate;
     overflow: hidden;
     background: #000000;
-    padding: clamp(7rem, 12vh, 8.5rem) 1.5rem clamp(2.75rem, 5vh, 4rem);
+    display: flex;
+    flex-direction: column;
+    /* Must always fill the viewport on load, on every screen size -- non-negotiable, this is
+       what makes it a hero. Previously this min-height only lived in the min-width:1024px tier
+       below, so any narrower/shorter breakpoint (portrait tablets, foldables, anything whose
+       content is naturally shorter than its viewport) sized the section to its content instead,
+       leaving the next section peeking in below it. flex-direction:column plus
+       .hero-composition's margin-block:auto (below) is what actually uses the extra height --
+       min-height alone would just leave it as dead space at the bottom. */
+    min-height: 100vh;
+    min-height: 100svh;
+    /* Bottom floor lowered from 2.75rem, but the top one only as far as 6.5rem (was 7rem): the
+       header (Header.astro) is `fixed` below the md breakpoint, floating over the hero
+       regardless of viewport height (its own padding is all rem-based, no vh) -- roughly 6.25rem
+       tall in practice. A top floor lower than that (an earlier pass here tried 4rem) let PATON
+       actually collide with the header on a short phone (iPhone SE, Surface Duo) once 9vh alone
+       no longer reached the old 7rem floor. 6.5rem keeps a small real gap under the header on
+       every phone this tier applies to (all of them share the same fixed-height header below
+       768px) while still shrinking from the original 7rem on merely-short-not-tiny viewports.
+       The overflow-vs-short-viewport problem this was originally added for (see --earth-h and
+       .hero-product-stage below for the rest of it) is still solved -- just not from this lever. */
+    padding: clamp(6.5rem, 9vh, 8.5rem) 1.5rem clamp(1.5rem, 4.5vh, 4rem);
     /* Declared here (not on .hero-earth) so .hero-product-stage can also read it below --
-       the product image needs to know how tall the earth strip is to reserve clearance above it. */
-    --earth-h: clamp(9rem, 15vw, 16rem);
+       the product image needs to know how tall the earth strip is to reserve clearance above it.
+       min(15vw, 12vh), not plain 15vw: on a short-but-wide phone (a foldable's outer screen,
+       landscape phones) 15vw alone still floored at 9rem regardless of height, the single
+       biggest contributor to the same overflow-past-the-fold problem above. The 12vh term only
+       ever pulls this *down* below what 15vw would give -- on a normal-proportioned viewport 15vw
+       stays the smaller (binding) term, unchanged from before. Floor lowered further (to 3.5rem,
+       from 5.5rem) to make room for the top padding floor above being less aggressive than
+       originally planned. */
+    --earth-h: clamp(3.5rem, min(15vw, 12vh), 16rem);
 }
 
 .hero-section::after {
@@ -1833,8 +1870,23 @@ html[data-theme="light"] .hero-earth__orb {
     vector-effect: non-scaling-stroke;
 }
 
-@media (min-width: 1024px) {
-    .hero-section { --earth-h: clamp(11rem, 13vw, 17rem); }
+/* min-aspect-ratio:4/3 alongside the width, here and on the matching block further down that
+   establishes the two-column desktop composition: width alone let a portrait tablet at exactly
+   1024px wide (iPad Pro 12.9" portrait is 1024x1366) through as if it were a landscape desktop.
+   See the comment on that block for the full story -- this half just keeps the two tiers'
+   --earth-h in sync (a portrait 1024px+ device should get the same earth-h as any other
+   sub-1024px portrait tablet, not this wider desktop-tuned value). */
+@media (min-width: 1024px) and (min-aspect-ratio: 4/3) {
+    /* min(13vw, 22vh), not plain 13vw, and a lower floor (6rem, not 11rem): a landscape device
+       that's wide but short (a smart-display-class screen, a browser window resized short) could
+       still be pure-width-bound down to the 11rem floor regardless of how little vertical room
+       was actually left -- on a 1024x600 landscape screen the floor alone, plus this same value's
+       reuse as .hero-product-stage's margin-bottom below, pushed the section past the viewport
+       height and most of the earth strip below the fold, reading as "the earth is tiny" (only
+       its topmost sliver stayed visible) even though the strip itself wasn't actually small.
+       Normal desktop/laptop screens (never this short relative to their width) stay 13vw-bound,
+       unchanged. */
+    .hero-section { --earth-h: clamp(6rem, min(13vw, 20vh), 17rem); }
 }
 
 .hero-composition {
@@ -1852,6 +1904,12 @@ html[data-theme="light"] .hero-earth__orb {
     max-width: 106rem;
     min-height: auto;
     margin-inline: auto;
+    /* Vertically centers the copy+product stack within whatever extra height .hero-section's
+       viewport-filling min-height adds beyond the content's natural size (see .hero-section
+       above) -- without this, the flex column would leave that space stranded below the content
+       instead of using it. Reset to 0 at the 1024px+ tier below, where .hero-composition itself
+       grows via flex:1 and its children bottom-anchor against the earth strip instead. */
+    margin-block: auto;
     align-items: center;
 }
 
@@ -1860,14 +1918,18 @@ html[data-theme="light"] .hero-earth__orb {
     z-index: 2;
     min-width: 0;
     max-width: 48rem;
-    padding-top: 1.75rem;
+    /* A fixed 1.75rem was one more small contributor (with .hero-title/.hero-lead's own margins
+       and .hero-product-stage's margin-top below) to the mobile-tier content overflowing a short
+       viewport's height and pushing the earth strip below the fold -- vh-clamped like the
+       section padding above, for the same reason. */
+    padding-top: clamp(0.5rem, 2.5vh, 1.75rem);
     animation: hero-copy-in 700ms cubic-bezier(.22,.75,.25,1) both;
 }
 
 .hero-title {
     max-width: 48rem;
-    margin: 1.05rem 0 0;
-    font-size: clamp(2.25rem, 8.7vw, 3.35rem);
+    margin: clamp(0.4rem, 1.8vh, 1.05rem) 0 0;
+    font-size: clamp(2rem, 7.4vw, 2.85rem);
     font-weight: 700;
     line-height: 0.96;
     letter-spacing: 0;
@@ -1988,7 +2050,7 @@ html[data-theme="light"] .hero-headline-language-hitbox {
 
 .hero-lead {
     max-width: 38rem;
-    margin: 1.4rem 0 0;
+    margin: clamp(0.6rem, 2.2vh, 1.4rem) 0 0;
     color: var(--text-soft);
     font-size: 1.06rem;
     font-weight: 520;
@@ -1998,8 +2060,17 @@ html[data-theme="light"] .hero-headline-language-hitbox {
 .hero-product-stage {
     display: flex;
     width: 100%;
-    height: clamp(18rem, 78vw, 24rem);
-    margin-top: 1.75rem;
+    /* min(84vw, 38vh), not plain 84vw: on a short-but-wide phone (landscape, or a small phone
+       that's unusually wide for its height) the vw term alone could still push this toward its
+       own 26rem ceiling regardless of how little vertical room is actually left -- alongside
+       --earth-h and the fixed margins here, a contributor to mobile-tier content overflowing a
+       short viewport and pushing the earth strip off-screen. The vh term only ever pulls the
+       result *down*; a normal-proportioned phone stays vw-bound, unchanged. Coefficients raised
+       from 78vw/34vh (and the ceiling from 24rem): the headline shrank alongside this (see
+       .hero-title's font-size above), freeing enough room to let the glove read bigger without
+       reopening that overflow. */
+    height: clamp(13rem, min(84vw, 38vh), 26rem);
+    margin-top: clamp(0.5rem, 2.5vh, 1.75rem);
     /* Reserve clearance for the earth strip below so the glove's cuff never sits on top of the
        coastline art (it did, at every breakpoint -- measured, not a guess: the two heights were
        previously computed independently of each other, with nothing keeping them apart). */
@@ -3690,7 +3761,15 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
     .hero-section { padding-inline: 2rem; }
     .hero-title { font-size: clamp(3.5rem, 8.2vw, 5.2rem); }
     .hero-lead { font-size: 1.2rem; }
-    .hero-product-stage { height: clamp(21rem, 46vw, 27rem); }
+    /* max(46vw, 40vh), not plain 46vw, and a taller ceiling (34rem, not 27rem): a portrait
+       tablet in this tier (iPad Mini, Surface Pro 7, and -- since the min-aspect-ratio gate on
+       the 1024px+ desktop tier below -- iPad Pro 12.9" portrait too) typically has much more
+       spare vertical room than horizontal, and 46vw alone left the glove reading small and
+       disconnected against a much bigger headline (font-size grows with vw here too, but faster,
+       via .hero-title's own clamp) and a lot of empty canvas around it. The 40vh term lets it
+       grow to use that room instead; a wide-but-short viewport (already handled by the base
+       tier's own min(78vw, 42vh) below 640px) stays 46vw-bound here, unaffected. */
+    .hero-product-stage { height: clamp(21rem, max(46vw, 40vh), 34rem); }
     .partner-grid { grid-template-columns: repeat(10, minmax(0, 1fr)); }
     .partner-grid .partner-logo-frame { grid-column: span 2; }
     .partner-grid .partner-logo-frame:nth-child(6) { grid-column: 2 / span 2; }
@@ -3710,17 +3789,39 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
         padding-top: 11rem;
         padding-bottom: 8rem;
     }
+}
+
+/* min-aspect-ratio:4/3 alongside the width: width alone let a *portrait* viewport at exactly
+   1024px wide through here as if it were a landscape desktop -- iPad Pro 12.9" portrait is
+   exactly 1024x1366. It got the two-column side-by-side composition below, sized for a wide
+   landscape screen, at a width with nowhere near the room for that: the product image (grown
+   via vh, so tall means big) ended up needing so much of the row's height that the whole
+   composition's align-self:end anchoring left a huge empty gap above the headline instead of the
+   headline sitting near the top. Below 4/3 (portrait, or close to square), it now falls through
+   to the base/mobile-tier rules instead -- the same single-column, vertically-centered,
+   stacked layout every *other* portrait tablet already used (iPad Air, Surface Pro 7, neither
+   was ever wide *and* short enough to reach this tier in the first place). Real desktop/laptop
+   screens this tier targets are always comfortably past 4/3 (even 4:3 monitors clear it exactly;
+   any wider clears it by more), so none of them fall through by this change. */
+@media (min-width: 1024px) and (min-aspect-ratio: 4/3) {
     .hero-section {
-        display: flex;
-        /* Must always fill the viewport on load, on every screen size -- non-negotiable, this is
-           what makes it a hero. (A previous pass here dropped this to fix excess top whitespace,
-           which instead broke the next section into view on large screens -- wrong trade.) */
-        min-height: 100vh;
-        min-height: 100svh;
-        padding: clamp(5.5rem, 8vh, 7rem) 4rem clamp(2.75rem, 5vh, 4rem);
+        /* display:flex and the viewport-filling min-height now live in the base rule above --
+           they apply at every breakpoint, not just this one. Only the padding differs here.
+           Top floor stays 5.5rem: the header is `absolute` (not fixed) at this width, but still
+           overlays the hero the same way, and 5.5rem is already the minimum that clears it at
+           any width in this tier -- lowering it would repeat the mobile-tier header-overlap bug.
+           Bottom floor lowered (2.75rem to 1.5rem) since nothing pins it to the header. */
+        padding: clamp(5.5rem, 8vh, 7rem) 4rem clamp(1.5rem, 5vh, 4rem);
     }
     .hero-composition {
         flex: 1;
+        /* The base rule centers the composition vertically via margin-block:auto, for tiers
+           whose content is shorter than the viewport. Here .hero-composition instead grows to
+           fill the leftover height itself (flex:1), and its children bottom-anchor within that
+           grown box against the earth strip (.hero-copy/.hero-product-stage align-self:end
+           below) -- auto margins would otherwise claim that space before flex-grow gets it,
+           collapsing the item back to content size and breaking that anchoring. */
+        margin-block: 0;
         /* Was fr-based (minmax(0, 1.08fr) minmax(22rem, 0.92fr)): fr tracks split whatever width
            the container has, but neither column's actual content scales with that width -- the
            text is capped at a fixed 64/72rem and the glove's rendered width follows its own
@@ -3730,7 +3831,15 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
            max-content-based columns instead size each track to exactly what its content needs;
            justify-content below then centers that tight two-column cluster as a group, so any
            leftover container width becomes a balanced outer margin instead of an internal gap. */
-        grid-template-columns: minmax(0, max-content) minmax(22rem, max-content);
+        /* Column 1's floor was 0 (i.e. whatever's left after column 2 takes what it wants):
+           fine once there's enough total width, but between 1024px and ~1280px (where the next
+           tier gives the whole row more room) a tall viewport lets column 2 grow toward its own
+           vh-driven ceiling regardless of how little width is left for column 1 -- and since the
+           headline still can't wrap (white-space:nowrap below), it absorbed that entirely as a
+           scaleX squeeze instead (measured near 0.7-0.85 in that zone). Giving column 1 a real
+           floor and lowering column 2's guarantees it stays legible even when height alone would
+           otherwise have let the glove crowd it out. */
+        grid-template-columns: minmax(32rem, max-content) minmax(20rem, max-content);
         justify-content: center;
         /* Tighter than the original clamp(2rem, 4vw, 4.5rem): that gap plus the wide max-width
            above spread text and product image toward opposite edges instead of reading as one
@@ -3769,14 +3878,26 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
         max-width: 64rem; /* matches .hero-copy's widened cap above -- see comment there */
         /* 5.2vw ran too large at the low end of this tier (e.g. 1366px wide) -- 4.2vw keeps the
            headline readable without crowding the product image at smaller desktop widths, while
-           still reaching the same 5.1rem ceiling by ~1930px wide where it was already capping. */
-        font-size: clamp(3.55rem, 4.2vw, 5.1rem);
+           still reaching the same 5.1rem ceiling by ~1930px wide where it was already capping.
+           Floor lowered further, from 3.55rem: at the narrow end of this tier (~1024px wide,
+           where 4.2vw alone already sits below any floor this size) it was crowding the product
+           image, most noticeable on a short landscape viewport (1024x600) where the image had
+           the least room to begin with. */
+        font-size: clamp(3rem, 4.2vw, 5.1rem);
     }
     .hero-title span { white-space: nowrap; }
     .hero-product-stage {
         /* Bigger than the original clamp(22rem, 46vh, 32rem): the glove was reading small
-           relative to the headline at every desktop size once measured side by side. */
-        height: clamp(25rem, 52vh, 34rem);
+           relative to the headline at every desktop size once measured side by side. Floor
+           lowered further since (25rem, i.e. the *old* ceiling) turned out to still be a real
+           floor on a short landscape viewport (a 1024x600 smart-display-class screen): 52vh
+           there is only 312px, well under 400px, so the floor -- not 52vh -- was what pushed the
+           section past the viewport height, the other half (with --earth-h above) of the earth
+           strip ending up mostly clipped below the fold. Normal laptop/desktop heights stay
+           vh-bound well above this floor, unaffected. Coefficient and ceiling raised (52vh/34rem
+           to 58vh/36rem) alongside the headline shrinking above -- freeing enough room for the
+           glove to read bigger without reopening that same short-viewport overflow. */
+        height: clamp(16rem, 57vh, 36rem);
         margin-top: 0;
         /* flex-start, not flex-end: this column's own minmax(22rem, 0.92fr) track is
            consistently wider than the glove image actually renders (measured up to ~150px of
@@ -3812,8 +3933,19 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
    screens) or leaving everything undersized against the canvas (on wide ones). Two triggers:
    min-height for tall 16:9/16:10 screens, min-aspect-ratio for ultrawide -- a short ultrawide
    like 2560x1080 doesn't clear the height bar but reads just as undersized as a tall one does,
-   so it needs the bump too, on its own condition rather than height. */
-@media (min-width: 1024px) and (min-height: 1100px),
+   so it needs the bump too, on its own condition rather than height.
+   The min-height branch's min-width used to match the 1024px tier above (1024px), on the
+   assumption that min-height:1100px alone was enough to mean "big monitor" -- it isn't: a
+   1024px-wide *portrait* tablet (iPad Pro 12.9" portrait is exactly 1024x1366) clears 1100px of
+   height too, so it got treated as a big desktop monitor and grown accordingly, at a width where
+   there's nowhere near the room for that. The glove (sized from vh, so tall means bigger)
+   crowded out the fixed-width two-column headline next to it, which still can't wrap (see
+   .hero-title span white-space:nowrap below) so it visibly squeezed instead (measured down to
+   ~0.48 scale, badly compressed -- see .hero-headline-language-text's scaleX). Real desktop
+   monitors this tier targets (1440p+, 1920x1200, etc.) are always comfortably wider than any
+   portrait tablet, so raising the width bar to 1600px keeps them in while excluding tablets --
+   the min-aspect-ratio branch for ultrawide is untouched, it was never the affected one. */
+@media (min-width: 1600px) and (min-height: 1100px),
        (min-width: 1024px) and (min-aspect-ratio: 2/1) {
     /* Was 130rem: like the base tier above, that gave the headline room to stay unsqueezed but
        overshot what the text (capped at .hero-copy's 64rem) ever uses, so the leftover became
@@ -3851,8 +3983,15 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
     .hero-product-stage { transform: translateX(1.5rem); }
 }
 
+/* This, not the plain .hero-title rule above, is what actually governs font-size below 640px --
+   same specificity, later in the cascade, so it wins for every width this reaches (there's no
+   width where the un-media-queried rule above is ever the one that applies: the min-width:640px
+   tier further down takes over immediately above this one's boundary). Lowered from
+   min(2.5rem, 9vw): shrinking the headline here is what gives .hero-product-stage's height
+   (below 640px, base rule above) room to grow without reopening the short-viewport overflow the
+   two were both tuned against together. */
 @media (max-width: 639px) {
-    .hero-title { font-size: min(2.5rem, 9vw); }
+    .hero-title { font-size: min(2.2rem, 7.8vw); }
 }
 
 @media (max-width: 1023px) {
