@@ -1713,6 +1713,16 @@ html[data-theme="light"] .mobile-nav-toggle {
        from 5.5rem) to make room for the top padding floor above being less aggressive than
        originally planned. */
     --earth-h: clamp(3.5rem, min(15vw, 12vh), 16rem);
+    /* Clearance reserved above the earth strip (.hero-copy and .hero-product-stage both read
+       this, see their margin-bottom) -- capped separately from --earth-h itself, not just
+       calc(var(--earth-h) + 1rem), because the two want different growth curves. The visual
+       earth band can reasonably keep growing on a very wide or very tall viewport (it's meant to
+       read as a bigger, more present horizon there). The *gap* reserved above it doesn't need to
+       grow at the same rate -- past a point it just reads as dead space between the composition
+       and the earth rather than a deliberate margin, most visible on a short-relative-to-width
+       ultrawide window where --earth-h alone can reach 300px+. 14rem keeps the gap reasonable at
+       that extreme while changing nothing anywhere --earth-h was already under the cap. */
+    --earth-clearance: calc(min(var(--earth-h), 14rem) + 1rem);
 }
 
 .hero-section::after {
@@ -1870,13 +1880,14 @@ html[data-theme="light"] .hero-earth__orb {
     vector-effect: non-scaling-stroke;
 }
 
-/* min-aspect-ratio:4/3 alongside the width, here and on the matching block further down that
+/* min-aspect-ratio:6/5 alongside the width, here and on the matching block further down that
    establishes the two-column desktop composition: width alone let a portrait tablet at exactly
    1024px wide (iPad Pro 12.9" portrait is 1024x1366) through as if it were a landscape desktop.
-   See the comment on that block for the full story -- this half just keeps the two tiers'
-   --earth-h in sync (a portrait 1024px+ device should get the same earth-h as any other
-   sub-1024px portrait tablet, not this wider desktop-tuned value). */
-@media (min-width: 1024px) and (min-aspect-ratio: 4/3) {
+   See the comment on that block for the full story (including why 6/5, not the original 4/3) --
+   this half just keeps the two tiers' --earth-h in sync (a portrait/near-square device should
+   get the same earth-h as any other sub-1024px portrait tablet, not this wider desktop-tuned
+   value). */
+@media (min-width: 1024px) and (min-aspect-ratio: 6/5) {
     /* min(13vw, 22vh), not plain 13vw, and a lower floor (6rem, not 11rem): a landscape device
        that's wide but short (a smart-display-class screen, a browser window resized short) could
        still be pure-width-bound down to the 11rem floor regardless of how little vertical room
@@ -2073,8 +2084,10 @@ html[data-theme="light"] .hero-headline-language-hitbox {
     margin-top: clamp(0.5rem, 2.5vh, 1.75rem);
     /* Reserve clearance for the earth strip below so the glove's cuff never sits on top of the
        coastline art (it did, at every breakpoint -- measured, not a guess: the two heights were
-       previously computed independently of each other, with nothing keeping them apart). */
-    margin-bottom: calc(var(--earth-h) + 1rem);
+       previously computed independently of each other, with nothing keeping them apart).
+       --earth-clearance, not calc(var(--earth-h) + 1rem) directly -- see that variable's
+       definition above for why the two are capped differently. */
+    margin-bottom: var(--earth-clearance);
     align-items: center;
     justify-content: center;
     animation: hero-product-in 900ms 120ms cubic-bezier(.22,.75,.25,1) both;
@@ -3791,19 +3804,32 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
     }
 }
 
-/* min-aspect-ratio:4/3 alongside the width: width alone let a *portrait* viewport at exactly
+/* min-aspect-ratio:6/5 (was 4/3, see below): width alone let a *portrait* viewport at exactly
    1024px wide through here as if it were a landscape desktop -- iPad Pro 12.9" portrait is
    exactly 1024x1366. It got the two-column side-by-side composition below, sized for a wide
    landscape screen, at a width with nowhere near the room for that: the product image (grown
    via vh, so tall means big) ended up needing so much of the row's height that the whole
    composition's align-self:end anchoring left a huge empty gap above the headline instead of the
-   headline sitting near the top. Below 4/3 (portrait, or close to square), it now falls through
-   to the base/mobile-tier rules instead -- the same single-column, vertically-centered,
-   stacked layout every *other* portrait tablet already used (iPad Air, Surface Pro 7, neither
-   was ever wide *and* short enough to reach this tier in the first place). Real desktop/laptop
-   screens this tier targets are always comfortably past 4/3 (even 4:3 monitors clear it exactly;
-   any wider clears it by more), so none of them fall through by this change. */
-@media (min-width: 1024px) and (min-aspect-ratio: 4/3) {
+   headline sitting near the top. Below the threshold (portrait, or close to square), it now
+   falls through to the base/mobile-tier rules instead -- the same single-column,
+   vertically-centered, stacked layout every *other* portrait tablet already used (iPad Air,
+   Surface Pro 7, neither was ever wide *and* short enough to reach this tier in the first place).
+
+   4/3 (1.333) was the first cut, tuned only against portrait tablets -- it turned out to also
+   exclude a case that isn't a tablet at all: two windows side by side on an ultrawide monitor.
+   Halving an ultrawide's width still leaves a *lot* of width (e.g. 1720px from a 3440px
+   monitor), but the window stays exactly as tall as the full screen, so its aspect ratio lands
+   well under 4/3 (around 1.2 for a 3440x1440 split in half) -- the stacked layout doesn't just
+   look cramped there the way it would on a genuinely narrow tablet, it actively breaks: the
+   product image's *container* is full-width (100%, sized for a phone where that's harmless)
+   while the headline stays capped at the base tier's 48rem, so the image ends up centered
+   somewhere in the middle of a mostly-empty row instead of grouped with the text at all -- which
+   is the bug this was reported as. 6/5 (1.2) draws the line between the two cases instead: real
+   portrait tablets are still comfortably excluded (iPad Pro included, at 0.75), while a split
+   ultrawide window -- and anything else that's wide but merely not-quite-4:3 -- now clears it and
+   gets the two-column layout it actually has the width for. Real desktop/laptop screens this
+   tier targets clear either threshold by more, so none of them are affected by this change. */
+@media (min-width: 1024px) and (min-aspect-ratio: 6/5) {
     .hero-section {
         /* display:flex and the viewport-filling min-height now live in the base rule above --
            they apply at every breakpoint, not just this one. Only the padding differs here.
@@ -3865,7 +3891,7 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
            viewport, where the leftover height grows with the screen and drags the headline's
            centered position away from the glove's by an amount that scales with viewport height. */
         align-self: end;
-        margin-bottom: calc(var(--earth-h) + 1rem);
+        margin-bottom: var(--earth-clearance);
     }
     /* JS-driven fine positioning (initHeroCopyAlignment in scripts/site.js): keeps the headline's
        second line level with the gap between the glove's thumb and index finger, measured against
@@ -3950,8 +3976,20 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
     /* Was 130rem: like the base tier above, that gave the headline room to stay unsqueezed but
        overshot what the text (capped at .hero-copy's 64rem) ever uses, so the leftover became
        dead space pushing the glove toward the far edge instead of toward the headline. 120rem
-       keeps that same unsqueezed room while pulling text and glove back into a tighter group. */
-    .hero-composition { max-width: 120rem; }
+       keeps that same unsqueezed room while pulling text and glove back into a tighter group.
+
+       flex:none and margin-block:auto override the normal desktop tier's flex:1 + align-self:end
+       (bottom-anchored against the earth strip -- see that tier's .hero-composition comment).
+       That works well at ordinary desktop proportions, but on a genuinely
+       short-relative-to-its-width viewport (an ultrawide monitor window that isn't very tall)
+       flex:1 grows the row to fill the *entire* leftover height, and since --earth-clearance
+       above is now capped independent of --earth-h, that leftover can be substantially more than
+       the row's own content -- all of which collected as one dead zone above the headline, since
+       bottom-anchoring has nowhere else to put it. Centering the (content-sized, ungrown)
+       composition instead splits that same slack evenly above and below, which reads as
+       intentional rather than "content stranded at the bottom of an empty canvas" -- the same
+       approach the base/mobile tier already uses below 1024px. */
+    .hero-composition { flex: none; margin-block: auto; max-width: 120rem; }
     /* min(..., 9vh) alongside the vw term: a short-but-wide screen (e.g. 2560x1080) and a
        tall one at the same width (e.g. 2560x1440) previously got identical vw-driven sizing even
        though the short one visibly has less vertical room to grow into. Capping by viewport
@@ -3981,6 +4019,21 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
 
 @media (min-width: 1536px) {
     .hero-product-stage { transform: translateX(1.5rem); }
+}
+
+/* Unusually tall, sub-1024px-wide viewports -- not a real phone or tablet (the tallest in the
+   device matrix this was tuned against, Surface Pro 7 and iPad Pro portrait, both top out
+   around 1370px), but a real case anyway: a desktop browser window resized narrow and left at
+   full monitor height (e.g. ~830x1870). --earth-h's base-tier formula (min(15vw, 12vh)) is
+   deliberately width-led -- that's what keeps it from overflowing a short phone -- but the same
+   formula never lets it grow past what the (here, modest) width allows, so on a window this
+   tall it renders as a barely-there sliver instead of a visible horizon curve, and the
+   composition (centered via margin-block:auto, see the base rule) ends up looking like it's
+   floating with no relationship to it. 1450px safely excludes every real device already
+   measured (nothing here is shorter than 1450px), so this can size earth-h from height alone
+   without reopening the short-viewport overflow that formula was protecting against. */
+@media (max-width: 1023px) and (min-height: 1450px) {
+    .hero-section { --earth-h: clamp(9rem, 15vh, 22rem); }
 }
 
 /* This, not the plain .hero-title rule above, is what actually governs font-size below 640px --
