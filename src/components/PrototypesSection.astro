@@ -24,7 +24,7 @@ const phaseKeys = ['prototypes.phase.0', 'prototypes.phase.1', 'prototypes.phase
         <div class="prototypes-film-stage reveal-block">
             <div data-video-frame class="video-ambient-frame prototypes-film">
                 <video id={playerId} class="h-full w-full bg-black object-cover" controls controlslist="nodownload" playsinline aria-describedby={`${playerId}-description`}
-                       preload={video.preload} poster={video.cover?.poster} width={video.width} height={video.height} aria-label={t(locale, 'prototypes.videoTitle')}>
+                       preload={video.preload} width={video.width} height={video.height} aria-label={t(locale, 'prototypes.videoTitle')}>
                     {video.sources.map((source) => (<source data-src={source.src} type={source.type} media={source.media}>))}
                     {t(locale, 'prototypes.videoFallback')}
                 </video>

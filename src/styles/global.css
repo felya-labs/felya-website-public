@@ -12,7 +12,16 @@ body {
     font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background-color: #000000;
     color: #ffffff;
-    transition: background-color 220ms ease, color 220ms ease;
+    /* 520ms, not the original 220ms: roughly matches .hero-section::after's 600ms wipe (see
+       below) so text color arrives close to when the directional background wipe passing under
+       it does, rather than flipping to the new theme's color well before the background there has
+       caught up (a real contrast risk for the dark-to-light direction specifically, where text
+       would otherwise go dark while still sitting on a not-yet-lightened background). Still a
+       plain, non-directional crossfade -- text everywhere fades in lockstep rather than following
+       the wipe's left-to-right/right-to-left motion -- but that keeps it simple and always at
+       least midway-readable throughout, which a hard directional cutover for text specifically
+       would need real per-element masking to guarantee. */
+    transition: background-color 520ms ease, color 520ms ease;
 }
 
 html:lang(ko) body {
@@ -79,13 +88,31 @@ html[data-theme="light"] body {
 }
 
 .theme-brand-logo {
-    transition: filter 220ms ease, opacity 220ms ease;
+    --brand-logo-frame-width: 5.87rem;
+    position: relative;
+    display: block;
+    width: var(--brand-logo-frame-width);
+    aspect-ratio: 152.098426159726 / 53.412775534962;
+    overflow: visible;
 }
 
-html[data-theme="light"] .theme-brand-logo {
-    filter: invert(1);
-    opacity: 0.92;
+.site-header .theme-brand-logo {
+    --brand-logo-frame-width: 6.46rem;
+    top: -0.1875rem;
 }
+
+.theme-brand-logo__asset {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.theme-brand-logo__asset--black { display: none; }
+html[data-theme="light"] .theme-brand-logo__asset--white { display: none; }
+html[data-theme="light"] .theme-brand-logo__asset--black { display: block; }
 
 .hero-product-stage {
     /* Containing block for ::before/::after below (both position:absolute): without this,
@@ -98,9 +125,15 @@ html[data-theme="light"] .theme-brand-logo {
        image than before. */
     position: relative;
     isolation: isolate;
+    cursor: pointer;
+    touch-action: manipulation;
 }
 
-.hero-product-stage::before,
+.hero-product-stage:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 0.35rem;
+}
+
 .hero-product-stage::after {
     content: "";
     position: absolute;
@@ -108,57 +141,23 @@ html[data-theme="light"] .theme-brand-logo {
     pointer-events: none;
 }
 
-.hero-product-stage::before {
-    inset: -14% -21% -17% -20%;
-    background:
-            radial-gradient(ellipse at 61% 55%, rgba(77, 111, 161, 0.12), transparent 48%),
-            radial-gradient(ellipse at 64% 76%, rgba(27, 38, 55, 0.085), transparent 58%),
-            radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.72) 55%, rgba(255, 255, 255, 0.22) 76%, transparent 88%);
-    filter: blur(24px);
-    opacity: 0;
-    transition: opacity 480ms cubic-bezier(.4, 0, .2, 1);
-}
-
 .hero-product-stage::after {
-    right: 10%;
-    bottom: 5%;
-    width: 42%;
-    height: 11%;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.34);
-    filter: blur(28px);
-    opacity: 0.72;
-}
-
-.hero-product-stage .hero-product-composite {
-    position: relative;
-    z-index: 1;
-}
-
-html[data-theme="light"] .hero-product-stage::before {
-    opacity: 1;
-    transition-duration: 680ms;
-    transition-timing-function: cubic-bezier(.16, 1, .3, 1);
-}
-
-html[data-theme="light"] .hero-product-stage::after {
     right: 9%;
     bottom: 5%;
     width: 44%;
     height: 10%;
+    border-radius: 50%;
     background: rgba(29, 40, 56, 0.13);
     filter: blur(32px);
     opacity: 0.7;
 }
 
-html[data-theme="light"] .hero-product-composite {
+.hero-product-stage .hero-product-composite {
+    position: relative;
+    z-index: 1;
     filter:
             drop-shadow(0 22px 34px rgba(19, 28, 42, 0.105))
             drop-shadow(0 6px 12px rgba(42, 66, 101, 0.055));
-}
-
-html[data-theme="dark"] .hero-product-composite {
-    filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.24));
 }
 
 .theme-toggle,
@@ -540,6 +539,15 @@ body:has(.mobile-navigation[open])::before {
 }
 
 @media (max-width: 767px) {
+    /* The explanatory PATON copy must orient the reader before the reserved
+       system graphic reaches its own visibility/idle-animation lifecycle. */
+    .system-intro.reveal-block {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition: none;
+    }
+
     .hero-mobile-glove-stage {
         justify-content: center;
         animation-name: hero-product-mobile-in;
@@ -662,14 +670,10 @@ body:has(.mobile-navigation[open])::before {
     opacity: 0;
 }
 
-.partner-logo-frame:hover .partner-logo--dark-default,
-.partner-logo-frame:focus-visible .partner-logo--dark-default,
 .partner-logo-frame--active .partner-logo--dark-default {
     opacity: 0;
 }
 
-.partner-logo-frame:hover .partner-logo--dark-hover,
-.partner-logo-frame:focus-visible .partner-logo--dark-hover,
 .partner-logo-frame--active .partner-logo--dark-hover {
     opacity: 1;
 }
@@ -695,14 +699,10 @@ html[data-theme="light"] .partner-logo--light-hover {
     opacity: 0;
 }
 
-html[data-theme="light"] .partner-logo-frame:hover .partner-logo--light-default,
-html[data-theme="light"] .partner-logo-frame:focus-visible .partner-logo--light-default,
 html[data-theme="light"] .partner-logo-frame--active .partner-logo--light-default {
     opacity: 0;
 }
 
-html[data-theme="light"] .partner-logo-frame:hover .partner-logo--light-hover,
-html[data-theme="light"] .partner-logo-frame:focus-visible .partner-logo--light-hover,
 html[data-theme="light"] .partner-logo-frame--active .partner-logo--light-hover {
     opacity: 1;
 }
@@ -1065,6 +1065,7 @@ html[data-theme="light"] .future-scenario::after {
 }
 
 .future-sketch--remote-center {
+    aspect-ratio: 2050 / 2103;
     top: 50%;
     bottom: auto;
     left: 62%;
@@ -1073,22 +1074,24 @@ html[data-theme="light"] .future-scenario::after {
 }
 
 .future-sketch--hazard-left {
+    aspect-ratio: 1345 / 982;
     left: 7%;
     bottom: 9%;
     width: min(40%, 30rem);
 }
 
 .future-sketch--hazard-right {
+    aspect-ratio: 1464 / 1066;
     right: 7%;
     bottom: 7.5%;
     width: min(41%, 30.5rem);
 }
 
 .future-sketch--presence-left {
+    aspect-ratio: 1636 / 1524;
     left: 13%;
     bottom: 0;
     width: min(41%, 30rem);
-    transform: scaleX(-1);
 }
 
 .future-presence-robot {
@@ -1101,6 +1104,7 @@ html[data-theme="light"] .future-scenario::after {
 }
 
 .future-presence-robot .future-sketch--presence-right {
+    aspect-ratio: 1526 / 1934;
     inset: 0;
     width: 100%;
     transform: scaleX(-1);
@@ -1725,6 +1729,14 @@ html[data-theme="light"] .mobile-nav-toggle {
     --earth-clearance: calc(min(var(--earth-h), 14rem) + 1rem);
 }
 
+/* Visibility here is clip-path-driven, not opacity -- see initColorTheme's runThemeWipe in
+   site.js for why: opacity would put this behind a browser-level snapshot mechanism (View
+   Transitions) that, we found empirically, suspends *everything* underneath for the transition's
+   duration -- including .hero-earth's rotation, which needs to keep animating live throughout.
+   A clip-path animated directly on this always-live pseudo-element never touches that mechanism
+   at all: nothing is ever snapshotted or suspended, so .hero-earth (z-index 1, above this
+   element's z-index 0) and .hero-composition (z-index 2) just keep rendering normally, uninterrupted,
+   the entire time this wipes open or shut behind them. */
 .hero-section::after {
     content: "";
     position: absolute;
@@ -1735,12 +1747,40 @@ html[data-theme="light"] .mobile-nav-toggle {
             radial-gradient(circle at 78% 10%, rgba(74, 109, 168, 0.08), transparent 27rem),
             radial-gradient(circle at 18% 4%, rgba(255, 255, 255, 0.9), transparent 24rem),
             linear-gradient(180deg, #fcfdfe 0%, #f4f6f8 46%, #eef2f5 100%);
-    opacity: 0;
-    transition: opacity 560ms cubic-bezier(.4, 0, .2, 1);
+    clip-path: inset(0 0 0 100%);
 }
 
 html[data-theme="light"] .hero-section::after {
-    opacity: 1;
+    clip-path: inset(0 0 0 0);
+}
+
+/* Wipe in progress (see runThemeWipe): the animation overrides the static clip-path above for its
+   duration, then -- because both land on the same value the static rule for the *arriving* theme
+   already specifies -- holds there with no jump once the direction attribute is cleared afterward.
+   Reduced motion never sets this attribute at all (see site.js), so it's an instant clip-path
+   swap via the static rules above, matching how the rest of the page already handles the
+   preference. */
+html[data-theme-wipe-direction="ltr"] .hero-section::after {
+    animation: hero-section-after-wipe-ltr 600ms cubic-bezier(.4, 0, .2, 1) forwards;
+}
+
+html[data-theme-wipe-direction="rtl"] .hero-section::after {
+    animation: hero-section-after-wipe-rtl 600ms cubic-bezier(.4, 0, .2, 1) forwards;
+}
+
+/* Light-to-dark: the light background wipes away left-to-right, uncovering the section's own
+   #000000 base underneath as it goes. */
+@keyframes hero-section-after-wipe-ltr {
+    from { clip-path: inset(0 0 0 0); }
+    to { clip-path: inset(0 0 0 100%); }
+}
+
+/* Dark-to-light: the mirror image -- the light background wipes in from the right, growing
+   leftward, rather than reusing the ltr keyframe in reverse (which would still start the reveal
+   from the left). */
+@keyframes hero-section-after-wipe-rtl {
+    from { clip-path: inset(0 0 0 100%); }
+    to { clip-path: inset(0 0 0 0); }
 }
 
 /* Hero earth — a faint horizon-line backdrop behind the hero copy, not a focal element. Real
@@ -1754,6 +1794,59 @@ html[data-theme="light"] .hero-section::after {
    "edge of the planet" is physically consistent with the coastline data at every breakpoint.
    Purely supportive of the "Anywhere on Earth" headline; must never compete with it or the
    product image for attention. */
+/* "Beyond Earth" easter egg (see initHeroBeyondEarthStarfield in site.js): a field of streaks
+   that fade in behind the earth and coastline, reading as travel away from the planet into deep
+   space. Sits at z-index 0 -- behind .hero-earth (1) and .hero-composition (2) -- so it never
+   competes with headline/product legibility, and is only ever built/animated in response to the
+   felya:beyondearth event, so the default page carries zero extra DOM/animation cost. */
+.hero-starfield {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 900ms cubic-bezier(.4, 0, .2, 1);
+}
+
+.hero-starfield.is-active {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-starfield { display: none; }
+}
+
+/* Same "dimmer against a light background" treatment as every other layer of the earth graphic
+   below (.hero-earth__horizon path etc.) -- a scale on the inherited custom property, since the
+   per-streak --peak itself is an inline style set once in JS (see initHeroBeyondEarthStarfield)
+   and would otherwise always win over a plain CSS override here. */
+.hero-starfield { --hero-starfield-peak-scale: 1; }
+html[data-theme="light"] .hero-starfield { --hero-starfield-peak-scale: 0.55; }
+
+/* Per-streak geometry (--x/--len/--dur/--delay/--peak) comes from inline custom properties set
+   once in JS at creation time -- transform/opacity only (see the perf notes below on
+   .hero-earth__horizon for why: no filter/blur here either), and a negative --delay starts each
+   streak mid-flight instead of every streak launching from the same point in unison. */
+.hero-starfield__streak {
+    position: absolute;
+    left: var(--x, 50%);
+    bottom: -10%;
+    width: 2px;
+    height: var(--len, 90px);
+    background: linear-gradient(to top, transparent, var(--accent-strong), transparent);
+    opacity: 0;
+    transform: translateY(0) scaleY(0.4);
+    animation: hero-starfield-streak var(--dur, 5s) linear var(--delay, 0s) infinite;
+}
+
+@keyframes hero-starfield-streak {
+    0% { transform: translateY(0) scaleY(0.4); opacity: 0; }
+    8% { opacity: calc(var(--peak, 0.5) * var(--hero-starfield-peak-scale, 1)); }
+    78% { opacity: calc(var(--peak, 0.5) * var(--hero-starfield-peak-scale, 1)); }
+    100% { transform: translateY(-115vh) scaleY(1); opacity: 0; }
+}
+
 .hero-earth {
     position: absolute;
     inset: 0;
@@ -1782,6 +1875,36 @@ html[data-theme="light"] .hero-section::after {
     stroke-width: 1.5px;
     vector-effect: non-scaling-stroke;
     opacity: 0.65;
+}
+
+/* The visible cap's solid body -- same shape as the clipPath above, filled instead of used as a
+   mask. Without this, the earth was only ever glowing outlines over transparent space: fine when
+   nothing sat behind it, but once .hero-starfield (z-index 0, below .hero-earth's 1) started
+   streaking stars past, they showed straight through the "planet" instead of disappearing behind
+   it -- there was nothing there to occlude them. Painted before the glow/coastline paths (first
+   child, see HeroSection.astro) so it sits behind them, not over them. Dark-theme only: in light
+   theme the earth reads as a faint wireframe against a light page (see the opacity overrides
+   below), where a solid fill would be a much bigger, unrequested visual change, and the occlusion
+   problem doesn't arise there since the easter egg that adds the starfield now also forces dark
+   theme (see initColorTheme's felya:beyondearth handling in site.js). */
+.hero-earth__horizon path.hero-earth__disc {
+    fill: #000000;
+    stroke: none;
+    opacity: 1;
+    /* Was an instant fill:none <-> fill:#000000 swap with no transition -- the globe snapped
+       solid black the moment the theme attribute flipped, well before the wipe had visually
+       reached it (nothing sweeps *through* this shape from the background wipe below: the disc is
+       opaque and sits above it in z-index, so this fill is the only thing the viewer actually sees
+       here). 600ms cubic-bezier(.4,0,.2,1) matches the wipe's own duration/easing so it darkens
+       across the same span instead of jumping ahead of it. */
+    transition: fill 600ms cubic-bezier(.4, 0, .2, 1);
+}
+
+html[data-theme="light"] .hero-earth__horizon path.hero-earth__disc {
+    /* transparent, not none: `none` is a keyword, not a color, so it can't be interpolated by the
+       transition above -- fill would still jump instantly. transparent (rgba(0,0,0,0)) is a real
+       color equal in appearance to no fill at all, so it fades smoothly instead. */
+    fill: transparent;
 }
 
 /* Four stacked, progressively wider and more transparent strokes (painted widest-first, see
@@ -1968,8 +2091,10 @@ html[data-theme="light"] .hero-earth__orb {
 @media (max-width: 1023px) {
     .hero-headline-language-hitbox {
         width: 100%;
-        overflow: clip;
-        clip-path: inset(-0.2em 0);
+        /* The static mobile line no longer needs a clipping window. Leave
+           enough vertical ink room for accented German glyph details. */
+        overflow: visible;
+        clip-path: none;
     }
 
     .hero-headline-language-reference {
@@ -2112,22 +2237,39 @@ html[data-theme="light"] .hero-headline-language-hitbox {
     will-change: opacity;
 }
 
-.hero-product-image--light {
-    opacity: 1;
-}
-
-.hero-product-image--dark {
+/* The warm original is intentionally not requested during the normal hero. It is loaded only
+   after the Beyond Earth easter egg starts, then slowly replaces the neutral-grey treatment as
+   though the glove's illumination is powering up. */
+.hero-product-image--warm {
     opacity: 0;
+    filter: brightness(0.84) saturate(0.82);
+    transition:
+        opacity 460ms cubic-bezier(.22,.75,.25,1),
+        filter 460ms cubic-bezier(.22,.75,.25,1);
+    will-change: opacity, filter;
 }
 
-.hero-product-composite[data-glove-theme="dark"] .hero-product-image--light,
-html[data-theme="dark"] .hero-product-composite:not([data-glove-theme]) .hero-product-image--light {
-    opacity: 0;
-}
-
-.hero-product-composite[data-glove-theme="dark"] .hero-product-image--dark,
-html[data-theme="dark"] .hero-product-composite:not([data-glove-theme]) .hero-product-image--dark {
+.hero-section--glove-lit .hero-product-image--warm.is-ready,
+.hero-section--easter-egg .hero-product-image--warm.is-ready {
     opacity: 1;
+    filter: brightness(1.12) saturate(1.08);
+}
+
+.hero-section--easter-egg .hero-product-image--warm {
+    transition-duration: 2700ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-product-image--warm { transition: none; }
+}
+
+/* Browser chrome can change a portrait phone's visual height during a gesture.
+   Keep the glove itself width-bound in that tier so the address bar cannot
+   resize the image mid-scroll; landscape keeps the existing height safeguard. */
+@media (max-width: 767px) and (orientation: portrait) {
+    .hero-product-stage {
+        height: clamp(13rem, 84vw, 26rem);
+    }
 }
 
 html[data-theme="light"] .hero-reveal::before {
@@ -3278,7 +3420,8 @@ html[data-theme="light"] #development-updates-form .development-updates-button:f
 .point-of-view-portrait img {
     display: block;
     width: 100%;
-    height: 46rem;
+    height: auto;
+    aspect-ratio: 1535 / 1024;
     object-fit: cover;
     object-position: center 28%;
     filter: saturate(0.94) contrast(1.04) brightness(0.99);
@@ -3677,8 +3820,10 @@ html[data-theme="light"] .contact-section {
 .footer-bar {
     display: grid;
     grid-template-columns: minmax(12rem, 1fr) auto minmax(12rem, 1fr);
-    grid-template-areas: "identity social legal";
-    gap: 2rem;
+    grid-template-areas:
+        "identity social ."
+        "copyright legal legal";
+    gap: 1.25rem 2rem;
     align-items: center;
     margin-top: clamp(4.5rem, 5vw, 5.5rem);
     border-top: 1px solid var(--line);
@@ -3689,11 +3834,11 @@ html[data-theme="light"] .contact-section {
     grid-area: identity;
     display: grid;
     justify-items: start;
-    gap: 0.75rem;
 }
 
-.footer-brand img { display: block; width: auto; height: 1.8rem; }
-html[data-theme="light"] .footer-brand img { filter: invert(1); }
+.theme-brand-logo--footer {
+    --brand-logo-frame-width: 5.04rem;
+}
 
 .footer-socials {
     grid-area: social;
@@ -3727,6 +3872,8 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
     gap: 1.25rem;
 }
 
+.footer-copyright { grid-area: copyright; }
+
 .footer-legal a,
 .footer-copyright {
     color: var(--text-muted);
@@ -3746,6 +3893,49 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
 .reveal-block[data-revealed="true"] {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Diagnostic mobile A/B modes. They are inert without a validated URL mode on
+   a coarse/touch device; desktop and parameterless Preview retain their normal
+   cascade. The video mode intentionally preserves the cover, CTA and layout,
+   while removing only expensive decorative compositing. */
+@media (hover: none), (pointer: coarse) {
+    /* The partner heading is the next-page cue after the prototypes film. It
+       must not inherit the large section container's 8%-threshold reveal: on
+       a phone that threshold can leave the heading inside the viewport while
+       its parent is still fully transparent. Logo loading remains independent
+       and the desktop reveal continues to use the normal .reveal-block rule. */
+    .partner-section > .section-inner.reveal-block {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    :is(html[data-mobile-perf="system"], html[data-mobile-perf="max"])[data-mobile-perf-scrolling="true"] .system-demonstration *,
+    :is(html[data-mobile-perf="system"], html[data-mobile-perf="max"])[data-mobile-perf-scrolling="true"] .system-demonstration::before,
+    :is(html[data-mobile-perf="system"], html[data-mobile-perf="max"])[data-mobile-perf-scrolling="true"] .system-demonstration::after {
+        animation-play-state: paused !important;
+    }
+
+    :is(html[data-mobile-perf="video"], html[data-mobile-perf="max"]) .prototypes-film-stage::before {
+        display: none;
+    }
+
+    :is(html[data-mobile-perf="video"], html[data-mobile-perf="max"]) .prototypes-film__reflection {
+        display: none;
+    }
+
+    :is(html[data-mobile-perf="video"], html[data-mobile-perf="max"]) .prototypes-film .video-play-cta {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background: rgba(248, 249, 251, 0.98);
+        box-shadow: 0 0.85rem 2.2rem rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    }
+
+    :is(html[data-mobile-perf="beyond"], html[data-mobile-perf="max"])[data-mobile-perf-scrolling="true"] .hero-starfield,
+    :is(html[data-mobile-perf="beyond"], html[data-mobile-perf="max"])[data-mobile-perf-scrolling="true"] .hero-starfield * {
+        animation-play-state: paused !important;
+    }
 }
 
 @supports (corner-shape: squircle) {
@@ -4054,7 +4244,7 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
     .system-intro > * { min-width: 0; }
     .system-intro .section-lead { grid-column: 1; grid-row: auto; margin-top: 2.5rem; }
     .prototypes-intro__copy { justify-self: start; }
-    .point-of-view-portrait img { height: 34rem; }
+    .point-of-view-portrait img { height: auto; }
 }
 
 @media (max-width: 767px) {
@@ -4387,6 +4577,9 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
 
 @media (max-width: 767px) {
     :root { --section-space: 6.5rem; }
+    .site-header .theme-brand-logo {
+        --brand-logo-frame-width: 5.54rem;
+    }
     .site-nav {
         border-radius: 2rem;
         corner-shape: squircle;
@@ -4437,7 +4630,7 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
         line-height: 0.98;
     }
     .point-of-view-portrait { margin-top: 3.5rem; }
-    .point-of-view-portrait img { height: auto; aspect-ratio: 3568 / 2585; object-fit: cover; }
+    .point-of-view-portrait img { height: auto; aspect-ratio: 1535 / 1024; object-fit: cover; }
     .prototypes-chapters { grid-template-columns: 1fr; }
     .prototypes-chapters li + li { border-top: 1px solid rgba(255,255,255,.13); border-left: 0; }
     .contact-description {
@@ -4469,14 +4662,16 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
     }
     .footer-bar {
         grid-template-columns: 1fr;
-        grid-template-areas: "identity" "social" "legal";
+        grid-template-areas: "identity" "social" "copyright" "legal";
         justify-items: center;
         gap: 1rem;
         margin-top: 0;
         padding-top: 1.15rem;
     }
-    .footer-identity { justify-items: center; gap: 0.45rem; text-align: center; }
-    .footer-brand img { height: 1.55rem; }
+    .footer-identity { justify-items: center; text-align: center; }
+    .theme-brand-logo--footer {
+        --brand-logo-frame-width: 4.62rem;
+    }
     .footer-copyright { text-align: center; }
     .footer-socials { gap: 0.45rem; }
     .footer-socials a { width: 2.75rem; height: 2.75rem; }
@@ -4718,9 +4913,6 @@ html[data-theme="light"] .footer-brand img { filter: invert(1); }
         animation: none;
     }
     .hero-product-image {
-        transition: none;
-    }
-    .hero-product-stage::before {
         transition: none;
     }
     .hero-section::after {

@@ -1,0 +1,30 @@
+---
+import sketches from '../data/future-sketches.json';
+import { futureImageSizes } from '../data/future-image-sizes.js';
+
+const { sketch, scenario } = Astro.props;
+const key = `${scenario}-${sketch.position}` as keyof typeof futureImageSizes;
+const lightName = sketch.singleMask ? sketch.name : `${sketch.name}-black`;
+const darkName = sketch.singleMask ? sketch.name : `${sketch.name}-white`;
+const light = sketches[lightName as keyof typeof sketches];
+const dark = sketches[darkName as keyof typeof sketches];
+const source = (image: typeof light) => image.variants[image.variants.length - 1][0];
+const srcset = (image: typeof light) => image.variants.map(([src, width]) => `${src} ${width}w`).join(', ');
+---
+
+<img
+    class={`future-sketch ${sketch.singleMask ? 'future-sketch--single-mask ' : ''}future-sketch--${key}`}
+    src={source(light)}
+    srcset={srcset(light)}
+    sizes={futureImageSizes[key]}
+    data-future-image
+    data-light-src={source(light)}
+    data-dark-src={source(dark)}
+    data-light-srcset={srcset(light)}
+    data-dark-srcset={srcset(dark)}
+    width={sketch.width}
+    height={sketch.height}
+    alt=""
+    loading="lazy"
+    decoding="async"
+/>

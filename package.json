@@ -8,12 +8,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "build:brand-v5": "node scripts/build-v5-brand-assets.mjs",
+    "build:future-sketch-chest-pyra": "node scripts/build-future-sketch-chest-pyra.mjs",
     "generate:system-collision-masks": "node scripts/generate-system-collision-masks.mjs",
     "verify:references": "node scripts/verify-repository.mjs",
     "verify:i18n": "node --experimental-strip-types scripts/verify-localizations.mjs",
     "verify:localized-build": "node --experimental-strip-types scripts/verify-localized-build.mjs",
+    "verify:brand-logo": "node scripts/verify-brand-logo-geometry.mjs",
     "review:i18n": "node --experimental-strip-types scripts/generate-localization-review.mjs",
-    "verify": "node scripts/verify-repository.mjs && node --experimental-strip-types scripts/verify-localizations.mjs && astro build && node --experimental-strip-types scripts/verify-localized-build.mjs"
+    "verify": "node scripts/verify-repository.mjs && node scripts/verify-brand-logo-geometry.mjs && node --experimental-strip-types scripts/verify-localizations.mjs && astro build && node --experimental-strip-types scripts/verify-localized-build.mjs",
+    "generate:future-sketches": "node scripts/generate-future-sketches.mjs"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.2",

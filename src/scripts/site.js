@@ -1,3 +1,4 @@
+import { initPartnerImages, initFutureImages } from './image-loading.js';
 import {
   colorTheme,
   prototypeVideoCover,
@@ -47,6 +48,92 @@ export function onDocumentReady(callback) {
   callback();
 }
 
+/**
+ * Enables narrowly-scoped, mobile-only rendering experiments from the URL.
+ * The normal page (including an invalid value) deliberately receives no data
+ * attribute, so its cascade remains unchanged. The one passive scroll listener
+ * also drives the normal coarse-pointer Hero Earth lifecycle; diagnostics keep
+ * their existing scoped variants on that same signal.
+ */
+export function initMobilePerfVariants({ root = document } = {}) {
+  const html = root.documentElement;
+  if (!html || typeof window === 'undefined') return;
+
+  const supported = new Set(['baseline', 'system', 'video', 'beyond', 'max', 'gloveStatic', 'heroStatic']);
+  const params = new URLSearchParams(window.location.search);
+  // heroPerf is the focused Hero isolation-test contract; mobilePerf remains
+  // available for the earlier section diagnostics.
+  const variant = params.get('heroPerf') ?? params.get('mobilePerf');
+  const coarse = window.matchMedia('(hover: none)').matches
+    || window.matchMedia('(pointer: coarse)').matches;
+  if (!coarse) return;
+
+  const diagnosticVariant = supported.has(variant) ? variant : null;
+  if (diagnosticVariant) html.dataset.mobilePerf = diagnosticVariant;
+  // Preserve the baseline diagnostic's no-scroll-signal contract.
+  if (diagnosticVariant === 'baseline') return;
+
+  let scrollTimer = 0;
+  const scrollVariant = diagnosticVariant ?? 'normal';
+  const setScrolling = (active) => {
+    if (active) html.dataset.mobilePerfScrolling = 'true';
+    else delete html.dataset.mobilePerfScrolling;
+    document.dispatchEvent(new CustomEvent('felya:mobileperfscroll', {
+      detail: { active, variant: scrollVariant }
+    }));
+  };
+  const onScroll = () => {
+    if (!html.dataset.mobilePerfScrolling) setScrolling(true);
+    window.clearTimeout(scrollTimer);
+    scrollTimer = window.setTimeout(() => setScrolling(false), 200);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+// Preview-only, bounded capture for a real Brave toolbar/section-boundary investigation.
+export function initBraveHeroDiagnostics({ root = document } = {}) {
+  if (new URLSearchParams(window.location.search).get('braveHeroDiag') !== '1') return;
+  const hero = root.querySelector('.hero-section');
+  const stage = root.querySelector('.hero-product-stage');
+  const glove = root.querySelector('.hero-scroll-glove');
+  const image = root.querySelector('.hero-product-image');
+  const earth = root.querySelector('.hero-earth');
+  const headline = root.querySelector('.hero-headline-language-hitbox');
+  const next = root.querySelector('#system');
+  if (!hero || !stage || !glove || !next) return;
+  const samples = [];
+  const rect = (element) => {
+    if (!element) return null;
+    const value = element.getBoundingClientRect();
+    return { x: +value.x.toFixed(1), y: +value.y.toFixed(1), width: +value.width.toFixed(1), height: +value.height.toFixed(1) };
+  };
+  const record = (reason) => {
+    const viewport = window.visualViewport;
+    samples.push({
+      reason, time: +performance.now().toFixed(1), scrollY: +window.scrollY.toFixed(1),
+      innerWidth: window.innerWidth, innerHeight: window.innerHeight,
+      clientWidth: document.documentElement.clientWidth, clientHeight: document.documentElement.clientHeight,
+      visualViewport: viewport && { width: +viewport.width.toFixed(1), height: +viewport.height.toFixed(1), offsetTop: +viewport.offsetTop.toFixed(1), pageTop: +viewport.pageTop.toFixed(1), scale: viewport.scale },
+      hero: rect(hero), stage: rect(stage), glove: rect(glove), image: rect(image), earth: rect(earth), headline: rect(headline), next: rect(next),
+      gloveStyle: { width: getComputedStyle(glove).width, height: getComputedStyle(glove).height, transform: getComputedStyle(glove).transform, gloveY: stage.style.getPropertyValue('--hero-glove-y') || null },
+      heroState: { className: hero.className, data: { ...hero.dataset } }
+    });
+    if (samples.length > 160) samples.shift();
+  };
+  let lastScrollY = window.scrollY;
+  const onScroll = () => { if (Math.abs(window.scrollY - lastScrollY) >= 32) { lastScrollY = window.scrollY; record('scroll'); } };
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => record(`intersection:${entry.target === hero ? 'hero' : 'next'}:${entry.isIntersecting}`)), { threshold: [0, 0.01, 0.5, 1] });
+  observer.observe(hero); observer.observe(next);
+  const resizeObserver = new ResizeObserver(() => record('resize-observer'));
+  [hero, stage, glove, next].forEach((element) => resizeObserver.observe(element));
+  window.addEventListener('resize', () => record('window-resize'));
+  window.visualViewport?.addEventListener('resize', () => record('visual-viewport-resize'));
+  window.visualViewport?.addEventListener('scroll', () => record('visual-viewport-scroll'));
+  window.addEventListener('scroll', onScroll, { passive: true });
+  record('init');
+  window.__felyaBraveHeroDiag = { samples, export: () => JSON.stringify(samples, null, 2), clear: () => { samples.length = 0; record('cleared'); } };
+}
+
 export function initColorTheme({ root = document, config = colorTheme } = {}) {
   const buttons = Array.from(root.querySelectorAll(config.selectors.buttons));
   if (!buttons.length) return;
@@ -93,15 +180,72 @@ export function initColorTheme({ root = document, config = colorTheme } = {}) {
 
   applyTheme(readStoredTheme(), false);
 
-  buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const nextTheme = button.dataset.themeNext || (document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+  // Both the manual toggle and the Beyond Earth easter egg (see initHeroHeadlineLanguages) drive
+  // theme changes through this one wipe. An earlier version of this used the browser's View
+  // Transitions API: it snapshots the page just before/after a DOM change into two layers and
+  // animates between them, which sounded like exactly what a "content never gets covered" wipe
+  // needs. Measured, though: those layers are frozen snapshots, and while they're showing, the
+  // *live* page's rendering is suspended underneath -- confirmed by watching .hero-earth's rotation
+  // (which runs continuously via requestAnimationFrame) stop advancing for the transition's entire
+  // duration even when explicitly exempted from the snapshot via its own view-transition-name.
+  // There's no way to keep one continuously-animating element live while the rest of the page runs
+  // through a View Transition, so it's a dead end for this specific requirement.
+  //
+  // This version instead flips the real theme (and thus every real color) immediately, and lets
+  // .hero-section::after -- an always-live, ordinary CSS pseudo-element, positioned behind
+  // .hero-earth and .hero-composition -- animate its own clip-path to *look* like the background
+  // is wiping across. Nothing is ever snapshotted or suspended, so the earth keeps rotating
+  // uninterrupted the entire time; see the CSS for the rest of this.
+  const heroSection = root.querySelector('.hero-section');
+  const runThemeWipe = (nextTheme, direction) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       applyTheme(nextTheme);
+      return;
+    }
+    document.documentElement.dataset.themeWipeDirection = direction;
+    applyTheme(nextTheme);
+    // Listens for the ::after pseudo-element's own animationend rather than a hardcoded
+    // setTimeout matching the CSS's 600ms: a duplicated magic number:like that is exactly the kind
+    // of thing that quietly drifts out of sync the next time either value gets tuned (this was
+    // caught by testing a slowed-down animation-duration override and watching the JS timeout yank
+    // the wipe to its end state early, well before the slower animation had actually finished).
+    // Not that it matters for correctness either way here -- see the CSS comment on why the
+    // animation's forwards-held end state always matches what the static rules want regardless of
+    // when the attribute is removed -- but waiting for the real event costs nothing and removes
+    // the drift risk entirely.
+    heroSection?.addEventListener('animationend', function onWipeEnd(event) {
+      if (event.pseudoElement !== '::after') return;
+      heroSection.removeEventListener('animationend', onWipeEnd);
+      delete document.documentElement.dataset.themeWipeDirection;
+    });
+  };
+
+  let themeRequest = 0;
+  buttons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const request = ++themeRequest;
+      const nextTheme = button.dataset.themeNext || (document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+      const pending = [];
+      document.dispatchEvent(new CustomEvent('felya:beforethemechange', {
+        detail: { theme: nextTheme, waitUntil: (ready) => pending.push(ready) }
+      }));
+      try {
+        await Promise.all(pending);
+        if (request === themeRequest) {
+          // Preserve the current live Easter-egg wipe while waiting for required assets.
+          runThemeWipe(nextTheme, nextTheme === 'dark' ? 'ltr' : 'rtl');
+        }
+      } catch { /* Keep the current theme and its images when a replacement fails. */ }
     });
   });
 
   document.addEventListener('felya:languagechange', () => {
     applyTheme(document.documentElement.dataset.theme, false);
+  });
+
+  document.addEventListener('felya:beyondearth', (event) => {
+    if (!event?.detail?.active) return;
+    if (document.documentElement.dataset.theme !== 'dark') runThemeWipe('dark', 'ltr');
   });
 }
 
@@ -141,7 +285,7 @@ export function initLanguageSelector({ root = document, config = language } = {}
 }
 
 export function initThemeImages({ root = document } = {}) {
-  const images = Array.from(root.querySelectorAll('[data-theme-image]'));
+  const images = Array.from(root.querySelectorAll('[data-theme-image]:not([data-future-image])'));
   if (!images.length) return;
 
   const applySources = () => {
@@ -156,25 +300,6 @@ export function initThemeImages({ root = document } = {}) {
 
   applySources();
   document.addEventListener('felya:themechange', applySources);
-}
-
-export function initHeroProductThemeTransition({ root = document } = {}) {
-  const composites = Array.from(root.querySelectorAll('[data-hero-product-composite]'));
-  if (!composites.length) return;
-
-  const applyGloveTheme = (theme) => {
-    const nextTheme = theme === 'dark' ? 'dark' : 'light';
-    composites.forEach((composite) => {
-      composite.dataset.gloveTheme = nextTheme;
-    });
-  };
-
-  applyGloveTheme(document.documentElement.dataset.theme);
-
-  document.addEventListener('felya:themechange', (event) => {
-    const nextTheme = event.detail?.theme || document.documentElement.dataset.theme;
-    applyGloveTheme(nextTheme);
-  });
 }
 
 export function initTwoLineHeadings({ root = document } = {}) {
@@ -269,10 +394,17 @@ export function initHeroHeadlineLanguages({
   const hitbox = root.querySelector('[data-hero-headline-languages]');
   const headline = hitbox?.querySelector('.hero-headline-language-text');
   if (!hitbox || !headline || !priority.length || !secondary.length) return;
+  const hero = hitbox.closest('.hero-section');
+  const warmGlove = hero?.querySelector('[data-hero-warm-glove]');
+  const gloveToggle = hero?.querySelector('[data-hero-glove-toggle]');
 
   hitbox.__felyaHeroHeadlineCleanup?.();
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // The compact touch Hero is intentionally quiet until the user interacts with
+  // its headline. Desktop and wider touch layouts keep the full language cycle.
+  const mobileHeroLite = window.matchMedia('(max-width: 767px)').matches
+    && (window.matchMedia('(hover: none)').matches || window.matchMedia('(pointer: coarse)').matches);
   const timings = {
     firstIdleDelay: 12000,
     idleDelayMin: 16000,
@@ -297,6 +429,9 @@ export function initHeroHeadlineLanguages({
   let secondaryQueue = [];
   let shouldShowEnglishFirst = false;
   let isEasterEggActive = false;
+  let warmGloveLoadId = 0;
+  let gloveLightTimer = 0;
+  let gloveTapPending = false;
   let isPointerInside = false;
   let isFocused = false;
   let touchTapCount = 0;
@@ -469,14 +604,56 @@ export function initHeroHeadlineLanguages({
     return true;
   };
 
+  const prepareWarmGlove = () => {
+    if (warmGlove) {
+      const loadId = ++warmGloveLoadId;
+      const revealWarmGlove = () => {
+        if (loadId !== warmGloveLoadId) return;
+        warmGlove.classList.add('is-ready');
+        if (gloveTapPending) {
+          gloveTapPending = false;
+          window.clearTimeout(gloveLightTimer);
+          gloveLightTimer = window.setTimeout(() => hero?.classList.remove('hero-section--glove-lit'), 340);
+        }
+      };
+      if (!warmGlove.getAttribute('src')) {
+        warmGlove.srcset = warmGlove.dataset.srcset || '';
+        warmGlove.src = warmGlove.dataset.src || '';
+      }
+      if (warmGlove.complete) {
+        if (typeof warmGlove.decode === 'function') warmGlove.decode().then(revealWarmGlove).catch(revealWarmGlove);
+        else revealWarmGlove();
+      } else warmGlove.addEventListener('load', revealWarmGlove, { once: true });
+    }
+  };
+
+  const lightGlove = () => {
+    window.clearTimeout(gloveLightTimer);
+    gloveTapPending = false;
+    hero?.classList.add('hero-section--glove-lit');
+    prepareWarmGlove();
+  };
+
+  const dimGlove = (delay = 0) => {
+    window.clearTimeout(gloveLightTimer);
+    if (!warmGlove?.classList.contains('is-ready')) {
+      gloveTapPending = true;
+      return;
+    }
+    gloveLightTimer = window.setTimeout(() => hero?.classList.remove('hero-section--glove-lit'), delay);
+  };
+
   const showEasterEgg = () => {
     isEasterEggActive = true;
+    hero?.classList.add('hero-section--easter-egg');
+    prepareWarmGlove();
     setState('easter-egg');
     headline.textContent = 'Beyond Earth. ✨';
     headline.lang = 'en';
     headline.dir = 'ltr';
     headline.dataset.heroLanguage = 'Easter egg';
     fitHeadline();
+    document.dispatchEvent(new CustomEvent('felya:beyondearth', { detail: { active: true } }));
   };
 
   const cancelIntro = () => {
@@ -501,6 +678,7 @@ export function initHeroHeadlineLanguages({
 
   const canRunIdle = () => (
     !isDestroyed
+    && !mobileHeroLite
     && !reduceMotion.matches
     && !document.hidden
     && !isIntroActive
@@ -604,6 +782,7 @@ export function initHeroHeadlineLanguages({
   };
 
   const runThemePreview = async () => {
+    if (mobileHeroLite) return;
     if (isEasterEggActive) return;
 
     cancelIntro();
@@ -667,6 +846,12 @@ export function initHeroHeadlineLanguages({
   };
 
   const scheduleIntro = async () => {
+    if (mobileHeroLite) {
+      hitbox.removeAttribute('data-hero-intro-pending');
+      restoreHeadline();
+      setState('static');
+      return;
+    }
     if (reduceMotion.matches) {
       hitbox.removeAttribute('data-hero-intro-pending');
       restoreHeadline();
@@ -708,10 +893,13 @@ export function initHeroHeadlineLanguages({
     claimManualInteraction();
     if (isEasterEggActive) {
       isEasterEggActive = false;
+      hero?.classList.remove('hero-section--easter-egg');
       setState('interaction');
+      document.dispatchEvent(new CustomEvent('felya:beyondearth', { detail: { active: false } }));
       await transitionHeadline(restoreHeadline);
       resetLanguageCycle();
-      scheduleNormalIdle();
+      if (mobileHeroLite) setState('static');
+      else scheduleNormalIdle();
       return;
     }
     await transitionHeadline(showNextLanguage);
@@ -783,7 +971,7 @@ export function initHeroHeadlineLanguages({
   };
   const handleBlur = () => {
     isFocused = false;
-    if (!isEasterEggActive) scheduleNormalIdle();
+    if (!isEasterEggActive && !mobileHeroLite) scheduleNormalIdle();
   };
   // Always refit, not just while an intro/cycling language is showing: the resting default
   // headline needs this too whenever the hitbox's available width changes for any reason (a
@@ -799,8 +987,11 @@ export function initHeroHeadlineLanguages({
       cancelHeadlineTransition();
       restoreHeadline();
       resetLanguageCycle();
-      setState('intro');
-      scheduleIntro();
+      if (mobileHeroLite) setState('static');
+      else {
+        setState('intro');
+        scheduleIntro();
+      }
     }
   };
   const handleThemeChange = (event) => {
@@ -814,6 +1005,11 @@ export function initHeroHeadlineLanguages({
     isFocused = false;
     cancelIntro();
     claimManualInteraction();
+    if (mobileHeroLite) {
+      restoreHeadline();
+      setState('static');
+      return;
+    }
     transitionHeadline(restoreEnglishHeadline).then(scheduleNormalIdle);
   };
   const handleVisibilityChange = () => {
@@ -826,7 +1022,7 @@ export function initHeroHeadlineLanguages({
       }
       return;
     }
-    if (!isEasterEggActive) scheduleNormalIdle();
+    if (!isEasterEggActive && !mobileHeroLite) scheduleNormalIdle();
   };
   const handleReducedMotionChange = () => {
     cancelIdle();
@@ -836,7 +1032,7 @@ export function initHeroHeadlineLanguages({
       setState('interaction');
       return;
     }
-    if (!reduceMotion.matches && !isEasterEggActive) scheduleNormalIdle();
+    if (!reduceMotion.matches && !isEasterEggActive && !mobileHeroLite) scheduleNormalIdle();
   };
 
   listen(hitbox, 'selectstart', (event) => event.preventDefault());
@@ -853,6 +1049,26 @@ export function initHeroHeadlineLanguages({
   listen(document, 'felya:themechange', handleThemeChange);
   listen(document, 'pointerdown', handleDocumentPointerDown);
   listen(document, 'visibilitychange', handleVisibilityChange);
+  if (gloveToggle) {
+    const releaseGlove = () => dimGlove(260);
+    listen(gloveToggle, 'pointerdown', (event) => {
+      gloveToggle.setPointerCapture?.(event.pointerId);
+      lightGlove();
+    });
+    listen(gloveToggle, 'pointerup', (event) => {
+      gloveToggle.releasePointerCapture?.(event.pointerId);
+      releaseGlove();
+    });
+    listen(gloveToggle, 'pointercancel', () => dimGlove());
+    listen(gloveToggle, 'keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      lightGlove();
+    });
+    listen(gloveToggle, 'keyup', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') releaseGlove();
+    });
+  }
   reduceMotion.addEventListener?.('change', handleReducedMotionChange);
 
   // Belt-and-suspenders alongside the resize listener above: a window resize is only one way
@@ -866,6 +1082,7 @@ export function initHeroHeadlineLanguages({
 
   const cleanup = () => {
     isDestroyed = true;
+    window.clearTimeout(gloveLightTimer);
     cancelPreview();
     cancelTimers();
     listeners.splice(0).forEach((removeListener) => removeListener());
@@ -885,7 +1102,7 @@ export function initHeroHeadlineLanguages({
   // loaded, since the very first fitHeadline() call above may have measured against fallback
   // font metrics.
   document.fonts?.ready.then(() => { if (!isDestroyed) fitHeadline(); });
-  setState('intro');
+  setState(mobileHeroLite ? 'static' : 'intro');
   scheduleIntro();
 }
 
@@ -960,6 +1177,12 @@ export function initPrototypeVideoCover({ root = document, config = prototypeVid
     const label = cover.querySelector('[data-video-play-label]');
     const playAriaLabel = cover.getAttribute('aria-label');
     const replayAriaLabel = cover.dataset.videoReplayLabel || playAriaLabel;
+    const coverImage = cover.querySelector('img');
+    const syncPoster = () => {
+      if (coverImage?.currentSrc) video.poster = coverImage.currentSrc;
+    };
+    coverImage?.addEventListener('load', syncPoster);
+    if (coverImage?.complete && coverImage.naturalWidth) syncPoster();
 
     const hideCover = () => {
       cover.hidden = true;
@@ -979,6 +1202,7 @@ export function initPrototypeVideoCover({ root = document, config = prototypeVid
     cover.setAttribute('aria-label', playAriaLabel);
     cover.hidden = false;
     cover.addEventListener('click', () => {
+      syncPoster();
       loadVideoSources(video);
       frame?.setAttribute('data-video-state', 'loading');
       const playRequest = video.play();
@@ -1035,43 +1259,78 @@ export function initHeroMobileGloveScroll({ root = document } = {}) {
   if (!stages.length) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // Preview-only mobile diagnosis: leave the glove at its normal CSS position so
+  // real-device testing can isolate the existing 0..-4px scroll translation.
+  // initMobilePerfVariants only sets this value on coarse/touch hardware.
+  const staticGlove = document.documentElement?.dataset.mobilePerf === 'gloveStatic'
+    || document.documentElement?.dataset.mobilePerf === 'heroStatic';
+  const hero = stages[0].closest('.hero-section') || stages[0];
   let frame = null;
+  let measureViewport = true;
+  let viewportWidth = 0;
+  let travel = 0;
+  let near = true;
+  let aboveViewport = false;
+  let lastValue = null;
 
   const reset = () => {
-    stages.forEach((stage) => {
-      stage.style.removeProperty('--hero-glove-y');
-    });
-
+    stages.forEach((stage) => stage.style.removeProperty('--hero-glove-y'));
     root.querySelectorAll('.hero-scroll-glove').forEach((glove) => {
       glove.style.removeProperty('transform');
     });
+    lastValue = null;
   };
-
+  if (staticGlove) {
+    reset();
+    return;
+  }
+  const applyPosition = (scrollY) => {
+    const progress = Math.min(Math.max(scrollY / travel, 0), 1);
+    const value = `${(progress * -4).toFixed(2)}px`;
+    if (value === lastValue) return;
+    lastValue = value;
+    stages.forEach((stage) => stage.style.setProperty('--hero-glove-y', value));
+  };
   const update = () => {
     frame = null;
-
-    if (reduceMotion.matches || window.innerWidth >= 768) {
-      reset();
+    if (measureViewport) {
+      // Read together, before writes, and only on initialization/resize.
+      viewportWidth = window.innerWidth;
+      travel = Math.min(360, window.innerHeight * 0.48);
+      measureViewport = false;
+    }
+    if (reduceMotion.matches || viewportWidth >= 768) {
+      if (lastValue !== null) reset();
       return;
     }
-
-    const travel = Math.min(360, window.innerHeight * 0.48);
-    const progress = Math.min(Math.max(window.scrollY / travel, 0), 1);
-    const offsetY = progress * -4;
-
-    stages.forEach((stage) => {
-      stage.style.setProperty('--hero-glove-y', `${offsetY.toFixed(2)}px`);
-    });
+    // Keep scroll reads in the RAF, not in the scroll event between DOM writes.
+    applyPosition(near ? window.scrollY : aboveViewport ? travel : 0);
   };
-
   const requestUpdate = () => {
-    if (frame !== null) return;
-    frame = window.requestAnimationFrame(update);
+    if (frame === null) frame = window.requestAnimationFrame(update);
+  };
+  const onScroll = () => {
+    if (near && viewportWidth < 768) requestUpdate();
+  };
+  const onResize = () => {
+    measureViewport = true;
+    requestUpdate();
   };
 
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        near = entry.isIntersecting;
+        aboveViewport = entry.boundingClientRect.bottom <= 0;
+      });
+      requestUpdate();
+    }, { threshold: 0 });
+    observer.observe(hero);
+  }
+  reset();
   update();
-  window.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('resize', requestUpdate);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onResize);
   reduceMotion.addEventListener?.('change', requestUpdate);
 }
 
@@ -1130,7 +1389,6 @@ export function initHeroEarthRotation({ root = document } = {}) {
   if (!container || !path) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (reduceMotion.matches) return; // leave the server-rendered static frame in place
 
   const { R, maxDlon, coscMin } = heroEarthRotationParams;
   const D2R = Math.PI / 180;
@@ -1145,12 +1403,67 @@ export function initHeroEarthRotation({ root = document } = {}) {
   // Urals), then drifts west into Europe ~17s into the loop (matches the static heroEarthPath
   // default below, which is baked at this same longitude).
   const LON_START = 50;
-  // 12fps (throttled) was the actual remaining cause of the reported stutter: consistent timing
-  // isn't the same as smooth motion, and 12fps reads as discrete steps rather than a continuous
-  // turn no matter how evenly spaced. Now that a frame costs ~2ms (post filter-removal), there's
-  // no reason to throttle below the display's own refresh rate; this just caps redundant work on
-  // very high-refresh-rate displays without any perceptible smoothness cost.
-  const UPDATE_INTERVAL_MS = 16;
+  // Keep desktop (and narrow non-touch) cadence. The normal coarse-pointer
+  // Mobile Hero projects at a deliberately lighter 20 Hz on this same RAF.
+  const compactViewport = window.matchMedia('(max-width: 767px)');
+  let compact = compactViewport.matches;
+  const mobileHero = compact && (window.matchMedia('(hover: none)').matches
+    || window.matchMedia('(pointer: coarse)').matches);
+  const DESKTOP_INTERVAL_MS = 16;
+  const COMPACT_INTERVAL_MS = 1000 / 30;
+  const MOBILE_IDLE_INTERVAL_MS = 1000 / 20;
+
+  // "Beyond Earth" easter egg (triggered elsewhere via the felya:beyondearth event): instead of
+  // the calm equatorial west-to-east drift, the sub-viewer point itself wanders in latitude -- a
+  // real parameter of the same orthographic projection below, not a CSS trick -- while the
+  // visible strip also banks around its own center. Together these read as watching the planet
+  // from a moving, inclined vantage (an ISS-style orbit) rather than a fixed point on the
+  // equator. Two incommensurate periods (24s tilt / 17s roll) so the two motions drift in and out
+  // of phase with each other instead of repeating in lockstep, and the rotation itself spins up
+  // to a much shorter period -- all three ramp in/out together via `intensity`, see
+  // currentIntensity below, so entering/leaving the easter egg is one smooth transition rather
+  // than a jump-cut. 15s/turn (was 26s) for a noticeably faster base spin -- still just the
+  // *base* rate the direction wobble further speeds up or reverses below.
+  const BEYOND_PERIOD_MS = 15000;
+  // Asymmetric on purpose, not a plain +/-34 swing around 0: the visible strip only ever shows
+  // latitudes roughly [lat0+44, lat0+90] (it's a grazing near-limb crop, not a top-down view --
+  // see project()'s coscMin cutoff), so a *symmetric* tilt centered on the equator never actually
+  // reaches it -- even at its most negative extreme it only came down to about +10 degrees,
+  // comfortably northern-hemisphere the entire time. An initial -20/+/-40 version still only
+  // grazed the equator (window down to ~[-16,30]) rather than showing the Southern Hemisphere
+  // properly, since heroEarthSegments used to have no data at all south of about -2 degrees
+  // anyway (see hero-earth-coastline.js) -- now that the full globe is actually in the data,
+  // centering the swing on -42 with a wider +/-42 amplitude ranges from a high-north extreme
+  // (lat0=0, window [44,90] -- coincides with the calm default rotation's own view) down through
+  // a genuinely southern one (lat0=-84, window ~[-40,6] -- southern Africa, Madagascar, southern
+  // Australia and South America all land inside that band, not just a graze past the equator).
+  const BEYOND_TILT_CENTER_DEG = -42;
+  const BEYOND_TILT_AMPLITUDE_DEG = 42;
+  const BEYOND_TILT_PERIOD_MS = 24000;
+  // Smaller than tilt: rolling around the true projection center (see projectBeyond below) moves
+  // near-limb points a lot per degree -- points near the visible strip sit close to the sphere's
+  // own radius from that center, so even a modest angle sweeps them by a large fraction of the
+  // strip's own height. This is the angle, not the resulting on-screen motion, so it reads as a
+  // properly "deutlich" bank without becoming an illegible blur.
+  const BEYOND_ROLL_DEG = 11;
+  const BEYOND_ROLL_PERIOD_MS = 17000;
+  const BEYOND_ROLL_PHASE = Math.PI / 3;
+  const BEYOND_TRANSITION_MS = 1400;
+  // Direction wobble: rather than always drifting the same way (however fast), the spin's own
+  // *velocity* is scaled by a sum of two incommensurate sine waves plus a DC offset -- still
+  // spinning forward most of the time, but every so often both waves dip negative together and
+  // the globe smoothly decelerates, stops, and reverses for a while before turning forward again.
+  // This is a continuous, differentiable function of time (a sum of sines), so the reversal is
+  // never a jump -- lon0 is its time-integral, and that integral stays perfectly smooth through
+  // every slow-down/reverse/speed-up, however erratic the direction feels. Periods incommensurate
+  // with each other and with BEYOND_TILT_PERIOD_MS/BEYOND_ROLL_PERIOD_MS/BEYOND_PERIOD_MS above so
+  // reversals land at unpredictable points in the tilt/roll cycle instead of always coinciding.
+  const BEYOND_SPIN_WOBBLE_PERIOD_A_MS = 19500;
+  const BEYOND_SPIN_WOBBLE_PERIOD_B_MS = 31000;
+  const BEYOND_SPIN_WOBBLE_PHASE = Math.PI / 5;
+  const BEYOND_SPIN_WOBBLE_DC = 0.7;
+  const BEYOND_SPIN_WOBBLE_AMP_A = 0.55;
+  const BEYOND_SPIN_WOBBLE_AMP_B = 0.4;
 
   function project(lon, lat, lon0) {
     const dlon = ((lon - lon0 + 540) % 360) - 180;
@@ -1165,12 +1478,44 @@ export function initHeroEarthRotation({ root = document } = {}) {
     return `${Math.round(x * 100) / 100},${Math.round(-y * 100) / 100}`;
   }
 
-  function buildPath(lon0) {
+  // General case, used only while the easter egg is transitioning in/out or active: reinstates
+  // the sub-viewer latitude (lat0) that project() above assumes is 0, via the same orthographic
+  // formula generalized to an arbitrary sub-viewer point, plus a post-projection roll. Kept
+  // separate so the default (lat0=0, no roll) path above stays exactly as cheap as it always was.
+  // Also skips project()'s maxDlon pre-filter, which is only a safe shortcut when lat0 is 0 --
+  // near a pole, points far away in raw longitude can still be in view.
+  //
+  // The roll rotates (x, y) around the origin (0, 0) -- not some other point picked to sit near
+  // the visible strip. That matters: for a true sphere under orthographic projection, every
+  // constant-cosc contour (including the one heroEarthLimbPath is baked from, and the sphere's
+  // own silhouette) projects to a circle centered exactly on the origin, *regardless* of viewing
+  // direction -- lon0, lat0, roll, all of it. Rotating around the origin is therefore the one
+  // pivot that turns the coastline as a rigid body without ever pulling it out of alignment with
+  // that fixed circle -- i.e. an actual rotating sphere, not the flattened map being sheared
+  // around a point that has no such invariant. An earlier version rolled around a point local to
+  // the visible strip instead (chosen because it sat mid-crop), which is exactly why the coastline
+  // visibly warped relative to the static horizon glow.
+  function projectBeyond(lon, lat, lon0, lat0R, cosRoll, sinRoll) {
+    const dlon = ((lon - lon0 + 540) % 360) - 180;
+    const latR = lat * D2R, dlonR = dlon * D2R;
+    const cosc = Math.sin(lat0R) * Math.sin(latR) + Math.cos(lat0R) * Math.cos(latR) * Math.cos(dlonR);
+    if (cosc < coscMin) return null;
+    const x = R * Math.cos(latR) * Math.sin(dlonR);
+    const y = R * (Math.cos(lat0R) * Math.sin(latR) - Math.sin(lat0R) * Math.cos(latR) * Math.cos(dlonR));
+    const rolledX = x * cosRoll - y * sinRoll;
+    const rolledY = x * sinRoll + y * cosRoll;
+    return `${Math.round(rolledX * 100) / 100},${Math.round(-rolledY * 100) / 100}`;
+  }
+
+  function buildPath(lon0, lat0R = 0, cosRoll = 1, sinRoll = 0) {
+    const useBeyond = lat0R !== 0 || cosRoll !== 1;
     const parts = [];
     for (const run of heroEarthSegments) {
       let segment = [];
       for (const [lon, lat] of run) {
-        const p = project(lon, lat, lon0);
+        const p = useBeyond
+          ? projectBeyond(lon, lat, lon0, lat0R, cosRoll, sinRoll)
+          : project(lon, lat, lon0);
         if (p) {
           segment.push(p);
         } else {
@@ -1183,42 +1528,189 @@ export function initHeroEarthRotation({ root = document } = {}) {
     return parts.join(' ');
   }
 
+  // Preserve the current rendered position across a reinitialisation, while pausing all
+  // scheduling whenever the globe, page, or motion preference makes it ineligible.
+  const preservedLon = container.__felyaEarthCleanup?.();
   let frame = null;
-  let lastUpdate = 0;
-  let visible = true;
+  let lastUpdate = null;
+  let lastIntegration = null;
+  let visible = !('IntersectionObserver' in window);
+  let pageActive = true;
+  let frozen = false;
+  let mobilePerfScrolling = false;
+  let disposed = false;
+  let lon0 = Number.isFinite(preservedLon) ? preservedLon : LON_START;
 
-  function tick(now) {
-    frame = window.requestAnimationFrame(tick);
-    if (!visible || now - lastUpdate < UPDATE_INTERVAL_MS) return;
-    lastUpdate = now;
-    const lon0 = LON_START - ((now / PERIOD_MS) % 1) * 360;
-    path.setAttribute('d', buildPath(lon0));
-  }
+  let beyondActive = false;
+  let beyondToggledAt = 0;
+  let beyondIntensityAtToggle = 0;
 
-  const start = () => {
-    if (frame === null) frame = window.requestAnimationFrame(tick);
+  // Smoothstepped 0..1 ramp toward whichever state (active/inactive) was last requested,
+  // starting from wherever the ramp actually was at the moment it was last toggled -- so
+  // re-triggering mid-transition eases from the current value instead of snapping.
+  const currentIntensity = (now) => {
+    const elapsed = now - beyondToggledAt;
+    const t = Math.min(1, Math.max(0, elapsed / BEYOND_TRANSITION_MS));
+    const eased = t * t * (3 - 2 * t);
+    const target = beyondActive ? 1 : 0;
+    return beyondIntensityAtToggle + (target - beyondIntensityAtToggle) * eased;
   };
-  const stop = () => {
-    if (frame !== null) window.cancelAnimationFrame(frame);
-    frame = null;
-    path.setAttribute('d', buildPath(LON_START));
-  };
 
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.target === container) visible = entry.isIntersecting;
-      });
-    }, { threshold: 0.01 });
-    observer.observe(container);
-  }
-
-  reduceMotion.addEventListener?.('change', () => {
-    if (reduceMotion.matches) stop();
-    else start();
+  document.addEventListener('felya:beyondearth', (event) => {
+    const active = Boolean(event?.detail?.active);
+    if (active === beyondActive) return;
+    beyondIntensityAtToggle = currentIntensity(performance.now());
+    beyondActive = active;
+    beyondToggledAt = performance.now();
+    sync();
   });
 
-  start();
+  const canRun = () => !disposed && visible && pageActive && !frozen
+    && !mobilePerfScrolling && document.visibilityState === 'visible' && !reduceMotion.matches;
+
+  function tick(now) {
+    frame = null;
+    if (!canRun()) { stop(); return; }
+    const dt = lastIntegration === null ? 0 : now - lastIntegration;
+    lastIntegration = now;
+    const intensity = currentIntensity(now);
+    const period = PERIOD_MS + (BEYOND_PERIOD_MS - PERIOD_MS) * intensity;
+    // Integrated rather than derived fresh from absolute time each frame (as the plain-drift
+    // case above can afford to be): the period itself now varies continuously, and re-deriving
+    // an angle from `now / period` every frame would jump discontinuously whenever period
+    // changes. Accumulating angular velocity over dt keeps the turn smooth through the spin-up
+    // and spin-down alike.
+    //
+    // directionMultiplier blends from a flat 1 (calm mode: always the plain westward drift above)
+    // toward the wobble sum as intensity ramps to 1, so the reversal effect itself fades in/out
+    // with the easter egg rather than snapping on. Blending the multiplier (not just adding the
+    // wobble on top) keeps this a lerp between two continuous functions of time, so it's still
+    // smooth through the ramp -- see the wobble constants' own comment above for why the wobble
+    // itself never introduces a discontinuity either.
+    const wobble = BEYOND_SPIN_WOBBLE_DC
+      + BEYOND_SPIN_WOBBLE_AMP_A * Math.sin((now / BEYOND_SPIN_WOBBLE_PERIOD_A_MS) * Math.PI * 2)
+      + BEYOND_SPIN_WOBBLE_AMP_B * Math.sin((now / BEYOND_SPIN_WOBBLE_PERIOD_B_MS) * Math.PI * 2 + BEYOND_SPIN_WOBBLE_PHASE);
+    const directionMultiplier = 1 + intensity * (wobble - 1);
+    lon0 = (((lon0 - (360 / period) * dt * directionMultiplier) % 360) + 360) % 360;
+
+    const interval = mobileHero ? MOBILE_IDLE_INTERVAL_MS
+      : compact ? COMPACT_INTERVAL_MS : DESKTOP_INTERVAL_MS;
+    const tolerance = compact ? 0.1 : 0;
+    if (lastUpdate !== null && now - lastUpdate + tolerance < interval) { start(); return; }
+    // Preserve the fractional remainder at compact cadences so timestamp rounding does not reduce cadence.
+    lastUpdate = lastUpdate === null || !compact
+      ? now : lastUpdate + Math.floor((now - lastUpdate + tolerance) / interval) * interval;
+
+    const tiltDeg = intensity * (BEYOND_TILT_CENTER_DEG
+      + BEYOND_TILT_AMPLITUDE_DEG * Math.sin((now / BEYOND_TILT_PERIOD_MS) * Math.PI * 2));
+    const rollDeg = intensity * BEYOND_ROLL_DEG
+      * Math.sin((now / BEYOND_ROLL_PERIOD_MS) * Math.PI * 2 + BEYOND_ROLL_PHASE);
+    const lat0R = tiltDeg * D2R;
+    const rollR = rollDeg * D2R;
+    path.setAttribute('d', buildPath(lon0, lat0R, Math.cos(rollR), Math.sin(rollR)));
+    start();
+  }
+
+  function start() {
+    if (canRun() && frame === null) frame = window.requestAnimationFrame(tick);
+  }
+  function stop() {
+    if (frame !== null) window.cancelAnimationFrame(frame);
+    frame = null;
+    lastIntegration = null;
+    lastUpdate = null;
+  }
+  const sync = () => { if (canRun()) start(); else stop(); };
+  const observer = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.target === container) visible = entry.isIntersecting;
+    });
+    sync();
+  }, { threshold: 0.01 }) : null;
+  observer?.observe(container);
+
+  const onPageHide = (event) => {
+    pageActive = false;
+    stop();
+    if (!event.persisted) cleanup();
+  };
+  const onPageShow = () => { pageActive = true; sync(); };
+  const onViewportChange = () => { compact = compactViewport.matches; lastUpdate = null; sync(); };
+  const onFreeze = () => { frozen = true; sync(); };
+  const onResume = () => { frozen = false; sync(); };
+  const onMobilePerfScroll = (event) => {
+    const variant = event.detail?.variant;
+    if (variant !== 'normal' && variant !== 'beyond' && variant !== 'max' && variant !== 'heroStatic') return;
+    mobilePerfScrolling = Boolean(event.detail?.active);
+    sync();
+  };
+  function cleanup() {
+    disposed = true;
+    stop();
+    observer?.disconnect();
+    reduceMotion.removeEventListener?.('change', sync);
+    compactViewport.removeEventListener?.('change', onViewportChange);
+    document.removeEventListener('visibilitychange', sync);
+    document.removeEventListener('freeze', onFreeze);
+    document.removeEventListener('resume', onResume);
+    document.removeEventListener('felya:mobileperfscroll', onMobilePerfScroll);
+    window.removeEventListener('pagehide', onPageHide);
+    window.removeEventListener('pageshow', onPageShow);
+    if (container.__felyaEarthCleanup === cleanup) delete container.__felyaEarthCleanup;
+    return lon0;
+  }
+  container.__felyaEarthCleanup = cleanup;
+  reduceMotion.addEventListener?.('change', sync);
+  compactViewport.addEventListener?.('change', onViewportChange);
+  document.addEventListener('visibilitychange', sync);
+  document.addEventListener('freeze', onFreeze);
+  document.addEventListener('resume', onResume);
+  document.addEventListener('felya:mobileperfscroll', onMobilePerfScroll);
+  window.addEventListener('pagehide', onPageHide);
+  window.addEventListener('pageshow', onPageShow);
+  sync();
+}
+
+// Companion to the "Beyond Earth" branch of initHeroEarthRotation above: a field of thin streaks
+// that fade in behind the earth once the easter egg is triggered, reading as travel away from the
+// planet into deep space. Kept as its own module (own event listener, own reduced-motion check)
+// rather than folded into the rotation tick loop -- the streaks are plain CSS animations once
+// built, so there's nothing per-frame here for a shared rAF loop to buy.
+export function initHeroBeyondEarthStarfield({ root = document, random = Math.random } = {}) {
+  const container = root.querySelector('[data-hero-starfield]');
+  if (!container) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (reduceMotion.matches) return; // static/absent starfield, no motion to opt out of
+
+  const STREAK_COUNT = 56;
+  let built = false;
+
+  const build = () => {
+    if (built) return;
+    built = true;
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < STREAK_COUNT; i += 1) {
+      const streak = document.createElement('span');
+      streak.className = 'hero-starfield__streak';
+      const duration = 3.4 + random() * 3.6;
+      streak.style.setProperty('--x', `${(random() * 100).toFixed(2)}%`);
+      streak.style.setProperty('--len', `${Math.round(60 + random() * 100)}px`);
+      streak.style.setProperty('--dur', `${duration.toFixed(2)}s`);
+      // Negative delay starts each streak mid-flight instead of every streak launching from the
+      // same point in unison the moment the easter egg activates.
+      streak.style.setProperty('--delay', `${(-random() * duration).toFixed(2)}s`);
+      streak.style.setProperty('--peak', (0.32 + random() * 0.38).toFixed(2));
+      fragment.appendChild(streak);
+    }
+    container.appendChild(fragment);
+  };
+
+  document.addEventListener('felya:beyondearth', (event) => {
+    const active = Boolean(event?.detail?.active);
+    if (active) build();
+    container.classList.toggle('is-active', active);
+  });
 }
 
 export function initPatonSystemDemonstration({ root = document } = {}) {
@@ -1237,7 +1729,7 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
     const desktopSignalArrivalRatio = 0.82;
     const mobileSignalArrivalRatio = 0.96;
     const compactPacketCount = 7;
-    const compactPacketEdgeInset = 0.025;
+    const compactPacketEdgeInsetPx = 12;
     const compactPacketSpawnHold = 110;
     const getCompactShortViewportLift = () => (
       Math.min(18, Math.max(0, (720 - window.innerHeight) * 0.34))
@@ -1248,6 +1740,9 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
     let isVisible = false;
     let isAwakening = false;
     let hasPlayedAmbientFollowUp = false;
+    let mobilePerfScrolling = false;
+    let mobileEntryScrolling = false;
+    let mobileEntryIdleTimer = 0;
     let rapidClickCount = 0;
     let lastSignalClickAt = 0;
     let sparkleUntil = 0;
@@ -1259,6 +1754,36 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
     const activeHapticTimers = new Set();
 
     demonstration.dataset.awakening = 'pending';
+
+    // The compact paths use fixed SVG coordinates; responsive layout only scales
+    // their SVG. Sample a detached copy once per path-data revision, so animation
+    // frames never query geometry from a tree dirtied by particle writes.
+    const compactSignalGeometry = new WeakMap();
+    const getCompactSignalGeometry = (sourcePath) => {
+      const data = sourcePath.getAttribute('d');
+      const cached = compactSignalGeometry.get(sourcePath);
+      if (cached?.data === data) return cached;
+      const geometryPath = sourcePath.cloneNode(false);
+      const length = geometryPath.getTotalLength();
+      const steps = 256;
+      const points = Array.from({ length: steps + 1 }, (_, index) => {
+        const point = geometryPath.getPointAtLength(index / steps * length);
+        return { x: point.x, y: point.y };
+      });
+      const geometry = {
+        data,
+        pointAt(progress) {
+          const position = Math.min(1, Math.max(0, progress)) * steps;
+          const index = Math.min(steps - 1, Math.floor(position));
+          const mix = position - index;
+          const a = points[index];
+          const b = points[index + 1];
+          return { x: a.x + (b.x - a.x) * mix, y: a.y + (b.y - a.y) * mix };
+        }
+      };
+      compactSignalGeometry.set(sourcePath, geometry);
+      return geometry;
+    };
 
     const clearAmbientAwakening = () => {
       window.clearTimeout(ambientTimer);
@@ -1380,18 +1905,16 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
       const packetLayer = sourcePath?.closest('.system-demonstration__mobile-loop-beam')?.parentNode;
       if (!sourcePath || !packetLayer) return;
 
-      const pathLength = sourcePath.getTotalLength();
+      const geometry = getCompactSignalGeometry(sourcePath);
       const { startInset, coverage } = getCompactPacketTrainGeometry();
-      const travelDistance = 1 - startInset;
+      const travelDistance = coverage;
       const renderedWidth = mobileSignalSvg.getBoundingClientRect().width || 100;
       const svgUnitsPerPixel = 100 / renderedWidth;
       const svgNamespace = 'http://www.w3.org/2000/svg';
       const packets = [];
 
       for (let packetIndex = 0; packetIndex < compactPacketCount; packetIndex += 1) {
-        const packetProgress = compactPacketCount > 1
-          ? packetIndex / (compactPacketCount - 1)
-          : 0;
+        const packetProgress = packetIndex / compactPacketCount;
         const packet = document.createElementNS(svgNamespace, 'g');
         packet.classList.add('system-demonstration__compact-packet');
         if (performance.now() < sparkleUntil) {
@@ -1439,13 +1962,17 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
         const movementElapsed = Math.max(0, now - startedAt - compactPacketSpawnHold);
         const movementProgress = Math.min(1, movementElapsed / duration);
         packets.forEach(({ element, startProgress }) => {
-          const positionProgress = startProgress + movementProgress * travelDistance;
-          if (positionProgress > 1) {
-            element.style.opacity = '0';
-            return;
-          }
+          // Keep every point on the same exposed arc-length track. The former
+          // one-way progression let leading points leave the path early, so a
+          // seven-point train visibly collapsed into a cluster followed by an
+          // expanding empty arc. Individual modulo wrapping preserves the
+          // existing count and speed while keeping neighbour spacing constant.
+          const positionProgress = startInset + (
+            (startProgress - startInset + movementProgress * travelDistance)
+            % travelDistance
+          );
 
-          const point = sourcePath.getPointAtLength(positionProgress * pathLength);
+          const point = geometry.pointAt(positionProgress);
           element.style.opacity = '1';
           element.setAttribute('transform', `translate(${point.x} ${point.y})`);
         });
@@ -1662,8 +2189,9 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
        * right/left arc. Distribute the train from the first visible endpoint
        * to the last, retaining only enough room for the packet radius.
        */
-      const startInset = compactPacketEdgeInset;
-      const coverage = 1 - compactPacketEdgeInset * 2;
+      const renderedWidth = mobileSignalSvg?.getBoundingClientRect().width || 100;
+      const startInset = Math.min(0.08, Math.max(0.02, compactPacketEdgeInsetPx / renderedWidth));
+      const coverage = 1 - startInset * 2;
 
       return { startInset, coverage };
     };
@@ -1972,9 +2500,26 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
         '.system-demonstration__collision-label--paton',
         patonLabel,
       );
+      // The compact side zones deliberately follow the measured, localized
+      // label boxes. Masking a small clearance around them is the last-resort
+      // guard for narrow screens where a full label cannot fit beside the
+      // circle: the visible arc can never run through text in any locale.
+      setCollisionLabelGeometry(
+        activeSvg,
+        '.system-demonstration__collision-label--forward',
+        forwardLabel,
+        compact ? 7 : 0,
+      );
+      setCollisionLabelGeometry(
+        activeSvg,
+        '.system-demonstration__collision-label--return',
+        returnLabel,
+        compact ? 7 : 0,
+      );
     };
 
     const requestCollisionGeometryUpdate = () => {
+      if (mobileEntryScrolling) return;
       if (collisionGeometryFrame) return;
       collisionGeometryFrame = window.requestAnimationFrame(updateCollisionGeometry);
     };
@@ -2042,6 +2587,11 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
       if (origin === 'return') {
         animateSignal('return', 0, returnDuration, cycleGeneration);
         scheduleHapticAtReturnArrival(0, returnDuration);
+        const forwardDelay = isMobileSignalLoop
+          ? getCompactLeadingArrivalDelay(0, returnDuration)
+          : getLandscapeLeadingArrivalDelay(0, returnDuration);
+        animateSignal('forward', forwardDelay, forwardDuration, cycleGeneration);
+        scheduleGlovesAtForwardStart(forwardDelay);
         return;
       }
 
@@ -2067,6 +2617,7 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
     };
 
     const playAwakening = ({ restart = false, origin = '', forceMobileRestart = false } = {}) => {
+      if (mobilePerfScrolling) return;
       if (reduceMotion.matches) {
         finishAwakening();
         return;
@@ -2151,13 +2702,36 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
       });
     });
 
+    const scheduleMobileEntry = () => {
+      if (!usesMobileSignalLoop()) {
+        playAwakening({ restart: true });
+        return;
+      }
+      window.clearTimeout(mobileEntryIdleTimer);
+      mobileEntryIdleTimer = window.setTimeout(() => {
+        mobileEntryScrolling = false;
+        if (!isVisible || reduceMotion.matches || isAwakening) return;
+        requestCollisionGeometryUpdate();
+        playAwakening({ restart: true });
+      }, 240);
+    };
+    const onMobileEntryScroll = () => {
+      if (!usesMobileSignalLoop()) return;
+      mobileEntryScrolling = true;
+      window.clearTimeout(mobileEntryIdleTimer);
+      clearAmbientAwakening();
+      mobileEntryIdleTimer = window.setTimeout(() => scheduleMobileEntry(), 240);
+    };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.target !== demonstration) return;
         const wasVisible = isVisible;
         isVisible = entry.isIntersecting;
-        if (isVisible && !wasVisible) playAwakening({ restart: true });
-        else if (!isVisible) clearAmbientAwakening();
+        if (isVisible && !wasVisible) scheduleMobileEntry();
+        else if (!isVisible) {
+          window.clearTimeout(mobileEntryIdleTimer);
+          clearAmbientAwakening();
+        }
       });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.32 });
 
@@ -2188,8 +2762,27 @@ export function initPatonSystemDemonstration({ root = document } = {}) {
       }
     };
 
+    const handleMobilePerfScroll = (event) => {
+      const variant = event.detail?.variant;
+      if (variant !== 'system' && variant !== 'max') return;
+      mobilePerfScrolling = Boolean(event.detail?.active);
+      if (mobilePerfScrolling) {
+        clearAmbientAwakening();
+        clearSignalCycle();
+        clearHapticFeedback();
+        isAwakening = false;
+        demonstration.removeAttribute('data-awakening');
+        demonstration.removeAttribute('data-signal-origin');
+        demonstration.dataset.phase = 'rest';
+      } else if (isVisible) {
+        scheduleAmbientAwakening();
+      }
+    };
+
     reduceMotion.addEventListener?.('change', handlePreferenceChange);
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('felya:mobileperfscroll', handleMobilePerfScroll);
+    window.addEventListener('scroll', onMobileEntryScroll, { passive: true });
   });
 }
 
@@ -2245,9 +2838,12 @@ export function initSectionNavigation({ root = document } = {}) {
 }
 
 export function initSite(root = document) {
+  initBraveHeroDiagnostics({ root });
+  initMobilePerfVariants({ root });
   initColorTheme({ root });
+  initPartnerImages({ root });
+  initFutureImages({ root });
   initThemeImages({ root });
-  initHeroProductThemeTransition({ root });
   initLanguageSelector({ root });
   initTwoLineHeadings({ root });
   initMobileNavigation({ root });
@@ -2258,6 +2854,7 @@ export function initSite(root = document) {
   initHeroMobileGloveScroll({ root });
   initHeroCopyAlignment({ root });
   initHeroEarthRotation({ root });
+  initHeroBeyondEarthStarfield({ root });
   initPatonSystemDemonstration({ root });
   initSectionReveals({ root });
   initSectionNavigation({ root });

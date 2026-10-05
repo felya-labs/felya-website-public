@@ -26,16 +26,19 @@ const orderedPartners = partnerOrder
     <div class="section-inner reveal-block">
         <p class="partner-kicker section-kicker" data-i18n="partners.eyebrow">{t(locale, 'partners.eyebrow')}</p>
         <h2 id="partners-heading" class="partner-heading" data-i18n="partners.heading">{t(locale, 'partners.heading')}</h2>
-        <ul class="sr-only">
-            {orderedPartners.map((partner) => <li>{partner.name}</li>)}
-        </ul>
-        <div class="partner-grid" aria-hidden="true">
+        <div class="partner-grid">
             {orderedPartners.map((partner) => (
-                <span class={`partner-logo-frame ${partner.frameClass}`}>
-                    <img src={partner.darkDefaultSrc} width={partner.width} height={partner.height} alt="" loading="lazy" decoding="async" class={`${baseLogoClass} partner-logo--dark-default`}>
-                    <img src={partner.src} width={partner.width} height={partner.height} alt="" loading="lazy" decoding="async" class={`${baseLogoClass} partner-logo--dark-hover`}>
-                    <img src={partner.lightDefaultSrc} width={partner.width} height={partner.height} alt="" loading="lazy" decoding="async" class={`${baseLogoClass} partner-logo--light-default`}>
-                    <img src={partner.lightHoverSrc} width={partner.width} height={partner.height} alt="" loading="lazy" decoding="async" class={`${baseLogoClass} partner-logo--light-hover`}>
+                <span class={`partner-logo-frame ${partner.frameClass}`} data-partner-images data-partner-light-overlay={/--(?:code-and-context|gateway|th-koeln)$/.test(partner.frameClass) || undefined} tabindex="0" role="img" aria-label={partner.name}>
+                    <img data-src={partner.darkDefaultSrc} data-partner-variant="dark-default" width={partner.width} height={partner.height} alt="" loading="lazy" decoding="async" class={`${baseLogoClass} partner-logo--dark-default`}>
+                    <img data-src={partner.src} data-partner-variant="dark-hover" width={partner.width} height={partner.height} alt="" loading="lazy" decoding="async" class={`${baseLogoClass} partner-logo--dark-hover`}>
+                    <img data-src={partner.lightDefaultSrc} data-partner-variant="light-default" width={partner.width} height={partner.height} alt="" loading="lazy" decoding="async" class={`${baseLogoClass} partner-logo--light-default`}>
+                    <img data-src={partner.lightHoverSrc} data-partner-variant="light-hover" width={partner.width} height={partner.height} alt="" loading="lazy" decoding="async" class={`${baseLogoClass} partner-logo--light-hover`}>
+                    <noscript>
+                        {/--(?:code-and-context|gateway|th-koeln)$/.test(partner.frameClass) && (
+                            <img src={partner.darkDefaultSrc} width={partner.width} height={partner.height} alt="" loading="lazy" class={`${baseLogoClass} partner-logo--dark-default`}>
+                        )}
+                        <img src={partner.lightDefaultSrc} width={partner.width} height={partner.height} alt="" loading="lazy" class={`${baseLogoClass} partner-logo--light-default`}>
+                    </noscript>
                 </span>
             ))}
         </div>

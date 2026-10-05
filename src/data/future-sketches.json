@@ -1,0 +1,366 @@
+{
+  "vr-hydrogen-engine-touch-black": {
+    "width": 2050,
+    "height": 2103,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-black-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-black-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-black-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-black-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-black-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-black-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-black-1440.webp",
+        1440
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-black-1680.webp",
+        1680
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/vr-hydrogen-engine-touch-black.webp",
+        2050
+      ]
+    ]
+  },
+  "vr-hydrogen-engine-touch-white": {
+    "width": 2050,
+    "height": 2103,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-white-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-white-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-white-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-white-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-white-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-white-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-white-1440.webp",
+        1440
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/vr-hydrogen-engine-touch-white-1680.webp",
+        1680
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/vr-hydrogen-engine-touch-white.webp",
+        2050
+      ]
+    ]
+  },
+  "static-haptic-black": {
+    "width": 1347,
+    "height": 984,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-black-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-black-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-black-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-black-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-black-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-black-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/static-haptic-black.webp",
+        1347
+      ]
+    ]
+  },
+  "static-haptic-white": {
+    "width": 1347,
+    "height": 984,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-white-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-white-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-white-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-white-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-white-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/static-haptic-white-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/static-haptic-white.webp",
+        1347
+      ]
+    ]
+  },
+  "humanoid-arms-knipex-pliers-black": {
+    "width": 1464,
+    "height": 1066,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-black-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-black-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-black-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-black-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-black-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-black-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/humanoid-arms-knipex-pliers-black.webp",
+        1464
+      ]
+    ]
+  },
+  "humanoid-arms-knipex-pliers-white": {
+    "width": 1464,
+    "height": 1066,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-white-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-white-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-white-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-white-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-white-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-arms-knipex-pliers-white-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/humanoid-arms-knipex-pliers-white.webp",
+        1464
+      ]
+    ]
+  },
+  "operator-vr-paton-glove-black": {
+    "width": 1636,
+    "height": 1524,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-black-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-black-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-black-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-black-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-black-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-black-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-black-1440.webp",
+        1440
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/operator-vr-paton-glove-black.webp",
+        1636
+      ]
+    ]
+  },
+  "operator-vr-paton-glove-white": {
+    "width": 1636,
+    "height": 1524,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-white-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-white-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-white-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-white-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-white-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-white-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/operator-vr-paton-glove-white-1440.webp",
+        1440
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/operator-vr-paton-glove-white.webp",
+        1636
+      ]
+    ]
+  },
+  "humanoid-with-rose-black": {
+    "width": 1526,
+    "height": 1934,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-black-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-black-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-black-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-black-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-black-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-black-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/humanoid-with-rose-black.webp",
+        1526
+      ]
+    ]
+  },
+  "humanoid-with-rose-white": {
+    "width": 1526,
+    "height": 1934,
+    "variants": [
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-white-320.webp",
+        320
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-white-480.webp",
+        480
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-white-640.webp",
+        640
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-white-768.webp",
+        768
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-white-960.webp",
+        960
+      ],
+      [
+        "/assets/images/possible-futures/sketches/responsive/humanoid-with-rose-white-1120.webp",
+        1120
+      ],
+      [
+        "/assets/images/possible-futures/sketches/webp/humanoid-with-rose-white.webp",
+        1526
+      ]
+    ]
+  }
+}

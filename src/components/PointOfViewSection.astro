@@ -20,7 +20,7 @@ const teamPortraitSrcset = teamPortrait.srcset.map(([src, width]) => `${src} ${w
         </header>
 
         <figure class="point-of-view-portrait reveal-block">
-            <img src={teamPortrait.src} srcset={teamPortraitSrcset} sizes="(min-width: 1536px) 1536px, (min-width: 768px) calc(100vw - 6rem), calc(100vw - 3rem)"
+            <img src={teamPortrait.src} srcset={teamPortraitSrcset} sizes={teamPortrait.sizes}
                  width={teamPortrait.width} height={teamPortrait.height} loading="lazy" decoding="async" alt={t(locale, 'pointOfView.imageAlt')}>
         </figure>
 

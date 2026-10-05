@@ -6,9 +6,10 @@ const imageSrcset = (directory, fileStem, widths = responsiveImageWidths) =>
 export const brand = {
   name: 'FELYA',
   logo: {
-    src: '/assets/images/brand/felya-labs-logo/felya-labs-wordmark-white.webp',
-    width: 2935,
-    height: 1034
+    blackSrc: '/assets/images/brand/felya-logo/felya-logo-horizontal-black.svg',
+    whiteSrc: '/assets/images/brand/felya-logo/felya-logo-horizontal-white.svg',
+    width: 152.098426159726,
+    height: 53.412775534962
   }
 };
 
@@ -53,6 +54,9 @@ export const socialLinks = [
   }
 ];
 
+// Unused -- the hero now shows gloveLightImage in both themes (see HeroSection.astro). Left
+// declared, and the underlying asset file left in place, rather than deleted, in case a
+// dark-specific product shot is wanted again later.
 export const gloveDarkImage = {
   src: '/assets/images/hero/paton-glove/paton-glove-dark-premium-v1.webp',
   srcset: [
@@ -64,7 +68,8 @@ export const gloveDarkImage = {
   alt: 'Close-up of the FELYA haptic glove with blue finger mechanisms over a fabric glove.'
 };
 
-export const gloveLightImage = {
+// Retained warm treatment, including all existing source and responsive files.
+export const gloveWarmImage = {
   src: '/assets/images/hero/paton-glove/paton-glove-light-premium-v1.webp',
   srcset: [
     ...imageSrcset('hero/paton-glove', 'paton-glove-light-premium-v1', [640, 768, 960, 1200])
@@ -72,8 +77,16 @@ export const gloveLightImage = {
   sizes: '(min-width: 1536px) 760px, (min-width: 1024px) 680px, (min-width: 768px) 620px, 300px',
   width: 1200,
   height: 1343,
-  alt: gloveDarkImage.alt
+  alt: 'Close-up of the FELYA haptic glove with blue finger mechanisms over a fabric glove.'
 };
+
+export const gloveNeutralImage = {
+  ...gloveWarmImage,
+  src: '/assets/images/hero/paton-glove/paton-glove-neutral-grey-v1.webp',
+  srcset: imageSrcset('hero/paton-glove', 'paton-glove-neutral-grey-v1', [640, 768, 960, 1200])
+};
+// Switch to gloveWarmImage to restore the original yellow/warm lighting.
+export const gloveLightImage = gloveNeutralImage;
 
 const developmentUpdatesFormAction = 'https://submit-form.com/5I3xX6ZMl';
 
@@ -83,12 +96,12 @@ export const developmentUpdatesForm = {
 };
 
 export const teamPortrait = {
-  src: '/assets/images/about/team-portrait/team-portrait-3568.webp',
-  srcset: imageSrcset('about/team-portrait', 'team-portrait'),
-  sizes: '(min-width: 1344px) 568px, (min-width: 768px) calc((100vw - 12rem) / 2), calc(100vw - 4rem)',
-  width: 3568,
-  height: 2585,
-  alt: 'Four FELYA team members holding and wearing haptic glove prototypes.'
+  src: '/assets/images/about/team-portrait/team5-pyra-clean-1535.webp',
+  srcset: imageSrcset('about/team-portrait', 'team5-pyra-clean', [640, 768, 960, 1200, 1440, 1535]),
+  sizes: '(min-width: 1792px) 1664px, (min-width: 1024px) calc(100vw - 8rem), (min-width: 768px) calc(100vw - 6rem), calc(100vw - 3rem)',
+  width: 1535,
+  height: 1024,
+  alt: 'Five FELYA team members holding and wearing haptic glove prototypes.'
 };
 
 export const partners = [

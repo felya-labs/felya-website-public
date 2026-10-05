@@ -93,7 +93,7 @@ const en = {
   'pointOfView.disciplinesEyebrow': 'Across disciplines.',
   'pointOfView.disciplines': 'Mechanical systems, wearable robotics, embedded electronics and software become one embodied interface.',
   'pointOfView.origin': 'Started at TH Köln. Shaped with industry.',
-  'pointOfView.imageAlt': 'Four FELYA team members holding and wearing haptic glove prototypes.',
+  'pointOfView.imageAlt': 'Five FELYA team members holding and wearing haptic glove prototypes.',
   'workWithUs.eyebrow': 'Work with us',
   'workWithUs.heading': '<span class="heading-line">Help extend</span><span class="heading-line">human capability.</span>',
   'workWithUs.description': 'We collaborate with researchers, engineers, robotics teams and industry partners to turn ambitious ideas into working systems.',
@@ -102,7 +102,7 @@ const en = {
   'workWithUs.joinTitle': 'Join the team',
   'workWithUs.joinDescription': 'Engineering, robotics, embedded systems, software and design',
   'workWithUs.openInvitation': 'See another way to work together? Let\'s talk.',
-  'footer.copyright': '© FELYA 2026.',
+  'footer.copyright': '© 2026 FELYA',
   'footer.legalAria': 'Legal information',
   'footer.linkedin': 'FELYA on LinkedIn',
   'footer.instagram': 'FELYA on Instagram',
@@ -117,7 +117,7 @@ export type TranslationKey = keyof typeof en;
 export type TranslationDictionary = Record<TranslationKey, string>;
 
 const de: TranslationDictionary = {
-  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© FELYA 2026.',
+  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© 2026 FELYA',
   'meta.title': 'FELYA',
   'meta.description': 'FELYA entwickelt tragbare Interfaces, die menschliche Bewegung, Berührung und Fähigkeiten auf robotische Systeme übertragen.',
   'meta.ogDescription': 'Interfaces, die menschliche Fähigkeiten erweitern.',
@@ -159,7 +159,7 @@ const de: TranslationDictionary = {
   'pointOfView.mission': 'Viele Aufgaben brauchen menschliches Urteilsvermögen, Geschick und Erfahrung. PATON überträgt diese Fähigkeiten auf robotische Systeme. Der Mensch behält die Kontrolle.',
   'pointOfView.principle': 'Denn unser Körper weiß längst, wie Bewegung funktioniert.', 'pointOfView.disciplinesEyebrow': 'Viele Disziplinen. Ein System.',
   'pointOfView.disciplines': 'Mechanik, tragbare Robotik, Elektronik und Software verbinden sich zu einem körpernahen Interface.', 'pointOfView.origin': 'Entstanden an der TH Köln. Gemeinsam mit der Industrie entwickelt.',
-  'pointOfView.imageAlt': 'Vier Mitglieder des FELYA Teams halten und tragen Prototypen der haptischen Handschuhe.',
+  'pointOfView.imageAlt': 'Fünf Mitglieder des FELYA Teams halten und tragen Prototypen der haptischen Handschuhe.',
   'workWithUs.eyebrow': 'Mit uns arbeiten', 'workWithUs.heading': '<span class="heading-line">Gestalte mit uns die Schnittstelle</span><span class="heading-line">zwischen Mensch und Maschine.</span>',
   'workWithUs.description': 'Gemeinsam mit Forschenden, Engineeringteams und Industriepartnern machen wir aus ambitionierten Ideen funktionierende Systeme.',
   'workWithUs.partnerTitle': 'Gemeinsam entwickeln', 'workWithUs.partnerDescription': 'Forschung, Pilotprojekte und Robotik', 'workWithUs.joinTitle': 'Werde Teil des Teams', 'workWithUs.joinDescription': 'Engineering, Robotik, Embedded Systems, Software und Design', 'workWithUs.openInvitation': 'Du siehst eine andere Möglichkeit? Lass uns sprechen.',
@@ -168,7 +168,7 @@ const de: TranslationDictionary = {
 };
 
 const ky: TranslationDictionary = {
-  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© FELYA 2026.',
+  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© 2026 FELYA',
   'meta.title': 'FELYA',
   'meta.description': 'FELYA адамдын кыймылын, тийүүсүн жана чеберчилигин роботтук системаларга өткөргөн тагылуучу интерфейстерди иштеп чыгат.',
   'meta.ogDescription': 'Адамдын мүмкүнчүлүгүн кеңейткен интерфейстер.',
@@ -191,13 +191,13 @@ const ky: TranslationDictionary = {
   'prototypes.eyebrow': 'Курулган. Жөн гана ойлонулган эмес.', 'prototypes.heading': '<span class="heading-line">Ар бир версияда</span><span class="heading-line">жакшыраак.</span>', 'prototypes.description': 'Ар бир прототип кийинки кадамды аныктайт.', 'prototypes.status': 'PATON — ар бир прототип менен өсүп жаткан изилдөө платформасы.', 'prototypes.proofAria': 'PATON жабык айлампасы', 'prototypes.proof.0': 'Адамдын кыймылы', 'prototypes.proof.1': 'Роботтун аракети', 'prototypes.proof.2': 'Тийүү жана күч', 'prototypes.phase.0': 'Каттоо', 'prototypes.phase.1': 'Өткөрүү', 'prototypes.phase.2': 'Кайтарым байланыш', 'prototypes.playButton': 'Көрүү', 'prototypes.replayButton': 'Кайра көрүү', 'prototypes.videoTitle': 'Interface of Craft прототип тасмасы', 'prototypes.videoLabel': 'Interface of Craft прототип тасмасын көрүү', 'prototypes.videoReplayLabel': 'Interface of Craft прототип тасмасын кайра көрүү', 'prototypes.videoFallback': 'Браузериңиз видеону көрсөтүүнү колдобойт.',
   'futures.eyebrow': 'Эмне мүмкүн болот', 'futures.heading': '<span class="heading-line">Адамдын мүмкүнчүлүгү</span><span class="heading-line">алыска жеткенде.</span>', 'futures.description': 'Аралыктан. Кооптуу чөйрөлөрдө. Адамдын ниетин жеткирген машиналар аркылуу.',
   'futures.scenario.remote.title': '<span class="heading-line">Аракеттен мурун</span><span class="heading-line">сыноо.</span>', 'futures.scenario.remote.description': 'Чыныгы тобокелдиксиз иш жүзүндө үйрөнүү.', 'futures.scenario.hazard.title': '<span class="heading-line">Адам барбашы керек</span><span class="heading-line">жерде иштөө.</span>', 'futures.scenario.hazard.description': 'Адамды тобокелге салбай, анын чеберчилигин кооптуу чөйрөгө жеткирүү.', 'futures.scenario.presence.title': '<span class="heading-line">Катышуу аралыктан</span><span class="heading-line">өтсүн.</span>', 'futures.scenario.presence.description': 'Ниетти, тийүүнү жана билдирүүнү аралык аркылуу жеткирүү.',
-  'pointOfView.eyebrow': 'Биздин көз караш', 'pointOfView.heading': '<span class="heading-line">Роботика адамдын</span><span class="heading-line">мүмкүнчүлүгүн кеңейтиши керек.</span>', 'pointOfView.mission': 'Көп иштер дагы эле адамдын баамына, эптүүлүгүнө жана тажрыйбасына таянат. PATON бул жөндөмдөрдү роботтук системаларга өткөрөт, адам болсо башкарууну сактайт.', 'pointOfView.principle': 'Анткени адамдын денеси кыймылды мурунтан эле билет.', 'pointOfView.disciplinesEyebrow': 'Көп тармак. Бир система.', 'pointOfView.disciplines': 'Механика, тагылуучу роботика, электроника жана программалык камсыздоо денеге жакын бир интерфейске биригет.', 'pointOfView.origin': 'TH Köln университетинде башталган. Өнөр жай менен бирге өнүккөн.', 'pointOfView.imageAlt': 'FELYA командасынын төрт мүчөсү тактилдик мээлей прототиптерин кармап жана кийип турушат.',
+  'pointOfView.eyebrow': 'Биздин көз караш', 'pointOfView.heading': '<span class="heading-line">Роботика адамдын</span><span class="heading-line">мүмкүнчүлүгүн кеңейтиши керек.</span>', 'pointOfView.mission': 'Көп иштер дагы эле адамдын баамына, эптүүлүгүнө жана тажрыйбасына таянат. PATON бул жөндөмдөрдү роботтук системаларга өткөрөт, адам болсо башкарууну сактайт.', 'pointOfView.principle': 'Анткени адамдын денеси кыймылды мурунтан эле билет.', 'pointOfView.disciplinesEyebrow': 'Көп тармак. Бир система.', 'pointOfView.disciplines': 'Механика, тагылуучу роботика, электроника жана программалык камсыздоо денеге жакын бир интерфейске биригет.', 'pointOfView.origin': 'TH Köln университетинде башталган. Өнөр жай менен бирге өнүккөн.', 'pointOfView.imageAlt': 'FELYA командасынын беш мүчөсү тактилдик мээлей прототиптерин кармап жана кийип турушат.',
   'workWithUs.eyebrow': 'Биз менен иштешиңиз', 'workWithUs.heading': '<span class="heading-line">Адам менен машинанын ортосундагы</span><span class="heading-line">интерфейсти бирге түзөлү.</span>', 'workWithUs.description': 'Биз изилдөөчүлөр, инженерлер, роботика командалары жана өнөр жай өнөктөштөрү менен дымактуу идеяларды иштеген системаларга айлантабыз.', 'workWithUs.partnerTitle': 'Бирге иштеп чыгуу', 'workWithUs.partnerDescription': 'Изилдөө, пилоттук долбоорлор жана роботика', 'workWithUs.joinTitle': 'Командага кошулуу', 'workWithUs.joinDescription': 'Инженерия, роботика, embedded systems, software жана дизайн', 'workWithUs.openInvitation': 'Кызматташуунун башка жолун көрүп жатасызбы? Сүйлөшөлү.',
   'footer.legalAria': 'Укуктук маалымат', 'footer.linkedin': 'FELYA LinkedIn баракчасы', 'footer.instagram': 'FELYA Instagram баракчасы', 'footer.github': 'FELYA GitHub баракчасы', 'footer.youtube': 'FELYA прототип тасмасы YouTube платформасында', 'legal.terms': 'Колдонуу шарттары', 'legal.privacy': 'Купуялык саясаты', 'legal.impressum': 'Импрессум'
 };
 
 const id: TranslationDictionary = {
-  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© FELYA 2026.',
+  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© 2026 FELYA',
   'meta.title': 'FELYA', 'meta.description': 'FELYA mengembangkan antarmuka wearable yang menyalurkan gerakan, sentuhan, dan keahlian manusia ke sistem robotik.', 'meta.ogDescription': 'Antarmuka yang memperluas kemampuan manusia.', 'meta.imageAlt': 'Sarung tangan haptik PATON dari FELYA dengan pesan Tangan Anda. Di mana pun di dunia.',
   'brand.home': 'Beranda FELYA', 'nav.skip': 'Langsung ke konten', 'nav.primary': 'Navigasi utama', 'nav.open': 'Buka navigasi', 'nav.why': 'Mengapa', 'nav.prototypes': 'Prototipe', 'nav.futures': 'Masa depan', 'nav.contact': 'Kontak',
   'theme.toLight': 'Beralih ke mode terang', 'theme.toDark': 'Beralih ke mode gelap', 'language.open': 'Pilih bahasa', 'language.dialog': 'Pilihan bahasa', 'language.close': 'Tutup pilihan bahasa', 'language.current': 'Bahasa aktif',
@@ -208,13 +208,13 @@ const id: TranslationDictionary = {
   'developmentUpdates.eyebrow': 'Catatan pengembangan', 'developmentUpdates.heading1': '<span class="heading-line">Ikuti perkembangan</span><span class="heading-line">PATON.</span>', 'developmentUpdates.description': 'Kabar prototipe, pencapaian engineering, dan peluang kolaborasi terpilih.', 'developmentUpdates.emailLabel': 'Alamat email', 'developmentUpdates.placeholder': 'Alamat email', 'developmentUpdates.button': 'Terima kabar terbaru', 'developmentUpdates.pendingButton': 'Mengirim...', 'developmentUpdates.pendingStatus': 'Mendaftarkan...', 'developmentUpdates.fallbackButton': 'Terima kabar terbaru', 'developmentUpdates.success': 'Terhubung. Anda sudah masuk dalam daftar.', 'developmentUpdates.error': 'Terjadi kesalahan. Kirim email ke info@felya.com dan kami akan menambahkan Anda secara manual.', 'developmentUpdates.consent': 'Dengan mendaftar, Anda menyetujui Formspark memproses email dan data teknis Anda untuk mengirimkan kabar pengembangan. Persetujuan dapat ditarik kapan saja. Lihat <a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">Kebijakan Privasi</a> kami.',
   'prototypes.eyebrow': 'Dibangun, bukan sekadar dibayangkan.', 'prototypes.heading': '<span class="heading-line">Disempurnakan</span><span class="heading-line">di setiap versi.</span>', 'prototypes.description': 'Setiap prototipe menentukan langkah berikutnya.', 'prototypes.status': 'PATON adalah platform riset yang terus berkembang bersama setiap prototipe.', 'prototypes.proofAria': 'Siklus tertutup PATON', 'prototypes.proof.0': 'Gerakan manusia', 'prototypes.proof.1': 'Aksi robotik', 'prototypes.proof.2': 'Sentuhan dan gaya', 'prototypes.phase.0': 'Penangkapan', 'prototypes.phase.1': 'Transfer', 'prototypes.phase.2': 'Umpan balik', 'prototypes.playButton': 'Putar', 'prototypes.replayButton': 'Putar ulang', 'prototypes.videoTitle': 'Film prototipe Interface of Craft', 'prototypes.videoLabel': 'Putar film prototipe Interface of Craft', 'prototypes.videoReplayLabel': 'Putar ulang film prototipe Interface of Craft', 'prototypes.videoFallback': 'Browser Anda tidak mendukung video tersemat.',
   'futures.eyebrow': 'Yang menjadi mungkin', 'futures.heading': '<span class="heading-line">Saat kemampuan manusia</span><span class="heading-line">menjangkau lebih jauh.</span>', 'futures.description': 'Melintasi jarak. Memasuki lingkungan berbahaya. Melalui mesin yang membawa intensi manusia.', 'futures.scenario.remote.title': '<span class="heading-line">Simulasikan sebelum</span><span class="heading-line">bertindak.</span>', 'futures.scenario.remote.description': 'Belajar dengan praktik tanpa risiko dunia nyata.', 'futures.scenario.hazard.title': '<span class="heading-line">Bekerja di tempat yang</span><span class="heading-line">tak semestinya dimasuki manusia.</span>', 'futures.scenario.hazard.description': 'Hadirkan keterampilan manusia tanpa menempatkan manusia dalam bahaya.', 'futures.scenario.presence.title': '<span class="heading-line">Biarkan kehadiran</span><span class="heading-line">melampaui jarak.</span>', 'futures.scenario.presence.description': 'Salurkan intensi, sentuhan, dan ekspresi dari kejauhan.',
-  'pointOfView.eyebrow': 'Sudut pandang kami', 'pointOfView.heading': '<span class="heading-line">Robotika harus memperluas</span><span class="heading-line">kemampuan manusia.</span>', 'pointOfView.mission': 'Banyak pekerjaan nyata masih bergantung pada pertimbangan, ketangkasan, dan pengalaman manusia. PATON membawa kemampuan itu ke sistem robotik, sementara manusia tetap memegang kendali.', 'pointOfView.principle': 'Karena tubuh manusia sudah memahami cara bergerak.', 'pointOfView.disciplinesEyebrow': 'Banyak disiplin. Satu sistem.', 'pointOfView.disciplines': 'Mekanika, wearable robotics, elektronika, dan software menyatu menjadi satu antarmuka yang mengikuti tubuh.', 'pointOfView.origin': 'Berawal di TH Köln. Dikembangkan bersama industri.', 'pointOfView.imageAlt': 'Empat anggota tim FELYA memegang dan mengenakan prototipe sarung tangan haptik.',
+  'pointOfView.eyebrow': 'Sudut pandang kami', 'pointOfView.heading': '<span class="heading-line">Robotika harus memperluas</span><span class="heading-line">kemampuan manusia.</span>', 'pointOfView.mission': 'Banyak pekerjaan nyata masih bergantung pada pertimbangan, ketangkasan, dan pengalaman manusia. PATON membawa kemampuan itu ke sistem robotik, sementara manusia tetap memegang kendali.', 'pointOfView.principle': 'Karena tubuh manusia sudah memahami cara bergerak.', 'pointOfView.disciplinesEyebrow': 'Banyak disiplin. Satu sistem.', 'pointOfView.disciplines': 'Mekanika, wearable robotics, elektronika, dan software menyatu menjadi satu antarmuka yang mengikuti tubuh.', 'pointOfView.origin': 'Berawal di TH Köln. Dikembangkan bersama industri.', 'pointOfView.imageAlt': 'Lima anggota tim FELYA memegang dan mengenakan prototipe sarung tangan haptik.',
   'workWithUs.eyebrow': 'Berkarya bersama', 'workWithUs.heading': '<span class="heading-line">Bangun antarmuka manusia dan mesin</span><span class="heading-line">bersama kami.</span>', 'workWithUs.description': 'Kami berkolaborasi dengan peneliti, engineer, tim robotika, dan mitra industri untuk mengubah gagasan ambisius menjadi sistem yang benar-benar bekerja.', 'workWithUs.partnerTitle': 'Kembangkan bersama', 'workWithUs.partnerDescription': 'Riset, proyek percontohan, dan robotika', 'workWithUs.joinTitle': 'Bergabung dengan tim', 'workWithUs.joinDescription': 'Engineering, robotika, embedded systems, software, dan desain', 'workWithUs.openInvitation': 'Melihat cara lain untuk bekerja bersama? Mari bicara.',
   'footer.legalAria': 'Informasi hukum', 'footer.linkedin': 'FELYA di LinkedIn', 'footer.instagram': 'FELYA di Instagram', 'footer.github': 'FELYA di GitHub', 'footer.youtube': 'Video prototipe FELYA di YouTube', 'legal.terms': 'Syarat & Ketentuan', 'legal.privacy': 'Kebijakan Privasi', 'legal.impressum': 'Impresum'
 };
 
 const ko: TranslationDictionary = {
-  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© FELYA 2026.',
+  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© 2026 FELYA',
   'meta.title': 'FELYA', 'meta.description': 'FELYA는 사람의 움직임과 촉감, 숙련도를 로봇 시스템에 전달하는 웨어러블 인터페이스를 개발합니다.', 'meta.ogDescription': '인간의 역량을 확장하는 인터페이스.', 'meta.imageAlt': '“당신의 두 손. 세계 어디에서나.”라는 문구와 함께 보이는 FELYA의 PATON 햅틱 글러브.',
   'brand.home': 'FELYA 홈', 'nav.skip': '본문으로 건너뛰기', 'nav.primary': '주요 탐색', 'nav.open': '메뉴 열기', 'nav.why': '철학', 'nav.prototypes': '프로토타입', 'nav.futures': '미래', 'nav.contact': '문의',
   'theme.toLight': '라이트 모드로 전환', 'theme.toDark': '다크 모드로 전환', 'language.open': '언어 선택', 'language.dialog': '언어 선택', 'language.close': '언어 선택 닫기', 'language.current': '현재 언어',
@@ -224,13 +224,13 @@ const ko: TranslationDictionary = {
   'developmentUpdates.eyebrow': '개발 노트', 'developmentUpdates.heading1': '<span class="heading-line">진화하는 PATON을</span><span class="heading-line">함께 지켜보세요.</span>', 'developmentUpdates.description': '프로토타입 업데이트와 엔지니어링 이정표, 엄선된 협업 기회를 전합니다.', 'developmentUpdates.emailLabel': '이메일 주소', 'developmentUpdates.placeholder': '이메일', 'developmentUpdates.button': '업데이트 받기', 'developmentUpdates.pendingButton': '전송 중...', 'developmentUpdates.pendingStatus': '등록 중...', 'developmentUpdates.fallbackButton': '업데이트 받기', 'developmentUpdates.success': '연결되었습니다. 소식을 전해드릴게요.', 'developmentUpdates.error': '오류가 발생했습니다. info@felya.com으로 메일을 보내주시면 직접 등록해 드립니다.', 'developmentUpdates.consent': '신청하면 개발 소식을 보내기 위해 Formspark가 이메일과 기술 정보를 처리하는 데 동의하게 됩니다. 동의는 언제든 철회할 수 있습니다. <a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">개인정보 처리방침</a>을 확인하세요.',
   'prototypes.eyebrow': '생각에 그치지 않고, 직접 만들었습니다.', 'prototypes.heading': '<span class="heading-line">버전을 거듭하며</span><span class="heading-line">더 나아집니다.</span>', 'prototypes.description': '각 프로토타입이 다음 방향을 결정합니다.', 'prototypes.status': 'PATON은 프로토타입과 함께 성장하는 연구 플랫폼입니다.', 'prototypes.proofAria': 'PATON 폐루프 과정', 'prototypes.proof.0': '사람의 움직임', 'prototypes.proof.1': '로봇 동작', 'prototypes.proof.2': '접촉과 힘', 'prototypes.phase.0': '포착', 'prototypes.phase.1': '전달', 'prototypes.phase.2': '피드백', 'prototypes.playButton': '재생', 'prototypes.replayButton': '다시 재생', 'prototypes.videoTitle': 'Interface of Craft 프로토타입 영상', 'prototypes.videoLabel': 'Interface of Craft 프로토타입 영상 재생', 'prototypes.videoReplayLabel': 'Interface of Craft 프로토타입 영상 다시 재생', 'prototypes.videoFallback': '이 브라우저는 삽입된 영상을 지원하지 않습니다.',
   'futures.eyebrow': '가능해지는 것들', 'futures.heading': '<span class="heading-line">인간의 존재가</span><span class="heading-line">새로운 형태를 얻는 곳.</span>', 'futures.description': '거리를 넘어. 위험한 환경으로. 인간의 의도를 전하는 기계를 통해.', 'futures.scenario.remote.title': '<span class="heading-line">행동하기 전에</span><span class="heading-line">시뮬레이션하세요.</span>', 'futures.scenario.remote.description': '현실의 위험 없이 직접 해보며 배웁니다.', 'futures.scenario.hazard.title': '<span class="heading-line">사람이 들어가선 안 될 곳에서</span><span class="heading-line">일합니다.</span>', 'futures.scenario.hazard.description': '사람을 위험에 놓지 않고 인간의 숙련도를 투입합니다.', 'futures.scenario.presence.title': '<span class="heading-line">존재가 거리를</span><span class="heading-line">넘어갑니다.</span>', 'futures.scenario.presence.description': '의도와 촉감, 표현을 먼 곳까지 전달합니다.',
-  'pointOfView.eyebrow': '우리의 관점', 'pointOfView.heading': '<span class="heading-line">로봇은 인간이 할 수 있는 일을</span><span class="heading-line">확장해야 합니다.</span>', 'pointOfView.mission': '현실의 많은 작업은 여전히 인간의 판단과 손기술, 경험에 달려 있습니다. PATON은 그 능력을 로봇 시스템으로 옮기면서도 사람이 제어권을 유지하게 합니다.', 'pointOfView.principle': '우리 몸은 이미 어떻게 움직여야 하는지 알고 있기 때문입니다.', 'pointOfView.disciplinesEyebrow': '여러 분야. 하나의 시스템.', 'pointOfView.disciplines': '기계 시스템과 웨어러블 로보틱스, 임베디드 전자장치, 소프트웨어가 하나의 신체형 인터페이스로 결합됩니다.', 'pointOfView.origin': 'TH Köln에서 시작해 산업계와 함께 발전시켰습니다.', 'pointOfView.imageAlt': 'FELYA 팀원 네 명이 햅틱 글러브 프로토타입을 들거나 착용하고 있습니다.',
+  'pointOfView.eyebrow': '우리의 관점', 'pointOfView.heading': '<span class="heading-line">로봇은 인간이 할 수 있는 일을</span><span class="heading-line">확장해야 합니다.</span>', 'pointOfView.mission': '현실의 많은 작업은 여전히 인간의 판단과 손기술, 경험에 달려 있습니다. PATON은 그 능력을 로봇 시스템으로 옮기면서도 사람이 제어권을 유지하게 합니다.', 'pointOfView.principle': '우리 몸은 이미 어떻게 움직여야 하는지 알고 있기 때문입니다.', 'pointOfView.disciplinesEyebrow': '여러 분야. 하나의 시스템.', 'pointOfView.disciplines': '기계 시스템과 웨어러블 로보틱스, 임베디드 전자장치, 소프트웨어가 하나의 신체형 인터페이스로 결합됩니다.', 'pointOfView.origin': 'TH Köln에서 시작해 산업계와 함께 발전시켰습니다.', 'pointOfView.imageAlt': 'FELYA 팀원 다섯 명이 햅틱 글러브 프로토타입을 들거나 착용하고 있습니다.',
   'workWithUs.eyebrow': '함께하기', 'workWithUs.heading': '<span class="heading-line">사람과 기계 사이의 인터페이스를</span><span class="heading-line">함께 만듭니다.</span>', 'workWithUs.description': '연구자와 엔지니어, 로봇 팀, 산업 파트너와 협력해 대담한 아이디어를 실제로 작동하는 시스템으로 구현합니다.', 'workWithUs.partnerTitle': '함께 개발하기', 'workWithUs.partnerDescription': '연구, 파일럿 프로젝트, 로봇 통합', 'workWithUs.joinTitle': '팀에 합류하기', 'workWithUs.joinDescription': '엔지니어링, 로보틱스, 임베디드 시스템, 소프트웨어, 디자인', 'workWithUs.openInvitation': '새로운 협업 방식이 떠오르나요? 이야기해 주세요.',
   'footer.legalAria': '법적 정보', 'footer.linkedin': 'LinkedIn의 FELYA', 'footer.instagram': 'Instagram의 FELYA', 'footer.github': 'GitHub의 FELYA', 'footer.youtube': 'YouTube의 FELYA 프로토타입 영상', 'legal.terms': '이용약관', 'legal.privacy': '개인정보 처리방침', 'legal.impressum': '법적 고지'
 };
 
 const ja: TranslationDictionary = {
-  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© FELYA 2026.',
+  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© 2026 FELYA',
   'meta.title': 'FELYA', 'meta.description': 'FELYAは、人の動き、触覚、技能をロボットシステムへ伝えるウェアラブルインターフェースを開発しています。', 'meta.ogDescription': '人の能力を拡張するインターフェース。', 'meta.imageAlt': '「あなたの手を、世界のどこへでも。」というメッセージとFELYAのPATONハプティックグローブ。',
   'brand.home': 'FELYA ホーム', 'nav.skip': '本文へ移動', 'nav.primary': 'メインナビゲーション', 'nav.open': 'ナビゲーションを開く', 'nav.why': '思想', 'nav.prototypes': 'プロトタイプ', 'nav.futures': '未来', 'nav.contact': 'お問い合わせ',
   'theme.toLight': 'ライトモードに切り替える', 'theme.toDark': 'ダークモードに切り替える', 'language.open': '言語を選択', 'language.dialog': '言語選択', 'language.close': '言語選択を閉じる', 'language.current': '現在の言語',
@@ -240,13 +240,13 @@ const ja: TranslationDictionary = {
   'developmentUpdates.eyebrow': '開発ノート', 'developmentUpdates.heading1': '<span class="heading-line">進化するPATONを</span><span class="heading-line">追いかける。</span>', 'developmentUpdates.description': 'プロトタイプの更新、技術的な節目、厳選した協業の機会をお届けします。', 'developmentUpdates.emailLabel': 'メールアドレス', 'developmentUpdates.placeholder': 'メール', 'developmentUpdates.button': '更新を受け取る', 'developmentUpdates.pendingButton': '送信中...', 'developmentUpdates.pendingStatus': '登録中...', 'developmentUpdates.fallbackButton': '更新を受け取る', 'developmentUpdates.success': '登録が完了しました。今後の情報をお届けします。', 'developmentUpdates.error': '送信できませんでした。info@felya.comへご連絡いただければ、こちらで登録します。', 'developmentUpdates.consent': '登録すると、開発情報を送るためにFormsparkがメールアドレスと技術情報を処理することに同意したものとみなされます。同意はいつでも撤回できます。詳しくは<a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">プライバシーポリシー</a>をご覧ください。',
   'prototypes.eyebrow': '考えるだけでなく、つくる。', 'prototypes.heading': '<span class="heading-line">試作を重ね、</span><span class="heading-line">前へ進む。</span>', 'prototypes.description': '一つひとつのプロトタイプが、次の方向を決めます。', 'prototypes.status': 'PATONは、試作とともに成長する研究プラットフォームです。', 'prototypes.proofAria': 'PATONの閉ループプロセス', 'prototypes.proof.0': '人の動き', 'prototypes.proof.1': 'ロボットの動作', 'prototypes.proof.2': '接触と力', 'prototypes.phase.0': '取得', 'prototypes.phase.1': '伝達', 'prototypes.phase.2': 'フィードバック', 'prototypes.playButton': '再生', 'prototypes.replayButton': 'もう一度再生', 'prototypes.videoTitle': 'Interface of Craft プロトタイプ映像', 'prototypes.videoLabel': 'Interface of Craft プロトタイプ映像を再生', 'prototypes.videoReplayLabel': 'Interface of Craft プロトタイプ映像をもう一度再生', 'prototypes.videoFallback': 'このブラウザは埋め込み動画に対応していません。',
   'futures.eyebrow': '可能になること', 'futures.heading': '<span class="heading-line">人の存在が</span><span class="heading-line">新しい形を得る場所。</span>', 'futures.description': '距離を越えて。危険な環境へ。人の意図を運ぶ機械を通して。', 'futures.scenario.remote.title': '<span class="heading-line">行動する前に、</span><span class="heading-line">シミュレーションする。</span>', 'futures.scenario.remote.description': '現実のリスクなく、実践から学ぶ。', 'futures.scenario.hazard.title': '<span class="heading-line">人が入るべきでない場所で、</span><span class="heading-line">作業する。</span>', 'futures.scenario.hazard.description': '人を危険にさらさず、その技能を危険な環境へ届ける。', 'futures.scenario.presence.title': '<span class="heading-line">存在を、距離の</span><span class="heading-line">向こう側へ。</span>', 'futures.scenario.presence.description': '意図、触覚、表現を遠くへ伝える。',
-  'pointOfView.eyebrow': '私たちの考え方', 'pointOfView.heading': '<span class="heading-line">ロボットは、人にできることを</span><span class="heading-line">拡張するべきだ。</span>', 'pointOfView.mission': '現実の多くの仕事には、今も人の判断、器用さ、経験が欠かせません。PATONはその能力をロボットシステムへ移しながら、主導権を人に残します。', 'pointOfView.principle': '人の身体は、動き方をすでに知っているから。', 'pointOfView.disciplinesEyebrow': '多くの専門性。一つのシステム。', 'pointOfView.disciplines': '機械、ウェアラブルロボティクス、組み込み電子回路、ソフトウェアが、一つの身体的なインターフェースになります。', 'pointOfView.origin': 'TH Kölnから始まり、産業界とともに育てています。', 'pointOfView.imageAlt': 'FELYAの4人のメンバーが、ハプティックグローブのプロトタイプを手に持ち、または装着しています。',
+  'pointOfView.eyebrow': '私たちの考え方', 'pointOfView.heading': '<span class="heading-line">ロボットは、人にできることを</span><span class="heading-line">拡張するべきだ。</span>', 'pointOfView.mission': '現実の多くの仕事には、今も人の判断、器用さ、経験が欠かせません。PATONはその能力をロボットシステムへ移しながら、主導権を人に残します。', 'pointOfView.principle': '人の身体は、動き方をすでに知っているから。', 'pointOfView.disciplinesEyebrow': '多くの専門性。一つのシステム。', 'pointOfView.disciplines': '機械、ウェアラブルロボティクス、組み込み電子回路、ソフトウェアが、一つの身体的なインターフェースになります。', 'pointOfView.origin': 'TH Kölnから始まり、産業界とともに育てています。', 'pointOfView.imageAlt': 'FELYAの5人のメンバーが、ハプティックグローブのプロトタイプを手に持ち、または装着しています。',
   'workWithUs.eyebrow': '共につくる', 'workWithUs.heading': '<span class="heading-line">人と機械をつなぐインターフェースを</span><span class="heading-line">共につくる。</span>', 'workWithUs.description': '研究者、エンジニア、ロボティクスチーム、産業パートナーと協力し、大胆なアイデアを実際に動くシステムへ変えています。', 'workWithUs.partnerTitle': '共同開発する', 'workWithUs.partnerDescription': '研究、実証、ロボット統合', 'workWithUs.joinTitle': 'チームに加わる', 'workWithUs.joinDescription': 'エンジニアリング、ロボティクス、組み込みシステム、ソフトウェア、デザイン', 'workWithUs.openInvitation': 'ほかの協業の形が見えますか。ぜひ話しましょう。',
   'footer.legalAria': '法的情報', 'footer.linkedin': 'LinkedInのFELYA', 'footer.instagram': 'InstagramのFELYA', 'footer.github': 'GitHubのFELYA', 'footer.youtube': 'YouTubeのFELYAプロトタイプ映像', 'legal.terms': '利用規約', 'legal.privacy': 'プライバシーポリシー', 'legal.impressum': '法的表記'
 };
 
 const zhCn: TranslationDictionary = {
-  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© FELYA 2026.',
+  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© 2026 FELYA',
   'meta.title': 'FELYA', 'meta.description': 'FELYA 开发可穿戴交互界面，将人的动作、触觉与技能传递至机器人系统。', 'meta.ogDescription': '延展人类能力的交互界面。', 'meta.imageAlt': 'FELYA 的 PATON 触觉手套，以及“你的双手。遍及世界。”标语。',
   'brand.home': 'FELYA 首页', 'nav.skip': '跳至主要内容', 'nav.primary': '主导航', 'nav.open': '打开导航', 'nav.why': '理念', 'nav.prototypes': '原型', 'nav.futures': '未来', 'nav.contact': '联系',
   'theme.toLight': '切换至浅色模式', 'theme.toDark': '切换至深色模式', 'language.open': '选择语言', 'language.dialog': '语言选择', 'language.close': '关闭语言选择', 'language.current': '当前语言',
@@ -256,13 +256,13 @@ const zhCn: TranslationDictionary = {
   'developmentUpdates.eyebrow': '研发动态', 'developmentUpdates.heading1': '<span class="heading-line">持续关注</span><span class="heading-line">PATON 的进化。</span>', 'developmentUpdates.description': '获取原型进展、工程里程碑与精选合作机会。', 'developmentUpdates.emailLabel': '电子邮箱', 'developmentUpdates.placeholder': '电子邮箱', 'developmentUpdates.button': '订阅动态', 'developmentUpdates.pendingButton': '发送中...', 'developmentUpdates.pendingStatus': '提交中...', 'developmentUpdates.fallbackButton': '订阅动态', 'developmentUpdates.success': '连接成功。后续动态将发送给你。', 'developmentUpdates.error': '提交失败。请发送邮件至 info@felya.com，我们会手动为你添加。', 'developmentUpdates.consent': '提交即表示你同意 Formspark 处理你的邮箱与技术数据，用于发送研发动态。你可以随时撤回同意。请查看我们的<a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">隐私政策</a>。',
   'prototypes.eyebrow': '不止构想，更要造出来。', 'prototypes.heading': '<span class="heading-line">每一次迭代，</span><span class="heading-line">都让系统更进一步。</span>', 'prototypes.description': '每一个原型都在决定下一步方向。', 'prototypes.status': 'PATON 是一个随原型不断成长的研究平台。', 'prototypes.proofAria': 'PATON 闭环流程', 'prototypes.proof.0': '人的动作', 'prototypes.proof.1': '机器人行动', 'prototypes.proof.2': '接触与力量', 'prototypes.phase.0': '捕捉', 'prototypes.phase.1': '传递', 'prototypes.phase.2': '反馈', 'prototypes.playButton': '播放', 'prototypes.replayButton': '重新播放', 'prototypes.videoTitle': 'Interface of Craft 原型影片', 'prototypes.videoLabel': '播放 Interface of Craft 原型影片', 'prototypes.videoReplayLabel': '重新播放 Interface of Craft 原型影片', 'prototypes.videoFallback': '你的浏览器不支持嵌入式视频。',
   'futures.eyebrow': '由此成为可能', 'futures.heading': '<span class="heading-line">让人的存在，</span><span class="heading-line">拥有新的形态。</span>', 'futures.description': '跨越距离。进入危险环境。借助承载人类意图的机器。', 'futures.scenario.remote.title': '<span class="heading-line">行动之前，</span><span class="heading-line">先行模拟。</span>', 'futures.scenario.remote.description': '在没有现实风险的环境中，通过实践学习。', 'futures.scenario.hazard.title': '<span class="heading-line">在人不该进入的地方，</span><span class="heading-line">完成工作。</span>', 'futures.scenario.hazard.description': '让人的技能进入危险环境，而无需让人身处险境。', 'futures.scenario.presence.title': '<span class="heading-line">让存在感，</span><span class="heading-line">跨越距离。</span>', 'futures.scenario.presence.description': '将意图、触觉与表达传递至远方。',
-  'pointOfView.eyebrow': '我们的观点', 'pointOfView.heading': '<span class="heading-line">机器人应当延展</span><span class="heading-line">人所能做到的事。</span>', 'pointOfView.mission': '现实中的许多任务，仍离不开人的判断、灵巧与经验。PATON 将这些能力带入机器人系统，同时让操作者始终掌握控制权。', 'pointOfView.principle': '因为人的身体，本就知道如何行动。', 'pointOfView.disciplinesEyebrow': '多种专业。一个系统。', 'pointOfView.disciplines': '机械系统、可穿戴机器人、嵌入式电子与软件，汇聚为一套贴合身体的交互界面。', 'pointOfView.origin': '始于 TH Köln，与产业伙伴共同发展。', 'pointOfView.imageAlt': '四位 FELYA 团队成员手持或佩戴触觉手套原型。',
+  'pointOfView.eyebrow': '我们的观点', 'pointOfView.heading': '<span class="heading-line">机器人应当延展</span><span class="heading-line">人所能做到的事。</span>', 'pointOfView.mission': '现实中的许多任务，仍离不开人的判断、灵巧与经验。PATON 将这些能力带入机器人系统，同时让操作者始终掌握控制权。', 'pointOfView.principle': '因为人的身体，本就知道如何行动。', 'pointOfView.disciplinesEyebrow': '多种专业。一个系统。', 'pointOfView.disciplines': '机械系统、可穿戴机器人、嵌入式电子与软件，汇聚为一套贴合身体的交互界面。', 'pointOfView.origin': '始于 TH Köln，与产业伙伴共同发展。', 'pointOfView.imageAlt': '五位 FELYA 团队成员手持或佩戴触觉手套原型。',
   'workWithUs.eyebrow': '与我们同行', 'workWithUs.heading': '<span class="heading-line">共同构建人与机器之间的</span><span class="heading-line">新型交互界面。</span>', 'workWithUs.description': '我们与研究人员、工程师、机器人团队和产业伙伴合作，将大胆构想变成真正运行的系统。', 'workWithUs.partnerTitle': '共同开发', 'workWithUs.partnerDescription': '研究、试点项目与机器人集成', 'workWithUs.joinTitle': '加入团队', 'workWithUs.joinDescription': '工程、机器人、嵌入式系统、软件与设计', 'workWithUs.openInvitation': '看到了另一种合作方式？欢迎与我们聊聊。',
   'footer.legalAria': '法律信息', 'footer.linkedin': 'FELYA 的 LinkedIn', 'footer.instagram': 'FELYA 的 Instagram', 'footer.github': 'FELYA 的 GitHub', 'footer.youtube': 'FELYA 在 YouTube 上的原型视频', 'legal.terms': '条款与条件', 'legal.privacy': '隐私政策', 'legal.impressum': '法律声明'
 };
 
 const zhTw: TranslationDictionary = {
-  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© FELYA 2026.',
+  'meta.ogTitle': 'FELYA', 'nav.paton': 'PATON', 'hero.product': 'PATON', 'system.stage.paton.label': 'PATON', 'footer.copyright': '© 2026 FELYA',
   'meta.title': 'FELYA', 'meta.description': 'FELYA 開發穿戴式介面，將人的動作、觸覺與技能帶入機器人系統。', 'meta.ogDescription': '延伸人類能力的介面。', 'meta.imageAlt': 'FELYA 的 PATON 觸覺手套，以及「你的雙手。世界任何角落。」標語。',
   'brand.home': 'FELYA 首頁', 'nav.skip': '跳至主要內容', 'nav.primary': '主要導覽', 'nav.open': '開啟導覽選單', 'nav.why': '理念', 'nav.prototypes': '原型', 'nav.futures': '未來', 'nav.contact': '聯絡',
   'theme.toLight': '切換至淺色模式', 'theme.toDark': '切換至深色模式', 'language.open': '選擇語言', 'language.dialog': '語言選擇', 'language.close': '關閉語言選擇', 'language.current': '目前語言',
@@ -272,7 +272,7 @@ const zhTw: TranslationDictionary = {
   'developmentUpdates.eyebrow': '開發札記', 'developmentUpdates.heading1': '<span class="heading-line">跟著 PATON</span><span class="heading-line">一步步成形。</span>', 'developmentUpdates.description': '深入了解原型、工程里程碑，以及下一階段的開發方向。', 'developmentUpdates.emailLabel': '電子郵件地址', 'developmentUpdates.placeholder': '電子郵件地址', 'developmentUpdates.button': '追蹤開發進度', 'developmentUpdates.pendingButton': '傳送中…', 'developmentUpdates.pendingStatus': '正在送出…', 'developmentUpdates.fallbackButton': '追蹤開發進度', 'developmentUpdates.success': '訂閱成功。接下來的開發動態會寄到你的信箱。', 'developmentUpdates.error': '目前無法送出。請寄信至 info@felya.com，我們會協助你完成訂閱。', 'developmentUpdates.consent': '送出即表示你同意由 Formspark 處理你的電子郵件與技術資料，以寄送開發動態。你可以隨時撤回同意。詳情請見我們的<a href="/privacy/" target="_blank" class="text-gray-300 underline-offset-4 transition-colors hover:text-white hover:underline">隱私權政策</a>。',
   'prototypes.eyebrow': '實作，不只停在想像', 'prototypes.heading': '<span class="heading-line">一步一步，</span><span class="heading-line">持續改進。</span>', 'prototypes.description': '每一版原型都在指出下一步方向。', 'prototypes.status': 'PATON 作為研究平台，隨著每一版原型持續成長。', 'prototypes.proofAria': 'PATON 的雙向閉環流程', 'prototypes.proof.0': '人的動作', 'prototypes.proof.1': '機器人行動', 'prototypes.proof.2': '觸覺與力量', 'prototypes.phase.0': '擷取', 'prototypes.phase.1': '傳輸', 'prototypes.phase.2': '回饋', 'prototypes.playButton': '播放', 'prototypes.replayButton': '重新播放', 'prototypes.videoTitle': 'Interface of Craft 原型影片', 'prototypes.videoLabel': '播放 Interface of Craft 原型影片', 'prototypes.videoReplayLabel': '重新播放 Interface of Craft 原型影片', 'prototypes.videoFallback': '你的瀏覽器不支援嵌入式影片。',
   'futures.eyebrow': '由此成為可能', 'futures.heading': '<span class="heading-line">人的存在，</span><span class="heading-line">以全新形式延伸。</span>', 'futures.description': '跨越距離。深入危險環境。透過承載人類意圖的機器。', 'futures.scenario.remote.title': '<span class="heading-line">走進現實之前，</span><span class="heading-line">先在虛擬世界演練。</span>', 'futures.scenario.remote.description': '在沒有現實風險的環境中，透過實作學習。', 'futures.scenario.hazard.title': '<span class="heading-line">前往人不該涉足之處，</span><span class="heading-line">完成必要的工作。</span>', 'futures.scenario.hazard.description': '讓人的技能深入危險環境，而不必讓人置身其中。', 'futures.scenario.presence.title': '<span class="heading-line">透過機器，</span><span class="heading-line">跨越距離存在。</span>', 'futures.scenario.presence.description': '將意圖、觸覺與表達帶到遠方。',
-  'pointOfView.eyebrow': '我們的觀點', 'pointOfView.heading': '<span class="heading-line">機器人應該延伸</span><span class="heading-line">人所能做到的事。</span>', 'pointOfView.mission': '現實世界中的許多任務，仍仰賴人的判斷力、靈巧與經驗。PATON 將這些能力帶入機器人系統，同時讓操作者始終掌握控制權。', 'pointOfView.principle': '因為我們的身體，早已懂得如何行動。', 'pointOfView.disciplinesEyebrow': '多種專業，一個系統。', 'pointOfView.disciplines': '機械、穿戴式機器人、嵌入式電子與軟體，整合成一套貼近身體的介面。', 'pointOfView.origin': '誕生於 TH Köln，與產業夥伴共同發展。', 'pointOfView.imageAlt': '四位 FELYA 團隊成員手持或穿戴觸覺手套原型。',
+  'pointOfView.eyebrow': '我們的觀點', 'pointOfView.heading': '<span class="heading-line">機器人應該延伸</span><span class="heading-line">人所能做到的事。</span>', 'pointOfView.mission': '現實世界中的許多任務，仍仰賴人的判斷力、靈巧與經驗。PATON 將這些能力帶入機器人系統，同時讓操作者始終掌握控制權。', 'pointOfView.principle': '因為我們的身體，早已懂得如何行動。', 'pointOfView.disciplinesEyebrow': '多種專業，一個系統。', 'pointOfView.disciplines': '機械、穿戴式機器人、嵌入式電子與軟體，整合成一套貼近身體的介面。', 'pointOfView.origin': '誕生於 TH Köln，與產業夥伴共同發展。', 'pointOfView.imageAlt': '五位 FELYA 團隊成員手持或穿戴觸覺手套原型。',
   'workWithUs.eyebrow': '與我們同行', 'workWithUs.heading': '<span class="heading-line">一起打造人與機器之間的</span><span class="heading-line">新型介面。</span>', 'workWithUs.description': '我們與研究人員、工程師、機器人團隊和產業夥伴合作，將大膽構想化為真正運作的系統。', 'workWithUs.partnerTitle': '成為合作夥伴', 'workWithUs.partnerDescription': '研究、產業試點與機器人整合', 'workWithUs.joinTitle': '加入團隊', 'workWithUs.joinDescription': '工程、機器人、嵌入式系統、軟體與設計', 'workWithUs.openInvitation': '看見另一種合作方式？歡迎與我們聊聊。',
   'footer.legalAria': '法律資訊', 'footer.linkedin': 'FELYA 的 LinkedIn', 'footer.instagram': 'FELYA 的 Instagram', 'footer.github': 'FELYA 的 GitHub', 'footer.youtube': 'FELYA 在 YouTube 上的原型影片', 'legal.terms': '使用條款', 'legal.privacy': '隱私權政策', 'legal.impressum': '法律聲明'
 };
@@ -370,7 +370,7 @@ const ru: TranslationDictionary = {
   'pointOfView.disciplinesEyebrow': 'Много дисциплин. Одна система.',
   'pointOfView.disciplines': 'Механика, носимая робототехника, встроенная электроника и программное обеспечение объединяются в единый телесный интерфейс.',
   'pointOfView.origin': 'Создано в TH Köln. Развивается вместе с индустрией.',
-  'pointOfView.imageAlt': 'Четыре участника FELYA держат и надевают прототипы тактильных перчаток.',
+  'pointOfView.imageAlt': 'Пять участников FELYA держат и надевают прототипы тактильных перчаток.',
   'workWithUs.eyebrow': 'Работайте с нами',
   'workWithUs.heading': '<span class="heading-line">Создадим вместе интерфейс</span><span class="heading-line">между человеком и машиной.</span>',
   'workWithUs.description': 'Вместе с исследователями, инженерами, командами робототехники и индустриальными партнёрами мы превращаем смелые идеи в работающие системы.',
@@ -379,7 +379,7 @@ const ru: TranslationDictionary = {
   'workWithUs.joinTitle': 'Присоединиться к команде',
   'workWithUs.joinDescription': 'Инженерия, робототехника, встраиваемые системы, программное обеспечение и дизайн',
   'workWithUs.openInvitation': 'Видите другой формат сотрудничества? Давайте обсудим.',
-  'footer.copyright': '© FELYA 2026.',
+  'footer.copyright': '© 2026 FELYA',
   'footer.legalAria': 'Правовая информация',
   'footer.linkedin': 'FELYA в LinkedIn',
   'footer.instagram': 'FELYA в Instagram',
@@ -483,7 +483,7 @@ const pt: TranslationDictionary = {
   'pointOfView.disciplinesEyebrow': 'Muitas disciplinas. Um sistema.',
   'pointOfView.disciplines': 'Mecânica, robótica vestível, eletrónica integrada e software unem-se numa única interface corporal.',
   'pointOfView.origin': 'Nascido na TH Köln. Desenvolvido com a indústria.',
-  'pointOfView.imageAlt': 'Quatro membros da FELYA seguram e utilizam protótipos de luvas hápticas.',
+  'pointOfView.imageAlt': 'Cinco membros da FELYA seguram e utilizam protótipos de luvas hápticas.',
   'workWithUs.eyebrow': 'Trabalhe connosco',
   'workWithUs.heading': '<span class="heading-line">Crie connosco a interface</span><span class="heading-line">entre pessoas e máquinas.</span>',
   'workWithUs.description': 'Colaboramos com investigadores, engenheiros, equipas de robótica e parceiros industriais para transformar ideias ambiciosas em sistemas funcionais.',
@@ -492,7 +492,7 @@ const pt: TranslationDictionary = {
   'workWithUs.joinTitle': 'Junte-se à equipa',
   'workWithUs.joinDescription': 'Engenharia, robótica, sistemas integrados, software e design',
   'workWithUs.openInvitation': 'Vê outra forma de trabalharmos juntos? Vamos conversar.',
-  'footer.copyright': '© FELYA 2026.',
+  'footer.copyright': '© 2026 FELYA',
   'footer.legalAria': 'Informação legal',
   'footer.linkedin': 'FELYA no LinkedIn',
   'footer.instagram': 'FELYA no Instagram',
@@ -596,7 +596,7 @@ const fr: TranslationDictionary = {
   'pointOfView.disciplinesEyebrow': 'Plusieurs disciplines. Un seul système.',
   'pointOfView.disciplines': 'Mécanique, robotique portable, électronique embarquée et logiciel se rejoignent dans une même interface corporelle.',
   'pointOfView.origin': 'Né à la TH Köln. Développé avec l’industrie.',
-  'pointOfView.imageAlt': 'Quatre membres de FELYA tiennent ou portent des prototypes de gants haptiques.',
+  'pointOfView.imageAlt': 'Cinq membres de FELYA tiennent ou portent des prototypes de gants haptiques.',
   'workWithUs.eyebrow': 'Travailler avec nous',
   'workWithUs.heading': '<span class="heading-line">Créons ensemble l’interface</span><span class="heading-line">entre l’humain et la machine.</span>',
   'workWithUs.description': 'Nous collaborons avec des chercheurs, des ingénieurs, des équipes de robotique et des partenaires industriels pour transformer des idées ambitieuses en systèmes fonctionnels.',
@@ -605,7 +605,7 @@ const fr: TranslationDictionary = {
   'workWithUs.joinTitle': 'Rejoindre l’équipe',
   'workWithUs.joinDescription': 'Ingénierie, robotique, systèmes embarqués, logiciel et design',
   'workWithUs.openInvitation': 'Vous imaginez une autre façon de collaborer ? Parlons-en.',
-  'footer.copyright': '© FELYA 2026.',
+  'footer.copyright': '© 2026 FELYA',
   'footer.legalAria': 'Informations légales',
   'footer.linkedin': 'FELYA sur LinkedIn',
   'footer.instagram': 'FELYA sur Instagram',
@@ -709,7 +709,7 @@ const es: TranslationDictionary = {
   'pointOfView.disciplinesEyebrow': 'Muchas disciplinas. Un sistema.',
   'pointOfView.disciplines': 'La mecánica, la robótica vestible, la electrónica integrada y el software se unen en una única interfaz corporal.',
   'pointOfView.origin': 'Nacido en la TH Köln. Desarrollado junto a la industria.',
-  'pointOfView.imageAlt': 'Cuatro miembros de FELYA sostienen y llevan prototipos de guantes hápticos.',
+  'pointOfView.imageAlt': 'Cinco miembros de FELYA sostienen y llevan prototipos de guantes hápticos.',
   'workWithUs.eyebrow': 'Trabaja con nosotros',
   'workWithUs.heading': '<span class="heading-line">Crea con nosotros la interfaz</span><span class="heading-line">entre personas y máquinas.</span>',
   'workWithUs.description': 'Colaboramos con investigadores, ingenieros, equipos de robótica y socios industriales para convertir ideas ambiciosas en sistemas que funcionan.',
@@ -718,7 +718,7 @@ const es: TranslationDictionary = {
   'workWithUs.joinTitle': 'Únete al equipo',
   'workWithUs.joinDescription': 'Ingeniería, robótica, sistemas integrados, software y diseño',
   'workWithUs.openInvitation': '¿Ves otra forma de colaborar? Hablemos.',
-  'footer.copyright': '© FELYA 2026.',
+  'footer.copyright': '© 2026 FELYA',
   'footer.legalAria': 'Información legal',
   'footer.linkedin': 'FELYA en LinkedIn',
   'footer.instagram': 'FELYA en Instagram',
@@ -822,7 +822,7 @@ const it: TranslationDictionary = {
   'pointOfView.disciplinesEyebrow': 'Più discipline. Un unico sistema.',
   'pointOfView.disciplines': 'Meccanica, robotica indossabile, elettronica embedded e software convergono in un’unica interfaccia per il corpo.',
   'pointOfView.origin': 'Nato alla TH Köln. Sviluppato insieme all’industria.',
-  'pointOfView.imageAlt': 'Quattro membri del team FELYA tengono in mano e indossano prototipi di guanti aptici.',
+  'pointOfView.imageAlt': 'Cinque membri del team FELYA tengono in mano e indossano prototipi di guanti aptici.',
   'workWithUs.eyebrow': 'Collabora con noi',
   'workWithUs.heading': '<span class="heading-line">Costruiamo insieme l’interfaccia</span><span class="heading-line">tra persone e macchine.</span>',
   'workWithUs.description': 'Collaboriamo con ricercatori, ingegneri, team di robotica e partner industriali per trasformare idee ambiziose in sistemi funzionanti.',
@@ -831,7 +831,7 @@ const it: TranslationDictionary = {
   'workWithUs.joinTitle': 'Entra nel team',
   'workWithUs.joinDescription': 'Ingegneria, robotica, sistemi embedded, software e design',
   'workWithUs.openInvitation': 'Vedi un altro modo di collaborare? Parliamone.',
-  'footer.copyright': '© FELYA 2026.',
+  'footer.copyright': '© 2026 FELYA',
   'footer.legalAria': 'Informazioni legali',
   'footer.linkedin': 'FELYA su LinkedIn',
   'footer.instagram': 'FELYA su Instagram',

@@ -23,8 +23,11 @@ const navigationHref = (href: string) => `${navigationBase}${href}`;
 <header class="site-header fixed left-0 top-0 z-50 w-full px-4 py-4 sm:px-6 md:absolute md:px-12 md:py-5 lg:px-16">
     <nav class="site-nav relative mx-auto flex w-full max-w-[104rem] items-center justify-between gap-3 px-5 py-3 md:gap-8 md:px-8" aria-label={t(locale, 'nav.primary')} data-i18n-aria-label="nav.primary">
         <a href={`${localePath(locale)}#main`} class="block shrink-0" aria-label={t(locale, 'brand.home')}>
-            <img src={brand.logo.src} width={brand.logo.width} height={brand.logo.height} loading="eager" alt={t(locale, 'brand.home')}
-                 class="theme-brand-logo block h-7 w-auto -translate-y-[0.12rem] object-contain md:h-8">
+            <span class="theme-brand-logo" aria-hidden="true">
+                <img src={brand.logo.whiteSrc} width={brand.logo.width} height={brand.logo.height} loading="eager" alt="" class="theme-brand-logo__asset theme-brand-logo__asset--white">
+                <img src={brand.logo.blackSrc} width={brand.logo.width} height={brand.logo.height} loading="eager" alt="" class="theme-brand-logo__asset theme-brand-logo__asset--black">
+            </span>
+            <span class="sr-only">{t(locale, 'brand.home')}</span>
         </a>
         <div class="header-controls order-2 ml-auto flex items-center gap-2 md:order-3 md:ml-0">
             {showLanguageSelector && <LanguageSelector locale={locale} />}

@@ -8,14 +8,17 @@ import { t, type TranslationKey } from '../i18n/translations';
 const { locale } = Astro.props as { locale: Locale };
 ---
 
-<footer class="site-footer section-shell">
+<footer id="footer" class="site-footer section-shell">
     <div class="section-inner">
         <div class="footer-bar">
             <div class="footer-identity">
                 <a href={`${localePath(locale)}#paton`} class="footer-brand" aria-label={t(locale, 'brand.home')}>
-                    <img src={brand.logo.src} width={brand.logo.width} height={brand.logo.height} alt="FELYA" loading="lazy" decoding="async" fetchpriority="low">
+                    <span class="theme-brand-logo theme-brand-logo--footer" aria-hidden="true">
+                        <img src={brand.logo.whiteSrc} width={brand.logo.width} height={brand.logo.height} alt="" loading="lazy" decoding="async" fetchpriority="low" class="theme-brand-logo__asset theme-brand-logo__asset--white">
+                        <img src={brand.logo.blackSrc} width={brand.logo.width} height={brand.logo.height} alt="" loading="lazy" decoding="async" fetchpriority="low" class="theme-brand-logo__asset theme-brand-logo__asset--black">
+                    </span>
+                    <span class="sr-only">FELYA</span>
                 </a>
-                <p class="footer-copyright" data-i18n="footer.copyright">{t(locale, 'footer.copyright')}</p>
             </div>
             <div class="footer-socials">
                 {socialLinks.map((link) => (
@@ -30,6 +33,7 @@ const { locale } = Astro.props as { locale: Locale };
                 ))}
                 <a href="https://brand.felya.com" target="_blank" rel="noopener noreferrer">Brand Guide</a>
             </nav>
+            <p class="footer-copyright" data-i18n="footer.copyright">{t(locale, 'footer.copyright')}</p>
         </div>
     </div>
 </footer>

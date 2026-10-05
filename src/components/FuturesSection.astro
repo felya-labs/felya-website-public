@@ -1,4 +1,5 @@
 ---
+import FutureSketch from './FutureSketch.astro';
 import type { Locale } from '../i18n/config';
 import { t, type TranslationKey } from '../i18n/translations';
 
@@ -13,7 +14,7 @@ const scenarios = [
   {
     key: 'hazard',
     sketches: [
-      { name: 'static-haptic-refined-mask', position: 'left', width: 1345, height: 982, singleMask: true },
+      { name: 'static-haptic', position: 'left', width: 1347, height: 984 },
       { name: 'humanoid-arms-knipex-pliers', position: 'right', width: 1464, height: 1066 }
     ]
   },
@@ -26,7 +27,6 @@ const scenarios = [
   }
 ];
 
-const sketchSource = (name, theme) => `/assets/images/possible-futures/sketches/webp/${name}-${theme}.webp`;
 ---
 
 <section class="futures-section section-shell" aria-labelledby="futures">
@@ -46,45 +46,13 @@ const sketchSource = (name, theme) => `/assets/images/possible-futures/sketches/
                     </div>
                     <div class="future-scenario__visual" aria-hidden="true">
                         {scenario.sketches.map((sketch) => (
-                            sketch.singleMask ? (
-                                <img
-                                    class={`future-sketch future-sketch--single-mask future-sketch--${scenario.key}-${sketch.position}`}
-                                    src={`/assets/images/possible-futures/sketches/webp/${sketch.name}.webp`}
-                                    width={sketch.width}
-                                    height={sketch.height}
-                                    alt=""
-                                    loading="lazy"
-                                    decoding="async"
-                                />
-                            ) : scenario.key === 'presence' && sketch.position === 'right' ? (
+                            scenario.key === 'presence' && sketch.position === 'right' ? (
                                 <div class="future-presence-robot">
                                     <span class="future-presence-rose-fog"></span>
-                                    <img
-                                        class={`future-sketch future-sketch--${scenario.key}-${sketch.position}`}
-                                        src={sketchSource(sketch.name, 'black')}
-                                        data-theme-image
-                                        data-light-src={sketchSource(sketch.name, 'black')}
-                                        data-dark-src={sketchSource(sketch.name, 'white')}
-                                        width={sketch.width}
-                                        height={sketch.height}
-                                        alt=""
-                                        loading="lazy"
-                                        decoding="async"
-                                    />
+                                    <FutureSketch sketch={sketch} scenario={scenario.key} />
                                 </div>
                             ) : (
-                                <img
-                                    class={`future-sketch future-sketch--${scenario.key}-${sketch.position}`}
-                                    src={sketchSource(sketch.name, 'black')}
-                                    data-theme-image
-                                    data-light-src={sketchSource(sketch.name, 'black')}
-                                    data-dark-src={sketchSource(sketch.name, 'white')}
-                                    width={sketch.width}
-                                    height={sketch.height}
-                                    alt=""
-                                    loading="lazy"
-                                    decoding="async"
-                                />
+                                <FutureSketch sketch={sketch} scenario={scenario.key} />
                             )
                         ))}
                     </div>

@@ -1,0 +1,26 @@
+{
+  "audit": "FELYA mobile smoothness",
+  "date": "2026-09-27",
+  "source": {
+    "commit": "03a50168b927e396ea31122f01f2c8c3c935e9ed",
+    "previewUrl": "https://preview.felya.com/en/"
+  },
+  "method": {
+    "emulation": "Chrome headless, 393x851 CSS px, DPR 2, touch viewport, CPU throttling x4",
+    "scope": "local production build; temporary CSS overrides only; no product source mutation",
+    "limitation": "This is a controlled renderer signal, not a physical-device profile. No GPU raster or input-latency conclusion should be drawn from it alone."
+  },
+  "frameThresholdsMs": { "target": 16.7, "caution": 25, "poor": 33, "severe": 50 },
+  "controlledScenarios": [
+    { "name": "system active", "frames": 322, "p50Ms": 16.7, "p95Ms": 16.7, "over25Ms": 0, "over33Ms": 0, "over50Ms": 0, "runningAnimations": 2 },
+    { "name": "system CSS paused / filters suppressed", "frames": 323, "p50Ms": 16.7, "p95Ms": 16.8, "over25Ms": 0, "over33Ms": 0, "over50Ms": 0, "runningAnimations": 2 },
+    { "name": "prototype effects muted", "frames": 315, "p50Ms": 16.7, "p95Ms": 16.7, "over25Ms": 0, "over33Ms": 0, "over50Ms": 0, "runningAnimations": 2 },
+    { "name": "closed mobile header backdrop disabled", "frames": 310, "p50Ms": 16.7, "p95Ms": 16.7, "over25Ms": 0, "over33Ms": 0, "over50Ms": 0, "runningAnimations": 2 }
+  ],
+  "previousComparableSignals": {
+    "mobileLighthouseMedian": { "score": 76, "mainThreadWorkMs": 2799.352, "lcpMs": 6004.825, "tbtMs": 0 },
+    "mobileSlowLighthouseMedian": { "score": 63, "mainThreadWorkMs": 5682.576, "lcpMs": 16203.225, "tbtMs": 0 },
+    "globe": { "mobileCadence": "30 Hz", "medianScriptCostMsAtDpr2": 0.9, "pausedTicks": 0 }
+  },
+  "interpretation": "No controlled scenario crossed 25 ms in the synthetic run. The result de-prioritizes the closed header as a root cause, but cannot exclude device-specific compositor/raster pressure from SVG masks, blur, backdrop-filter, video decode, or simultaneous scroll/input work."
+}

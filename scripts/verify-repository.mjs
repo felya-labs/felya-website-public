@@ -55,7 +55,7 @@ if (JSON.stringify(configuredLocales) !== JSON.stringify(runtimeLocales)) {
   throw new Error(`Runtime locale drift: config=${configuredLocales.join(',')} runtime=${runtimeLocales.join(',')}`);
 }
 
-const publicArchiveNames = /paton-glove-(?:handshake|pov|suit)|robot-rubber-chicken|openarm-bottle-color|static-haptic-(?:black|white)/;
+const publicArchiveNames = /paton-glove-(?:handshake|pov|suit)|robot-rubber-chicken|openarm-bottle-color/;
 const publicSketches = await readdir(new URL('public/assets/images/possible-futures/sketches/webp/', root));
 const leakedArchive = publicSketches.find((name) => publicArchiveNames.test(name));
 if (leakedArchive) throw new Error(`Archived sketch returned to the production tree: ${leakedArchive}`);
