@@ -431,7 +431,12 @@ export function initHeroHeadlineLanguages({
   let isEasterEggActive = false;
   let warmGloveLoadId = 0;
   let gloveLightTimer = 0;
-  let gloveTapPending = false;
+  let ignoreGloveTouchClickUntil = 0;
+  // The warm glove is a presentation layer, not the source of truth. It begins as a
+  // self-running 5.6s presentation treatment, then the first user interaction hands control
+  // to a persistent manual on/off state for this page session. Beyond Earth never owns or
+  // restores a separate glove state.
+  const gloveState = { mode: reduceMotion.matches ? 'manual-off' : 'auto-breathing' };
   let isPointerInside = false;
   let isFocused = false;
   let touchTapCount = 0;
@@ -610,11 +615,6 @@ export function initHeroHeadlineLanguages({
       const revealWarmGlove = () => {
         if (loadId !== warmGloveLoadId) return;
         warmGlove.classList.add('is-ready');
-        if (gloveTapPending) {
-          gloveTapPending = false;
-          window.clearTimeout(gloveLightTimer);
-          gloveLightTimer = window.setTimeout(() => hero?.classList.remove('hero-section--glove-lit'), 340);
-        }
       };
       if (!warmGlove.getAttribute('src')) {
         warmGlove.srcset = warmGlove.dataset.srcset || '';
@@ -627,26 +627,29 @@ export function initHeroHeadlineLanguages({
     }
   };
 
-  const lightGlove = () => {
-    window.clearTimeout(gloveLightTimer);
-    gloveTapPending = false;
-    hero?.classList.add('hero-section--glove-lit');
-    prepareWarmGlove();
+  const applyGloveState = () => {
+    const breathing = gloveState.mode === 'auto-breathing' && !reduceMotion.matches;
+    const manuallyLit = gloveState.mode === 'manual-on';
+    hero?.classList.remove('hero-section--easter-egg-glove-off');
+    hero?.classList.toggle('hero-section--glove-breathing', breathing);
+    hero?.classList.toggle('hero-section--glove-lit', manuallyLit);
+    if (breathing || manuallyLit) prepareWarmGlove();
   };
 
-  const dimGlove = (delay = 0) => {
+  const toggleGloveLight = () => {
     window.clearTimeout(gloveLightTimer);
-    if (!warmGlove?.classList.contains('is-ready')) {
-      gloveTapPending = true;
-      return;
-    }
-    gloveLightTimer = window.setTimeout(() => hero?.classList.remove('hero-section--glove-lit'), delay);
+    gloveState.mode = gloveState.mode === 'auto-breathing'
+      ? 'manual-off'
+      : gloveState.mode === 'manual-on' ? 'manual-off' : 'manual-on';
+    applyGloveState();
   };
+
+  applyGloveState();
 
   const showEasterEgg = () => {
     isEasterEggActive = true;
     hero?.classList.add('hero-section--easter-egg');
-    prepareWarmGlove();
+    applyGloveState();
     setState('easter-egg');
     headline.textContent = 'Beyond Earth. ✨';
     headline.lang = 'en';
@@ -654,6 +657,13 @@ export function initHeroHeadlineLanguages({
     headline.dataset.heroLanguage = 'Easter egg';
     fitHeadline();
     document.dispatchEvent(new CustomEvent('felya:beyondearth', { detail: { active: true } }));
+  };
+
+  const activateEasterEgg = () => {
+    if (isEasterEggActive) return;
+    cancelIntro();
+    claimManualInteraction();
+    transitionHeadline(showEasterEgg);
   };
 
   const cancelIntro = () => {
@@ -894,6 +904,7 @@ export function initHeroHeadlineLanguages({
     if (isEasterEggActive) {
       isEasterEggActive = false;
       hero?.classList.remove('hero-section--easter-egg');
+      applyGloveState();
       setState('interaction');
       document.dispatchEvent(new CustomEvent('felya:beyondearth', { detail: { active: false } }));
       await transitionHeadline(restoreHeadline);
@@ -938,7 +949,7 @@ export function initHeroHeadlineLanguages({
 
     if (touchTapCount === 1) handleStandardActivation();
     if (touchTapCount === 3) {
-      transitionHeadline(showEasterEgg);
+      activateEasterEgg();
       touchTapCount = 0;
       return;
     }
@@ -951,7 +962,7 @@ export function initHeroHeadlineLanguages({
     if (performance.now() < ignoreTouchClickUntil) return;
     if (event.detail === 3) {
       claimManualInteraction();
-      transitionHeadline(showEasterEgg);
+      activateEasterEgg();
       return;
     }
     if (event.detail > 1) return;
@@ -1025,6 +1036,7 @@ export function initHeroHeadlineLanguages({
     if (!isEasterEggActive && !mobileHeroLite) scheduleNormalIdle();
   };
   const handleReducedMotionChange = () => {
+    applyGloveState();
     cancelIdle();
     if (reduceMotion.matches && interactionState === 'idle-active') {
       cancelHeadlineTransition();
@@ -1047,26 +1059,27 @@ export function initHeroHeadlineLanguages({
   listen(window, 'resize', handleResize, { passive: true });
   listen(document, 'felya:languagechange', handleLanguageChange);
   listen(document, 'felya:themechange', handleThemeChange);
+  listen(document, 'felya:activate-beyondearth', activateEasterEgg);
   listen(document, 'pointerdown', handleDocumentPointerDown);
   listen(document, 'visibilitychange', handleVisibilityChange);
   if (gloveToggle) {
-    const releaseGlove = () => dimGlove(260);
     listen(gloveToggle, 'pointerdown', (event) => {
       gloveToggle.setPointerCapture?.(event.pointerId);
-      lightGlove();
     });
     listen(gloveToggle, 'pointerup', (event) => {
       gloveToggle.releasePointerCapture?.(event.pointerId);
-      releaseGlove();
+      if (event.pointerType === 'touch') {
+        ignoreGloveTouchClickUntil = performance.now() + 700;
+        toggleGloveLight();
+      }
     });
-    listen(gloveToggle, 'pointercancel', () => dimGlove());
+    listen(gloveToggle, 'click', (event) => {
+      if (performance.now() >= ignoreGloveTouchClickUntil) toggleGloveLight();
+    });
     listen(gloveToggle, 'keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
-      lightGlove();
-    });
-    listen(gloveToggle, 'keyup', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') releaseGlove();
+      toggleGloveLight();
     });
   }
   reduceMotion.addEventListener?.('change', handleReducedMotionChange);
@@ -1384,7 +1397,7 @@ export function initHeroCopyAlignment({ root = document } = {}) {
 }
 
 export function initHeroEarthRotation({ root = document } = {}) {
-  const container = root.querySelector('.hero-earth');
+  const container = root.querySelector('[data-hero-earth-drag]');
   const path = root.querySelector('.hero-earth__coastline path');
   if (!container || !path) return;
 
@@ -1422,9 +1435,10 @@ export function initHeroEarthRotation({ root = document } = {}) {
   // of phase with each other instead of repeating in lockstep, and the rotation itself spins up
   // to a much shorter period -- all three ramp in/out together via `intensity`, see
   // currentIntensity below, so entering/leaving the easter egg is one smooth transition rather
-  // than a jump-cut. 15s/turn (was 26s) for a noticeably faster base spin -- still just the
-  // *base* rate the direction wobble further speeds up or reverses below.
-  const BEYOND_PERIOD_MS = 15000;
+  // than a jump-cut. The dedicated Easter Egg cadence is 12s/turn: substantially faster than
+  // the calm 150s base and the prior 45s V3 cadence, while leaving enough time to observe the
+  // geography as the direction wobble further speeds up or reverses it below.
+  const BEYOND_PERIOD_MS = 12000;
   // Asymmetric on purpose, not a plain +/-34 swing around 0: the visible strip only ever shows
   // latitudes roughly [lat0+44, lat0+90] (it's a grazing near-limb crop, not a top-down view --
   // see project()'s coscMin cutoff), so a *symmetric* tilt centered on the equator never actually
@@ -1540,6 +1554,21 @@ export function initHeroEarthRotation({ root = document } = {}) {
   let mobilePerfScrolling = false;
   let disposed = false;
   let lon0 = Number.isFinite(preservedLon) ? preservedLon : LON_START;
+  // Manual orientation is intentionally accumulated separately from the clock-driven longitude.
+  // Releasing a drag therefore resumes the same renderer from the exact projection the user left.
+  let manualLatitudeDeg = 0;
+  let manualPaused = false;
+  let activePointerId = null;
+  let dragStarted = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragLastX = 0;
+  let dragLastY = 0;
+  // 0.32°/px horizontally and 0.22°/px vertically means 1,440° requires deliberate,
+  // repeated spinning (about four full turns), not ordinary geographical exploration.
+  const EASTER_EGG_DRAG_THRESHOLD_DEG = 1440;
+  let dragRotationTravelDeg = 0;
+  let dragEasterEggTriggered = false;
 
   let beyondActive = false;
   let beyondToggledAt = 0;
@@ -1565,8 +1594,19 @@ export function initHeroEarthRotation({ root = document } = {}) {
     sync();
   });
 
-  const canRun = () => !disposed && visible && pageActive && !frozen
+  const canRun = () => !disposed && visible && pageActive && !frozen && !manualPaused
     && !mobilePerfScrolling && document.visibilityState === 'visible' && !reduceMotion.matches;
+
+  const renderPath = (now) => {
+    const intensity = currentIntensity(now);
+    const tiltDeg = manualLatitudeDeg + intensity * (BEYOND_TILT_CENTER_DEG
+      + BEYOND_TILT_AMPLITUDE_DEG * Math.sin((now / BEYOND_TILT_PERIOD_MS) * Math.PI * 2));
+    const rollDeg = intensity * BEYOND_ROLL_DEG
+      * Math.sin((now / BEYOND_ROLL_PERIOD_MS) * Math.PI * 2 + BEYOND_ROLL_PHASE);
+    const lat0R = tiltDeg * D2R;
+    const rollR = rollDeg * D2R;
+    path.setAttribute('d', buildPath(lon0, lat0R, Math.cos(rollR), Math.sin(rollR)));
+  };
 
   function tick(now) {
     frame = null;
@@ -1601,13 +1641,7 @@ export function initHeroEarthRotation({ root = document } = {}) {
     lastUpdate = lastUpdate === null || !compact
       ? now : lastUpdate + Math.floor((now - lastUpdate + tolerance) / interval) * interval;
 
-    const tiltDeg = intensity * (BEYOND_TILT_CENTER_DEG
-      + BEYOND_TILT_AMPLITUDE_DEG * Math.sin((now / BEYOND_TILT_PERIOD_MS) * Math.PI * 2));
-    const rollDeg = intensity * BEYOND_ROLL_DEG
-      * Math.sin((now / BEYOND_ROLL_PERIOD_MS) * Math.PI * 2 + BEYOND_ROLL_PHASE);
-    const lat0R = tiltDeg * D2R;
-    const rollR = rollDeg * D2R;
-    path.setAttribute('d', buildPath(lon0, lat0R, Math.cos(rollR), Math.sin(rollR)));
+    renderPath(now);
     start();
   }
 
@@ -1621,6 +1655,53 @@ export function initHeroEarthRotation({ root = document } = {}) {
     lastUpdate = null;
   }
   const sync = () => { if (canRun()) start(); else stop(); };
+  const endDrag = (event) => {
+    if (event.pointerId !== activePointerId) return;
+    container.releasePointerCapture?.(event.pointerId);
+    activePointerId = null;
+    manualPaused = false;
+    dragStarted = false;
+    container.classList.remove('is-dragging');
+    // start() resets integration on the paused frame, preventing a catch-up jump.
+    sync();
+  };
+  const onPointerDown = (event) => {
+    if (event.button !== undefined && event.button !== 0) return;
+    activePointerId = event.pointerId;
+    dragStarted = false;
+    dragStartX = dragLastX = event.clientX;
+    dragStartY = dragLastY = event.clientY;
+    dragRotationTravelDeg = 0;
+    dragEasterEggTriggered = false;
+    manualPaused = true;
+    container.setPointerCapture?.(event.pointerId);
+    stop();
+  };
+  const onPointerMove = (event) => {
+    if (event.pointerId !== activePointerId) return;
+    const totalX = event.clientX - dragStartX;
+    const totalY = event.clientY - dragStartY;
+    if (!dragStarted && Math.hypot(totalX, totalY) < 5) return;
+    dragStarted = true;
+    container.classList.add('is-dragging');
+    const deltaX = event.clientX - dragLastX;
+    const deltaY = event.clientY - dragLastY;
+    dragLastX = event.clientX;
+    dragLastY = event.clientY;
+    lon0 = (((lon0 - deltaX * 0.32) % 360) + 360) % 360;
+    manualLatitudeDeg = Math.max(-78, Math.min(78, manualLatitudeDeg + deltaY * 0.22));
+    dragRotationTravelDeg += Math.abs(deltaX * 0.32) + Math.abs(deltaY * 0.22);
+    if (!dragEasterEggTriggered && dragRotationTravelDeg >= EASTER_EGG_DRAG_THRESHOLD_DEG) {
+      dragEasterEggTriggered = true;
+      document.dispatchEvent(new CustomEvent('felya:activate-beyondearth'));
+    }
+    renderPath(performance.now());
+    event.preventDefault();
+  };
+  container.addEventListener?.('pointerdown', onPointerDown);
+  container.addEventListener?.('pointermove', onPointerMove);
+  container.addEventListener?.('pointerup', endDrag);
+  container.addEventListener?.('pointercancel', endDrag);
   const observer = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.target === container) visible = entry.isIntersecting;
@@ -1654,6 +1735,10 @@ export function initHeroEarthRotation({ root = document } = {}) {
     document.removeEventListener('freeze', onFreeze);
     document.removeEventListener('resume', onResume);
     document.removeEventListener('felya:mobileperfscroll', onMobilePerfScroll);
+    container.removeEventListener?.('pointerdown', onPointerDown);
+    container.removeEventListener?.('pointermove', onPointerMove);
+    container.removeEventListener?.('pointerup', endDrag);
+    container.removeEventListener?.('pointercancel', endDrag);
     window.removeEventListener('pagehide', onPageHide);
     window.removeEventListener('pageshow', onPageShow);
     if (container.__felyaEarthCleanup === cleanup) delete container.__felyaEarthCleanup;
@@ -1683,7 +1768,10 @@ export function initHeroBeyondEarthStarfield({ root = document, random = Math.ra
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (reduceMotion.matches) return; // static/absent starfield, no motion to opt out of
 
-  const STREAK_COUNT = 56;
+  const compact = window.matchMedia('(max-width: 767px)').matches;
+  // Exact Production character with only a restrained density increase for the larger Preview
+  // canvas. Every streak otherwise uses the same geometry, timing and opacity distribution.
+  const STREAK_COUNT = compact ? 70 : 96;
   let built = false;
 
   const build = () => {

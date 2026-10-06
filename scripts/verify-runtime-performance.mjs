@@ -31,7 +31,7 @@ for (const initiallyReduced of [false, true]) {
   const mobile = hub({ matches: true });
   const coarse = hub({ matches: false });
   const root = { querySelector(s) {
-    return s === ".hero-earth" ? container : path;
+    return s === "[data-hero-earth-drag]" || s === ".hero-earth" ? container : path;
   } };
   const doc = hub({ visibilityState: "visible" });
   class IO {
@@ -174,7 +174,7 @@ for (const initiallyReduced of [false, true]) {
     assert.ok(pending.size <= 1, 'mobile lite duplicate Earth RAF');
   };
   const visible = (state) => observers.forEach((observer) => observer.callback([{ target: container, isIntersecting: state }]));
-  init({ root: { querySelector(selector) { return selector === '.hero-earth' ? container : path; } } });
+  init({ root: { querySelector(selector) { return selector === '[data-hero-earth-drag]' || selector === '.hero-earth' ? container : path; } } });
   visible(true);
   assert.equal(pending.size, 1, 'mobile idle did not schedule Earth RAF');
   for (let index = 0; index < 300; index += 1) step(1000 / 60);
