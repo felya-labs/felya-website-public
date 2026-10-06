@@ -1863,6 +1863,31 @@ html[data-theme="light"] .hero-starfield { --hero-starfield-peak-scale: 0.55; }
 
 .hero-earth.is-dragging { cursor: grabbing; }
 
+/* The visible globe sits under the hero copy for its intended depth. A separate transparent SVG
+   path above that copy supplies pointer targeting only for the actual disc shape, so every visible
+   part of the globe can begin a drag without turning the empty Hero, headline, or glove into a
+   draggable surface. It reuses heroEarthClipPath exactly; there is no independently tuned hitbox. */
+.hero-earth__drag-hitbox {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: var(--earth-h);
+    overflow: visible;
+    pointer-events: none;
+}
+
+.hero-earth__drag-hitbox path {
+    fill: transparent;
+    stroke: none;
+    pointer-events: all;
+    touch-action: none;
+    cursor: grab;
+}
+
+.hero-earth__drag-hitbox.is-dragging path { cursor: grabbing; }
+
 .hero-earth__horizon {
     position: absolute;
     left: 0;
@@ -2079,6 +2104,46 @@ html[data-theme="light"] .hero-earth__orb {
 
 .hero-title > span:last-child {
     margin-top: 0.08em;
+}
+
+/* initColorTheme flips the live document color before its background wipe begins so the Earth
+   never freezes. The first headline line uses an explicit light-theme utility color, unlike its
+   sibling language line, so it otherwise reveals that flipped color early. This overlay keeps
+   only the departing text color visible and clips it at the very same moving wipe front. The
+   direction-specific clips mirror hero-section::after: no timing delay and no second animation
+   contract. */
+.hero-headline-hands {
+    position: relative;
+    display: block;
+}
+
+.hero-headline-hands::after {
+    content: attr(data-hero-theme-wipe-text);
+    position: absolute;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+    clip-path: inset(0 100% 0 0);
+}
+
+html[data-theme-wipe-direction="ltr"] .hero-headline-hands::after {
+    color: #090b0f;
+    animation: hero-headline-hands-wipe-ltr 600ms cubic-bezier(.4, 0, .2, 1) forwards;
+}
+
+html[data-theme-wipe-direction="rtl"] .hero-headline-hands::after {
+    color: #ffffff;
+    animation: hero-headline-hands-wipe-rtl 600ms cubic-bezier(.4, 0, .2, 1) forwards;
+}
+
+@keyframes hero-headline-hands-wipe-ltr {
+    from { clip-path: inset(0 0 0 0); }
+    to { clip-path: inset(0 0 0 100%); }
+}
+
+@keyframes hero-headline-hands-wipe-rtl {
+    from { clip-path: inset(0 0 0 0); }
+    to { clip-path: inset(0 100% 0 0); }
 }
 
 .hero-headline-language-hitbox {

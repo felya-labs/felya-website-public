@@ -12,7 +12,7 @@ const gloveWarmSrcset = gloveWarmImage.srcset.map(([src, width]) => `${src} ${wi
 
 <section id="paton" class="hero-reveal hero-section">
     <div class="hero-starfield" aria-hidden="true" data-hero-starfield></div>
-    <div class="hero-earth" aria-hidden="true" data-hero-earth-drag>
+    <div class="hero-earth" aria-hidden="true">
         <div class="hero-earth__glow"></div>
         <svg class="hero-earth__horizon" viewBox={heroEarthViewBox} preserveAspectRatio="xMidYMin slice">
             <defs>
@@ -33,12 +33,16 @@ const gloveWarmSrcset = gloveWarmImage.srcset.map(([src, width]) => `${src} ${wi
             </svg>
         </div>
     </div>
+    <svg class="hero-earth__drag-hitbox" viewBox={heroEarthViewBox} preserveAspectRatio="xMidYMin slice" aria-hidden="true" data-hero-earth-drag>
+        <path d={heroEarthClipPath} />
+    </svg>
     <div class="hero-composition">
         <div class="hero-copy">
             <div class="hero-copy-align">
                 <p class="hero-product-name" data-i18n="hero.product">{t(locale, 'hero.product')}</p>
                 <h1 class="hero-title">
-                    <span class="block text-white" data-i18n="hero.headlineHands">{t(locale, 'hero.headlineHands')}</span>
+                    <span class="hero-headline-hands block text-white" data-i18n="hero.headlineHands"
+                          data-hero-theme-wipe-text={t(locale, 'hero.headlineHands')}>{t(locale, 'hero.headlineHands')}</span>
                     <span class="hero-headline-language-hitbox text-[#777777]" data-hero-headline-languages data-hero-intro-pending
                           role="button" tabindex="0" aria-label={t(locale, 'hero.languageInteraction')}>
                         <span class="hero-headline-language-reference" data-i18n="hero.headlineAnywhere"

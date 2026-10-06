@@ -1397,9 +1397,10 @@ export function initHeroCopyAlignment({ root = document } = {}) {
 }
 
 export function initHeroEarthRotation({ root = document } = {}) {
-  const container = root.querySelector('[data-hero-earth-drag]');
+  const container = root.querySelector('.hero-earth');
+  const dragTarget = root.querySelector('[data-hero-earth-drag]');
   const path = root.querySelector('.hero-earth__coastline path');
-  if (!container || !path) return;
+  if (!container || !dragTarget || !path) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -1657,11 +1658,12 @@ export function initHeroEarthRotation({ root = document } = {}) {
   const sync = () => { if (canRun()) start(); else stop(); };
   const endDrag = (event) => {
     if (event.pointerId !== activePointerId) return;
-    container.releasePointerCapture?.(event.pointerId);
+    dragTarget.releasePointerCapture?.(event.pointerId);
     activePointerId = null;
     manualPaused = false;
     dragStarted = false;
     container.classList.remove('is-dragging');
+    dragTarget.classList.remove('is-dragging');
     // start() resets integration on the paused frame, preventing a catch-up jump.
     sync();
   };
@@ -1674,7 +1676,7 @@ export function initHeroEarthRotation({ root = document } = {}) {
     dragRotationTravelDeg = 0;
     dragEasterEggTriggered = false;
     manualPaused = true;
-    container.setPointerCapture?.(event.pointerId);
+    dragTarget.setPointerCapture?.(event.pointerId);
     stop();
   };
   const onPointerMove = (event) => {
@@ -1684,6 +1686,7 @@ export function initHeroEarthRotation({ root = document } = {}) {
     if (!dragStarted && Math.hypot(totalX, totalY) < 5) return;
     dragStarted = true;
     container.classList.add('is-dragging');
+    dragTarget.classList.add('is-dragging');
     const deltaX = event.clientX - dragLastX;
     const deltaY = event.clientY - dragLastY;
     dragLastX = event.clientX;
@@ -1698,10 +1701,10 @@ export function initHeroEarthRotation({ root = document } = {}) {
     renderPath(performance.now());
     event.preventDefault();
   };
-  container.addEventListener?.('pointerdown', onPointerDown);
-  container.addEventListener?.('pointermove', onPointerMove);
-  container.addEventListener?.('pointerup', endDrag);
-  container.addEventListener?.('pointercancel', endDrag);
+  dragTarget.addEventListener?.('pointerdown', onPointerDown);
+  dragTarget.addEventListener?.('pointermove', onPointerMove);
+  dragTarget.addEventListener?.('pointerup', endDrag);
+  dragTarget.addEventListener?.('pointercancel', endDrag);
   const observer = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.target === container) visible = entry.isIntersecting;
@@ -1735,10 +1738,10 @@ export function initHeroEarthRotation({ root = document } = {}) {
     document.removeEventListener('freeze', onFreeze);
     document.removeEventListener('resume', onResume);
     document.removeEventListener('felya:mobileperfscroll', onMobilePerfScroll);
-    container.removeEventListener?.('pointerdown', onPointerDown);
-    container.removeEventListener?.('pointermove', onPointerMove);
-    container.removeEventListener?.('pointerup', endDrag);
-    container.removeEventListener?.('pointercancel', endDrag);
+    dragTarget.removeEventListener?.('pointerdown', onPointerDown);
+    dragTarget.removeEventListener?.('pointermove', onPointerMove);
+    dragTarget.removeEventListener?.('pointerup', endDrag);
+    dragTarget.removeEventListener?.('pointercancel', endDrag);
     window.removeEventListener('pagehide', onPageHide);
     window.removeEventListener('pageshow', onPageShow);
     if (container.__felyaEarthCleanup === cleanup) delete container.__felyaEarthCleanup;
