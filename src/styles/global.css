@@ -3502,9 +3502,6 @@ html[data-theme="light"] #development-updates-form .development-updates-button:f
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 1535 / 1024;
-    object-fit: cover;
-    object-position: center 28%;
     filter: saturate(0.94) contrast(1.04) brightness(0.99);
 }
 
@@ -4711,7 +4708,6 @@ html[data-theme="light"] .contact-section {
         line-height: 0.98;
     }
     .point-of-view-portrait { margin-top: 3.5rem; }
-    .point-of-view-portrait img { height: auto; aspect-ratio: 1535 / 1024; object-fit: cover; }
     .prototypes-chapters { grid-template-columns: 1fr; }
     .prototypes-chapters li + li { border-top: 1px solid rgba(255,255,255,.13); border-left: 0; }
     .contact-description {

@@ -96,12 +96,12 @@ export const developmentUpdatesForm = {
 };
 
 export const teamPortrait = {
-  src: '/assets/images/about/team-portrait/team5-pyra-clean-1535.webp',
-  srcset: imageSrcset('about/team-portrait', 'team5-pyra-clean', [640, 768, 960, 1200, 1440, 1535]),
+  src: '/assets/images/about/team-portrait/team-2026-11-26-2048.webp',
+  srcset: imageSrcset('about/team-portrait', 'team-2026-11-26', [640, 768, 960, 1200, 1440, 2048]),
   sizes: '(min-width: 1792px) 1664px, (min-width: 1024px) calc(100vw - 8rem), (min-width: 768px) calc(100vw - 6rem), calc(100vw - 3rem)',
-  width: 1535,
-  height: 1024,
-  alt: 'Five FELYA team members holding and wearing haptic glove prototypes.'
+  width: 2048,
+  height: 1513,
+  alt: 'Four FELYA team members holding and wearing haptic glove prototypes.'
 };
 
 export const partners = [
