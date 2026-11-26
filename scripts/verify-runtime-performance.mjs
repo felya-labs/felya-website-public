@@ -217,13 +217,6 @@ for (const initiallyReduced of [false, true]) {
   console.log('Mobile idle Earth lifecycle passed');
 }
 
-const headlineSource = source.slice(source.indexOf('export function initHeroHeadlineLanguages'), source.indexOf('export function setDevelopmentUpdatesStatus'));
-assert.match(headlineSource, /mobileHeroLite/);
-assert.match(headlineSource, /if \(mobileHeroLite\) \{\s*hitbox\.removeAttribute\('data-hero-intro-pending'\)/);
-assert.match(headlineSource, /!isEasterEggActive && !mobileHeroLite/);
-console.log('Mobile Hero Lite headline guards present');
-
-
 // Preserve the original 4px scroll curve, while proving that saturated scrolling
 // does not schedule more frames, read viewport dimensions or repeat CSS writes.
 const hero = source.slice(source.indexOf('export function initHeroMobileGloveScroll'),

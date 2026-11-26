@@ -7,10 +7,6 @@ import {
   developmentUpdatesFormConfig
 } from './site-config.js';
 import {
-  priorityHeroLanguages,
-  secondaryHeroLanguages
-} from './hero-headline-translations.js';
-import {
   heroEarthSegments,
   heroEarthRotationParams
 } from '../data/hero-earth-coastline.js';
@@ -180,7 +176,7 @@ export function initColorTheme({ root = document, config = colorTheme } = {}) {
 
   applyTheme(readStoredTheme(), false);
 
-  // Both the manual toggle and the Beyond Earth easter egg (see initHeroHeadlineLanguages) drive
+  // Both the manual toggle and the Beyond Earth easter egg (see initHeroPresentation) drive
   // theme changes through this one wipe. An earlier version of this used the browser's View
   // Transitions API: it snapshots the page just before/after a DOM change into two layers and
   // animates between them, which sounded like exactly what a "content never gets covered" wipe
@@ -384,117 +380,18 @@ export function initMobileNavigation({ root = document, config = mobileNavigatio
   });
 }
 
-export function initHeroHeadlineLanguages({
-  root = document,
-  priority = priorityHeroLanguages,
-  secondary = secondaryHeroLanguages,
-  random = Math.random,
-  idleTimings = {}
-} = {}) {
-  const hitbox = root.querySelector('[data-hero-headline-languages]');
+export function initHeroPresentation({ root = document } = {}) {
+  const hero = root.querySelector('.hero-section');
+  const hitbox = hero?.querySelector('.hero-headline-language-hitbox');
   const headline = hitbox?.querySelector('.hero-headline-language-text');
-  if (!hitbox || !headline || !priority.length || !secondary.length) return;
-  const hero = hitbox.closest('.hero-section');
-  const warmGlove = hero?.querySelector('[data-hero-warm-glove]');
-  const gloveToggle = hero?.querySelector('[data-hero-glove-toggle]');
+  if (!headline) return;
 
-  hitbox.__felyaHeroHeadlineCleanup?.();
-
+  const warmGlove = hero.querySelector('[data-hero-warm-glove]');
+  const gloveToggle = hero.querySelector('[data-hero-glove-toggle]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  // The compact touch Hero is intentionally quiet until the user interacts with
-  // its headline. Desktop and wider touch layouts keep the full language cycle.
-  const mobileHeroLite = window.matchMedia('(max-width: 767px)').matches
-    && (window.matchMedia('(hover: none)').matches || window.matchMedia('(pointer: coarse)').matches);
-  const timings = {
-    firstIdleDelay: 12000,
-    idleDelayMin: 16000,
-    idleDelayMax: 24000,
-    longIdleDelayMin: 35000,
-    longIdleDelayMax: 50000,
-    languageHoldMin: 2000,
-    languageHoldMax: 2600,
-    ...idleTimings
-  };
-  const shuffle = (items) => {
-    const result = [...items];
-    for (let index = result.length - 1; index > 0; index -= 1) {
-      const randomIndex = Math.floor(random() * (index + 1));
-      [result[index], result[randomIndex]] = [result[randomIndex], result[index]];
-    }
-    return result;
-  };
-
-  const englishLanguage = priority.find((entry) => entry.code === 'en');
-  let priorityQueue = [];
-  let secondaryQueue = [];
-  let shouldShowEnglishFirst = false;
-  let isEasterEggActive = false;
   let warmGloveLoadId = 0;
-  let gloveLightTimer = 0;
   let ignoreGloveTouchClickUntil = 0;
-  // The warm glove is a presentation layer, not the source of truth. It begins as a
-  // self-running 5.6s presentation treatment, then the first user interaction hands control
-  // to a persistent manual on/off state for this page session. Beyond Earth never owns or
-  // restores a separate glove state.
   const gloveState = { mode: reduceMotion.matches ? 'manual-off' : 'auto-breathing' };
-  let isPointerInside = false;
-  let isFocused = false;
-  let touchTapCount = 0;
-  let ignoreTouchClickUntil = 0;
-  let introRunId = 0;
-  let isIntroActive = false;
-  let transitionRunId = 0;
-  let previewRunId = 0;
-  let isPointerPreviewRunning = false;
-  let idleRunId = 0;
-  let automaticChangeCount = 0;
-  let lastAutomaticLanguageCode = '';
-  let lastPointerPreviewLanguageCode = '';
-  let interactionState = 'intro';
-  let isDestroyed = false;
-  const timers = new Map();
-  const listeners = [];
-
-  const setState = (state) => {
-    interactionState = state;
-    hitbox.dataset.heroLanguageState = state;
-  };
-
-  const randomBetween = (minimum, maximum) => minimum + (random() * (maximum - minimum));
-
-  const wait = (duration, group) => new Promise((resolve) => {
-    const timerId = window.setTimeout(() => {
-      timers.delete(timerId);
-      resolve(true);
-    }, duration);
-    timers.set(timerId, { group, resolve });
-  });
-
-  const cancelTimers = (group) => {
-    timers.forEach((timer, timerId) => {
-      if (group && timer.group !== group) return;
-      window.clearTimeout(timerId);
-      timers.delete(timerId);
-      timer.resolve(false);
-    });
-  };
-
-  const listen = (target, type, handler, options) => {
-    target.addEventListener(type, handler, options);
-    listeners.push(() => target.removeEventListener(type, handler, options));
-  };
-
-  const resetLanguageCycle = () => {
-    const defaultText = translate(headline.dataset.i18n);
-    shouldShowEnglishFirst = Boolean(englishLanguage && defaultText !== englishLanguage.text);
-    priorityQueue = shuffle(priority).filter((entry) => (
-      entry.text !== defaultText
-      && (!shouldShowEnglishFirst || entry.code !== englishLanguage.code)
-    ));
-    secondaryQueue = shuffle(secondary).filter((entry) => entry.text !== defaultText);
-  };
-
-  resetLanguageCycle();
 
   const fitHeadline = () => {
     headline.style.removeProperty('--hero-headline-scale');
@@ -504,109 +401,6 @@ export function initHeroHeadlineLanguages({
       ? availableWidth / contentWidth
       : 1;
     headline.style.setProperty('--hero-headline-scale', String(scale));
-  };
-
-  const restoreHeadline = () => {
-    headline.textContent = translate(headline.dataset.i18n);
-    headline.removeAttribute('lang');
-    headline.removeAttribute('dir');
-    headline.removeAttribute('data-hero-language');
-    fitHeadline();
-  };
-
-  const restoreEnglishHeadline = () => {
-    if (!englishLanguage) {
-      restoreHeadline();
-      return;
-    }
-
-    headline.textContent = englishLanguage.text;
-    headline.lang = englishLanguage.code;
-    headline.dir = englishLanguage.dir || 'ltr';
-    headline.dataset.heroLanguage = englishLanguage.name;
-    fitHeadline();
-  };
-
-  const nextLanguage = () => {
-    if (shouldShowEnglishFirst) {
-      shouldShowEnglishFirst = false;
-      return englishLanguage;
-    }
-    if (priorityQueue.length) return priorityQueue.shift();
-    if (!secondaryQueue.length) {
-      const defaultText = translate(headline.dataset.i18n);
-      secondaryQueue = shuffle(secondary).filter((entry) => entry.text !== defaultText);
-    }
-    return secondaryQueue.shift();
-  };
-
-  const showNextLanguage = () => {
-    let languageEntry = nextLanguage();
-    const defaultText = translate(headline.dataset.i18n);
-    if (languageEntry?.text === defaultText) languageEntry = nextLanguage();
-    if (!languageEntry) return;
-
-    headline.textContent = languageEntry.text;
-    headline.lang = languageEntry.code;
-    headline.dir = languageEntry.dir || 'ltr';
-    headline.dataset.heroLanguage = languageEntry.name;
-    fitHeadline();
-  };
-
-  const nextAutomaticLanguage = () => {
-    const maximumAttempts = priority.length + secondary.length + 2;
-    for (let attempt = 0; attempt < maximumAttempts; attempt += 1) {
-      const entry = nextLanguage();
-      if (!entry || entry.code === lastAutomaticLanguageCode) continue;
-      return entry;
-    }
-    return null;
-  };
-
-  const nextPointerPreviewLanguage = () => {
-    const defaultText = translate(headline.dataset.i18n);
-    const maximumAttempts = priority.length + secondary.length + 2;
-    for (let attempt = 0; attempt < maximumAttempts; attempt += 1) {
-      const entry = nextLanguage();
-      if (!entry || entry.text === defaultText || entry.code === lastPointerPreviewLanguageCode) continue;
-      return entry;
-    }
-    return null;
-  };
-
-  const cancelHeadlineTransition = () => {
-    transitionRunId += 1;
-    cancelTimers('transition');
-    headline.classList.remove('hero-headline-language-text--intro-in', 'hero-headline-language-text--intro-out');
-    hitbox.classList.remove('hero-headline-language-hitbox--idle-transition');
-    if (!isIntroActive) hitbox.classList.remove('hero-headline-language-hitbox--animating');
-  };
-
-  const transitionHeadline = async (updateHeadline, { idle = false } = {}) => {
-    cancelHeadlineTransition();
-
-    if (reduceMotion.matches) {
-      updateHeadline();
-      return true;
-    }
-
-    const runId = ++transitionRunId;
-    hitbox.classList.add('hero-headline-language-hitbox--animating');
-    hitbox.classList.toggle('hero-headline-language-hitbox--idle-transition', idle);
-    headline.classList.add('hero-headline-language-text--intro-out');
-
-    if (!await wait(idle ? 130 : 140, 'transition') || runId !== transitionRunId) return false;
-
-    updateHeadline();
-    headline.classList.remove('hero-headline-language-text--intro-out');
-    headline.classList.add('hero-headline-language-text--intro-in');
-
-    if (!await wait(idle ? 190 : 210, 'transition') || runId !== transitionRunId) return false;
-
-    headline.classList.remove('hero-headline-language-text--intro-in');
-    hitbox.classList.remove('hero-headline-language-hitbox--animating');
-    hitbox.classList.remove('hero-headline-language-hitbox--idle-transition');
-    return true;
   };
 
   const prepareWarmGlove = () => {
@@ -630,14 +424,12 @@ export function initHeroHeadlineLanguages({
   const applyGloveState = () => {
     const breathing = gloveState.mode === 'auto-breathing' && !reduceMotion.matches;
     const manuallyLit = gloveState.mode === 'manual-on';
-    hero?.classList.remove('hero-section--easter-egg-glove-off');
     hero?.classList.toggle('hero-section--glove-breathing', breathing);
     hero?.classList.toggle('hero-section--glove-lit', manuallyLit);
     if (breathing || manuallyLit) prepareWarmGlove();
   };
 
   const toggleGloveLight = () => {
-    window.clearTimeout(gloveLightTimer);
     gloveState.mode = gloveState.mode === 'auto-breathing'
       ? 'manual-off'
       : gloveState.mode === 'manual-on' ? 'manual-off' : 'manual-on';
@@ -646,477 +438,43 @@ export function initHeroHeadlineLanguages({
 
   applyGloveState();
 
-  const showEasterEgg = () => {
-    isEasterEggActive = true;
-    hero?.classList.add('hero-section--easter-egg');
-    applyGloveState();
-    setState('easter-egg');
-    headline.textContent = 'Beyond Earth. ✨';
-    headline.lang = 'en';
-    headline.dir = 'ltr';
-    headline.dataset.heroLanguage = 'Easter egg';
-    fitHeadline();
-    document.dispatchEvent(new CustomEvent('felya:beyondearth', { detail: { active: true } }));
+  const setBeyondEarth = (active) => {
+    hero.classList.toggle('hero-section--easter-egg', active);
+    document.dispatchEvent(new CustomEvent('felya:beyondearth', { detail: { active } }));
   };
 
-  const activateEasterEgg = () => {
-    if (isEasterEggActive) return;
-    cancelIntro();
-    claimManualInteraction();
-    transitionHeadline(showEasterEgg);
-  };
+  document.addEventListener('felya:activate-beyondearth', () => {
+    setBeyondEarth(!hero.classList.contains('hero-section--easter-egg'));
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && hero.classList.contains('hero-section--easter-egg')) setBeyondEarth(false);
+  });
 
-  const cancelIntro = () => {
-    introRunId += 1;
-    cancelTimers('intro');
-    headline.classList.remove('hero-headline-language-text--intro-in', 'hero-headline-language-text--intro-out');
-    hitbox.classList.remove('hero-headline-language-hitbox--animating');
-    if (isIntroActive) restoreHeadline();
-    isIntroActive = false;
-  };
-
-  const cancelIdle = () => {
-    idleRunId += 1;
-    cancelTimers('idle');
-  };
-
-  const cancelPreview = () => {
-    previewRunId += 1;
-    isPointerPreviewRunning = false;
-    cancelTimers('preview');
-  };
-
-  const canRunIdle = () => (
-    !isDestroyed
-    && !mobileHeroLite
-    && !reduceMotion.matches
-    && !document.hidden
-    && !isIntroActive
-    && !isEasterEggActive
-    && !isPointerInside
-    && !isFocused
-  );
-
-  let scheduleIdle;
-
-  const runIdleChange = async (runId) => {
-    if (runId !== idleRunId || !canRunIdle()) return;
-
-    const languageEntry = nextAutomaticLanguage();
-    if (!languageEntry) {
-      scheduleIdle(randomBetween(timings.idleDelayMin, timings.idleDelayMax));
-      return;
-    }
-
-    setState('idle-active');
-    lastAutomaticLanguageCode = languageEntry.code;
-    const didShowLanguage = await transitionHeadline(() => {
-      headline.textContent = languageEntry.text;
-      headline.lang = languageEntry.code;
-      headline.dir = languageEntry.dir || 'ltr';
-      headline.dataset.heroLanguage = languageEntry.name;
-      fitHeadline();
-    }, { idle: true });
-    if (!didShowLanguage || runId !== idleRunId || !canRunIdle()) return;
-
-    if (!await wait(randomBetween(timings.languageHoldMin, timings.languageHoldMax), 'idle')) return;
-    if (runId !== idleRunId || !canRunIdle()) return;
-
-    const didRestore = await transitionHeadline(restoreHeadline, { idle: true });
-    if (!didRestore || runId !== idleRunId || !canRunIdle()) return;
-
-    automaticChangeCount += 1;
-    const shouldTakeLongPause = automaticChangeCount >= 3;
-    if (shouldTakeLongPause) automaticChangeCount = 0;
-    setState('idle-waiting');
-    scheduleIdle(randomBetween(
-      shouldTakeLongPause ? timings.longIdleDelayMin : timings.idleDelayMin,
-      shouldTakeLongPause ? timings.longIdleDelayMax : timings.idleDelayMax
-    ));
-  };
-
-  scheduleIdle = (delay) => {
-    cancelIdle();
-    if (!canRunIdle()) return;
-    setState('idle-waiting');
-    const runId = idleRunId;
-    wait(delay, 'idle').then((completed) => {
-      if (completed) runIdleChange(runId);
-    });
-  };
-
-  const scheduleNormalIdle = () => {
-    scheduleIdle(randomBetween(timings.idleDelayMin, timings.idleDelayMax));
-  };
-
-  const claimManualInteraction = () => {
-    cancelIdle();
-    cancelHeadlineTransition();
-    if (!isEasterEggActive) setState('interaction');
-  };
-
-  const showLanguageEntry = (languageEntry) => {
-    if (!languageEntry) return;
-    headline.textContent = languageEntry.text;
-    headline.lang = languageEntry.code;
-    headline.dir = languageEntry.dir || 'ltr';
-    headline.dataset.heroLanguage = languageEntry.name;
-    fitHeadline();
-  };
-
-  const runPointerPreview = async () => {
-    cancelPreview();
-    const runId = previewRunId;
-    isPointerPreviewRunning = true;
-    const languageEntry = nextPointerPreviewLanguage();
-    if (!languageEntry) {
-      isPointerPreviewRunning = false;
-      return;
-    }
-
-    const didShowLanguage = await transitionHeadline(() => {
-      showLanguageEntry(languageEntry);
-      lastPointerPreviewLanguageCode = languageEntry.code;
-    });
-    if (!didShowLanguage || runId !== previewRunId) {
-      if (runId === previewRunId) isPointerPreviewRunning = false;
-      return;
-    }
-
-    isPointerPreviewRunning = false;
-    if (isPointerInside || isEasterEggActive) return;
-
-    if (!await wait(40, 'preview') || runId !== previewRunId) return;
-    await transitionHeadline(restoreHeadline);
-    if (runId === previewRunId) scheduleNormalIdle();
-  };
-
-  const runThemePreview = async () => {
-    if (mobileHeroLite) return;
-    if (isEasterEggActive) return;
-
-    cancelIntro();
-    cancelPreview();
-    claimManualInteraction();
-    const runId = previewRunId;
-    const defaultText = translate(headline.dataset.i18n);
-    let languageEntry = nextAutomaticLanguage();
-    let attempts = priority.length + secondary.length;
-    while (languageEntry?.text === defaultText && attempts > 0) {
-      languageEntry = nextAutomaticLanguage();
-      attempts -= 1;
-    }
-    if (!languageEntry) return;
-
-    const didShowLanguage = await transitionHeadline(() => showLanguageEntry(languageEntry));
-    if (!didShowLanguage || runId !== previewRunId) return;
-    if (!await wait(40, 'preview') || runId !== previewRunId || isEasterEggActive) return;
-
-    await transitionHeadline(restoreHeadline);
-    if (runId === previewRunId) scheduleNormalIdle();
-  };
-
-  const playIntro = async (introLanguages) => {
-    const runId = ++introRunId;
-    if (!introLanguages.length) return;
-
-    hitbox.classList.add('hero-headline-language-hitbox--animating');
-
-    const waitForIntro = async (duration) => (
-      await wait(duration, 'intro') && runId === introRunId
-    );
-
-    for (const entry of introLanguages) {
-      headline.classList.add('hero-headline-language-text--intro-out');
-      if (!await waitForIntro(140)) return;
-
-      headline.textContent = entry.text;
-      headline.lang = entry.code;
-      headline.dir = entry.dir || 'ltr';
-      headline.dataset.heroLanguage = entry.name;
-      fitHeadline();
-      headline.classList.remove('hero-headline-language-text--intro-out');
-      headline.classList.add('hero-headline-language-text--intro-in');
-      if (!await waitForIntro(210)) return;
-      headline.classList.remove('hero-headline-language-text--intro-in');
-      if (!await waitForIntro(40)) return;
-    }
-
-    headline.classList.add('hero-headline-language-text--intro-out');
-    if (!await waitForIntro(140)) return;
-    restoreHeadline();
-    headline.classList.remove('hero-headline-language-text--intro-out');
-    headline.classList.add('hero-headline-language-text--intro-in');
-    if (!await waitForIntro(230)) return;
-    headline.classList.remove('hero-headline-language-text--intro-in');
-    hitbox.classList.remove('hero-headline-language-hitbox--animating');
-    isIntroActive = false;
-    setState('idle-waiting');
-    scheduleIdle(timings.firstIdleDelay);
-  };
-
-  const scheduleIntro = async () => {
-    if (mobileHeroLite) {
-      hitbox.removeAttribute('data-hero-intro-pending');
-      restoreHeadline();
-      setState('static');
-      return;
-    }
-    if (reduceMotion.matches) {
-      hitbox.removeAttribute('data-hero-intro-pending');
-      restoreHeadline();
-      setState('interaction');
-      return;
-    }
-
-    const defaultText = translate(headline.dataset.i18n);
-    const eligibleLanguage = (entry) => entry.text !== defaultText;
-    const introLanguages = shuffle([
-      ...priority,
-      ...secondary
-    ].filter(eligibleLanguage)).slice(0, 3);
-    if (!introLanguages.length) {
-      hitbox.removeAttribute('data-hero-intro-pending');
-      isIntroActive = false;
-      scheduleIdle(timings.firstIdleDelay);
-      return;
-    }
-
-    const firstLanguage = introLanguages.shift();
-    headline.textContent = firstLanguage.text;
-    headline.lang = firstLanguage.code;
-    headline.dir = firstLanguage.dir || 'ltr';
-    headline.dataset.heroLanguage = firstLanguage.name;
-    isIntroActive = true;
-    const runId = introRunId;
-    fitHeadline();
-    hitbox.removeAttribute('data-hero-intro-pending');
-
-    await document.fonts?.ready;
-    if (runId !== introRunId || isDestroyed) return;
-    fitHeadline();
-    if (await wait(600, 'intro') && runId === introRunId) playIntro(introLanguages);
-  };
-
-  const handleStandardActivation = async () => {
-    cancelPreview();
-    claimManualInteraction();
-    if (isEasterEggActive) {
-      isEasterEggActive = false;
-      hero?.classList.remove('hero-section--easter-egg');
-      applyGloveState();
-      setState('interaction');
-      document.dispatchEvent(new CustomEvent('felya:beyondearth', { detail: { active: false } }));
-      await transitionHeadline(restoreHeadline);
-      resetLanguageCycle();
-      if (mobileHeroLite) setState('static');
-      else scheduleNormalIdle();
-      return;
-    }
-    await transitionHeadline(showNextLanguage);
-    scheduleNormalIdle();
-  };
-
-  const handlePointerDown = () => {
-    cancelIntro();
-    claimManualInteraction();
-  };
-  const handlePointerEnter = (event) => {
-    if (event.pointerType === 'touch') return;
-    isPointerInside = true;
-    cancelIntro();
-    claimManualInteraction();
-    if (isEasterEggActive) return;
-    runPointerPreview();
-  };
-  const handlePointerLeave = async (event) => {
-    if (event.pointerType === 'touch') return;
-    isPointerInside = false;
-    if (isEasterEggActive) return;
-    if (isPointerPreviewRunning) return;
-    cancelPreview();
-    claimManualInteraction();
-    await transitionHeadline(restoreHeadline);
-    scheduleNormalIdle();
-  };
-  const handlePointerUp = (event) => {
-    if (event.pointerType !== 'touch') return;
-
-    claimManualInteraction();
-    ignoreTouchClickUntil = performance.now() + 700;
-    touchTapCount += 1;
-    cancelTimers('touch');
-
-    if (touchTapCount === 1) handleStandardActivation();
-    if (touchTapCount === 3) {
-      activateEasterEgg();
-      touchTapCount = 0;
-      return;
-    }
-
-    wait(500, 'touch').then((completed) => {
-      if (completed) touchTapCount = 0;
-    });
-  };
-  const handleClick = (event) => {
-    if (performance.now() < ignoreTouchClickUntil) return;
-    if (event.detail === 3) {
-      claimManualInteraction();
-      activateEasterEgg();
-      return;
-    }
-    if (event.detail > 1) return;
-    handleStandardActivation();
-  };
-  const handleKeyDown = (event) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    cancelIntro();
-    claimManualInteraction();
-    event.preventDefault();
-    handleStandardActivation();
-  };
-  const handleFocus = () => {
-    isFocused = true;
-    cancelIntro();
-    claimManualInteraction();
-  };
-  const handleBlur = () => {
-    isFocused = false;
-    if (!isEasterEggActive && !mobileHeroLite) scheduleNormalIdle();
-  };
-  // Always refit, not just while an intro/cycling language is showing: the resting default
-  // headline needs this too whenever the hitbox's available width changes for any reason (a
-  // window resize, a devtools viewport-dimension switch, an orientation change) -- gating this
-  // on dataset.heroLanguage left the resting text's scale stuck at whatever it was computed as
-  // on the very first fit, however that number came about.
-  const handleResize = () => fitHeadline();
-  const handleLanguageChange = () => {
-    if (!isEasterEggActive) {
-      cancelPreview();
-      cancelIntro();
-      cancelIdle();
-      cancelHeadlineTransition();
-      restoreHeadline();
-      resetLanguageCycle();
-      if (mobileHeroLite) setState('static');
-      else {
-        setState('intro');
-        scheduleIntro();
-      }
-    }
-  };
-  const handleThemeChange = (event) => {
-    if (!event.detail?.userInitiated) return;
-    runThemePreview();
-  };
-  const handleDocumentPointerDown = (event) => {
-    if (isEasterEggActive || hitbox.contains(event.target)) return;
-
-    if (document.activeElement === hitbox) hitbox.blur();
-    isFocused = false;
-    cancelIntro();
-    claimManualInteraction();
-    if (mobileHeroLite) {
-      restoreHeadline();
-      setState('static');
-      return;
-    }
-    transitionHeadline(restoreEnglishHeadline).then(scheduleNormalIdle);
-  };
-  const handleVisibilityChange = () => {
-    cancelIdle();
-    if (document.hidden) {
-      if (isIntroActive) cancelIntro();
-      if (interactionState === 'idle-active') {
-        cancelHeadlineTransition();
-        restoreEnglishHeadline();
-      }
-      return;
-    }
-    if (!isEasterEggActive && !mobileHeroLite) scheduleNormalIdle();
-  };
-  const handleReducedMotionChange = () => {
-    applyGloveState();
-    cancelIdle();
-    if (reduceMotion.matches && interactionState === 'idle-active') {
-      cancelHeadlineTransition();
-      restoreEnglishHeadline();
-      setState('interaction');
-      return;
-    }
-    if (!reduceMotion.matches && !isEasterEggActive && !mobileHeroLite) scheduleNormalIdle();
-  };
-
-  listen(hitbox, 'selectstart', (event) => event.preventDefault());
-  listen(hitbox, 'pointerdown', handlePointerDown);
-  listen(hitbox, 'pointerenter', handlePointerEnter);
-  listen(hitbox, 'pointerleave', handlePointerLeave);
-  listen(hitbox, 'pointerup', handlePointerUp);
-  listen(hitbox, 'click', handleClick);
-  listen(hitbox, 'keydown', handleKeyDown);
-  listen(hitbox, 'focus', handleFocus);
-  listen(hitbox, 'blur', handleBlur);
-  listen(window, 'resize', handleResize, { passive: true });
-  listen(document, 'felya:languagechange', handleLanguageChange);
-  listen(document, 'felya:themechange', handleThemeChange);
-  listen(document, 'felya:activate-beyondearth', activateEasterEgg);
-  listen(document, 'pointerdown', handleDocumentPointerDown);
-  listen(document, 'visibilitychange', handleVisibilityChange);
   if (gloveToggle) {
-    listen(gloveToggle, 'pointerdown', (event) => {
+    gloveToggle.addEventListener('pointerdown', (event) => {
       gloveToggle.setPointerCapture?.(event.pointerId);
     });
-    listen(gloveToggle, 'pointerup', (event) => {
+    gloveToggle.addEventListener('pointerup', (event) => {
       gloveToggle.releasePointerCapture?.(event.pointerId);
       if (event.pointerType === 'touch') {
         ignoreGloveTouchClickUntil = performance.now() + 700;
         toggleGloveLight();
       }
     });
-    listen(gloveToggle, 'click', (event) => {
+    gloveToggle.addEventListener('click', (event) => {
       if (performance.now() >= ignoreGloveTouchClickUntil) toggleGloveLight();
     });
-    listen(gloveToggle, 'keydown', (event) => {
+    gloveToggle.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
       toggleGloveLight();
     });
   }
-  reduceMotion.addEventListener?.('change', handleReducedMotionChange);
-
-  // Belt-and-suspenders alongside the resize listener above: a window resize is only one way
-  // the hitbox's available width can change. A ResizeObserver also catches a font swap reflowing
-  // the line, a sibling layout shift, or a breakpoint's width cap kicking in at a size no
-  // window-level resize event fires for (e.g. a devtools device-toolbar switch that changes the
-  // viewport without the page navigating). Doesn't loop: fitHeadline only ever writes a
-  // transform on .hero-headline-language-text, which doesn't feed back into hitbox's own size.
-  const hitboxResizeObserver = 'ResizeObserver' in window ? new ResizeObserver(() => fitHeadline()) : null;
-  hitboxResizeObserver?.observe(hitbox);
-
-  const cleanup = () => {
-    isDestroyed = true;
-    window.clearTimeout(gloveLightTimer);
-    cancelPreview();
-    cancelTimers();
-    listeners.splice(0).forEach((removeListener) => removeListener());
-    reduceMotion.removeEventListener?.('change', handleReducedMotionChange);
-    hitboxResizeObserver?.disconnect();
-    cancelHeadlineTransition();
-    hitbox.classList.remove('hero-headline-language-hitbox--animating', 'hero-headline-language-hitbox--idle-transition');
-    hitbox.removeAttribute('data-hero-language-state');
-    if (hitbox.__felyaHeroHeadlineCleanup === cleanup) delete hitbox.__felyaHeroHeadlineCleanup;
-  };
-  hitbox.__felyaHeroHeadlineCleanup = cleanup;
-  listen(window, 'pagehide', cleanup, { once: true });
-
+  reduceMotion.addEventListener?.('change', applyGloveState);
+  window.addEventListener('resize', fitHeadline, { passive: true });
+  if ('ResizeObserver' in window) new ResizeObserver(fitHeadline).observe(hitbox);
+  document.fonts?.ready.then(fitHeadline);
   fitHeadline();
-  // Independent of whichever branch scheduleIntro() below takes (e.g. it skips its own
-  // fonts.ready wait entirely under prefers-reduced-motion): refit once webfonts are actually
-  // loaded, since the very first fitHeadline() call above may have measured against fallback
-  // font metrics.
-  document.fonts?.ready.then(() => { if (!isDestroyed) fitHeadline(); });
-  setState(mobileHeroLite ? 'static' : 'intro');
-  scheduleIntro();
 }
 
 export function setDevelopmentUpdatesStatus(statusElement, message, state = 'idle') {
@@ -2938,7 +2296,7 @@ export function initSite(root = document) {
   initLanguageSelector({ root });
   initTwoLineHeadings({ root });
   initMobileNavigation({ root });
-  initHeroHeadlineLanguages({ root });
+  initHeroPresentation({ root });
   initDevelopmentUpdatesForm({ root });
   initPrototypeVideoCover({ root });
   initPrototypeFilmViewport({ root });

@@ -7,9 +7,6 @@ const allowedEnglish = new Set([
   'meta.title', 'meta.ogTitle', 'nav.paton', 'hero.product', 'system.stage.paton.label', 'system.patonLayer', 'footer.copyright',
   'legal.impressum', 'developmentUpdates.placeholder'
 ]);
-const allowedIdenticalByLocale = {
-  fr: new Set(['nav.prototypes', 'nav.contact']),
-};
 const errors = [];
 const englishKeys = Object.keys(translations.en);
 
@@ -33,7 +30,6 @@ for (const locale of locales) {
       locale !== 'en'
       && value === translations.en[key]
       && !allowedEnglish.has(key)
-      && !allowedIdenticalByLocale[locale]?.has(key)
     ) {
       errors.push(`${locale}: unexpected English fallback for ${key}`);
     }

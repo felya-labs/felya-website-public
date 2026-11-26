@@ -12,7 +12,6 @@ const required = [
   'src/components/SiteScripts.astro',
   'src/scripts/site.js',
   'src/scripts/site-config.js',
-  'src/scripts/hero-headline-translations.js',
   'public/assets/images/possible-futures/sketches/webp',
   'public/assets/images/partners',
   'public/assets/images/system/operator',

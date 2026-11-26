@@ -12,7 +12,7 @@ export const colorTheme = {
 export const language = {
   storageKey: 'felya-labs-language',
   defaultLanguage: 'en',
-  languages: ['en', 'de', 'ru', 'pt', 'fr', 'es', 'it', 'ky', 'id', 'ko', 'ja', 'zh-cn', 'zh-tw'],
+  languages: ['en', 'de'],
   selectors: {
     openButtons: '[data-language-open]',
     closeButtons: '[data-language-close]',

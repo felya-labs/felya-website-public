@@ -30,7 +30,6 @@
 | `hero.headlineHands` | Your hands. | Deine Hände. | Native review pending | |
 | `hero.headlineAnywhere` | Anywhere on Earth. | Überall auf der Welt. | Native review pending | |
 | `hero.lead` | Natural movement. Physical feedback. | Natürlich bewegen mit haptischem Feedback. | Native review pending | |
-| `hero.languageInteraction` | Show the next language | Nächste Sprache anzeigen | Native review pending | |
 | `hero.imageAlt` | Close-up of the FELYA haptic glove with blue finger mechanisms over a fabric glove. | Nahaufnahme des haptischen FELYA Handschuhs mit blauer Fingermechanik auf einem Stoffhandschuh. | Native review pending | |
 | `system.eyebrow` | The system | Das System | Native review pending | |
 | `system.heading` | <span class="heading-line">PATON closes</span><span class="heading-line">the loop.</span> | <span class="heading-line">PATON schließt</span><span class="heading-line">den Kreis.</span> | Native review pending | |
