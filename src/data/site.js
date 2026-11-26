@@ -96,11 +96,11 @@ export const developmentUpdatesForm = {
 };
 
 export const teamPortrait = {
-  src: '/assets/images/about/team-portrait/team-2026-11-26-2048.webp',
-  srcset: imageSrcset('about/team-portrait', 'team-2026-11-26', [640, 768, 960, 1200, 1440, 2048]),
+  src: '/assets/images/about/team-portrait/team-2026-11-26-crop-2048.webp',
+  srcset: imageSrcset('about/team-portrait', 'team-2026-11-26-crop', [640, 768, 960, 1200, 1440, 2048]),
   sizes: '(min-width: 1792px) 1664px, (min-width: 1024px) calc(100vw - 8rem), (min-width: 768px) calc(100vw - 6rem), calc(100vw - 3rem)',
   width: 2048,
-  height: 1513,
+  height: 1293,
   alt: 'Four FELYA team members holding and wearing haptic glove prototypes.'
 };
 
